@@ -1,13 +1,145 @@
 #VRML_SIM R2023b utf8
+
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/robotiq/protos/Robotiq2f140Gripper.proto"
+
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773 0.5773 0.5773 2.0944
-  position 0 0 10
+  orientation -0.03520214968063279 -0.029012244588243547 -0.9989590073280356 1.7640937991421781
+  position 0.4877007880528872 4.12347593483978 0.3477050401260155
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
+}
+Floor {
+}
+Robot {
+  translation 0 0 0.43
+  children [
+    DEF Body Solid {
+      children [
+        DEF Hinge1 HingeJoint {
+          jointParameters DEF Hinge1 HingeJointParameters {
+            axis 0 0 1
+          }
+          device [
+            RotationalMotor {
+              name "hinge1"
+            }
+          ]
+          endPoint Solid {
+            translation 0.199999 0 0.3
+            rotation 0 1 0 1.5708
+            children [
+              DEF Hinge2 HingeJoint {
+                endPoint Solid {
+                  translation -0.0800002 0 0.21
+                  rotation 0 -0.9999999999999999 0 1.5707953071795862
+                  children [
+                    DEF Hinge3 HingeJoint {
+                      jointParameters HingeJointParameters {
+                        axis 0 0 1
+                      }
+                      device [
+                        RotationalMotor {
+                          name "hinge3"
+                        }
+                      ]
+                      endPoint Solid {
+                        translation 0.079999 0 0.12
+                        rotation 0 0.9999999999999999 0 1.5707953071795862
+                        children [
+                          SliderJoint {
+                            jointParameters JointParameters {
+                              axis 1 0 0
+                            }
+                            device [
+                              LinearMotor {
+                                name "hinge4"
+                                acceleration 1
+                              }
+                            ]
+                            endPoint Solid {
+                              translation 0.21 0 0.09
+                              rotation 0 1 0 -1.5707953071795862
+                              children [
+                                Robotiq2f140Gripper {
+                                  translation 7.16471e-07 1.9652e-06 -0.350052
+                                  rotation 1.3267899999755562e-06 0.9999999999991198 4.768413740585298e-09 3.141590000002249
+                                }
+                                DEF UpDown Shape {
+                                  appearance PBRAppearance {
+                                    baseColor 0 0 1
+                                    roughness 1
+                                  }
+                                  geometry Cylinder {
+                                    height 0.75
+                                    radius 0.02
+                                  }
+                                }
+                              ]
+                              name "solid(3)"
+                              boundingObject USE UpDown
+                            }
+                          }
+                          DEF Arm3 Shape {
+                            appearance PBRAppearance {
+                            }
+                            geometry Cylinder {
+                              height 0.3
+                              radius 0.05
+                            }
+                          }
+                        ]
+                        name "solid(2)"
+                        boundingObject USE Arm3
+                      }
+                    }
+                    DEF Arm2 Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.666667 0.666667 0
+                      }
+                      geometry Cylinder {
+                        height 0.25
+                        radius 0.05
+                      }
+                    }
+                  ]
+                  name "solid(1)"
+                  boundingObject USE Arm2
+                }
+              }
+              DEF Arm1 Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 1
+                }
+                geometry Cylinder {
+                  height 0.5
+                  radius 0.05
+                }
+              }
+            ]
+            boundingObject USE Arm1
+          }
+        }
+        DEF Body Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.333333 0.498039
+            roughness 1
+          }
+          geometry Cylinder {
+            height 1
+            radius 0.05
+          }
+        }
+      ]
+      name "solid(3)"
+    }
+  ]
+  boundingObject USE Body
+  controller "my_robot_controller"
 }
