@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.03520214968063279 -0.029012244588243547 -0.9989590073280356 1.7640937991421781
-  position 0.4877007880528872 4.12347593483978 0.3477050401260155
+  orientation 0.4882515636028047 0.5044947105970315 -0.7121063808301634 1.8728891183528582
+  position 0.08435188054147545 1.6635117947344882 4.2782945045793275
 }
 TexturedBackground {
 }
@@ -19,6 +19,7 @@ Floor {
 }
 Robot {
   translation 0 0 0.43
+  rotation 0 0 1 0.5235996938995747
   children [
     DEF Body Solid {
       children [
@@ -32,8 +33,8 @@ Robot {
             }
           ]
           endPoint Solid {
-            translation 0.199999 0 0.3
-            rotation 0 1 0 1.5708
+            translation 0.20002499999999993 0 0.29999999999999977
+            rotation 0.24816044788771618 0.9363937602987158 -0.24815946038343872 1.6364722483946137
             children [
               DEF Hinge2 HingeJoint {
                 endPoint Solid {
@@ -141,5 +142,6 @@ Robot {
     }
   ]
   boundingObject USE Body
+  rotationStep 0.261785
   controller "my_robot_controller"
 }
