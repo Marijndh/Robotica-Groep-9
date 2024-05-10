@@ -8,18 +8,18 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.4882515636028047 0.5044947105970315 -0.7121063808301634 1.8728891183528582
-  position 0.08435188054147545 1.6635117947344882 4.2782945045793275
+  orientation 0.5521771573640251 0.3182917128674614 -0.7705782065470592 2.2705055562818925
+  position 1.10569560177811 1.6196673386136418 5.631278899187183
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Floor {
+  rotation 0 0 1 -0.5235996938995747
 }
 Robot {
   translation 0 0 0.43
-  rotation 0 0 1 0.5235996938995747
   children [
     DEF Body Solid {
       children [
@@ -33,12 +33,12 @@ Robot {
             }
           ]
           endPoint Solid {
-            translation 0.20002499999999993 0 0.29999999999999977
-            rotation 0.24816044788771618 0.9363937602987158 -0.24815946038343872 1.6364722483946137
+            translation 0.254752 -0.146306 0.55
+            rotation 0.2481604478877161 0.9363937602987156 -0.2481594603834388 1.6364722483946137
             children [
               DEF Hinge2 HingeJoint {
                 endPoint Solid {
-                  translation -0.0800002 0 0.21
+                  translation -0.16 0 0.23
                   rotation 0 -0.9999999999999999 0 1.5707953071795862
                   children [
                     DEF Hinge3 HingeJoint {
@@ -51,7 +51,7 @@ Robot {
                         }
                       ]
                       endPoint Solid {
-                        translation 0.079999 0 0.12
+                        translation 0.189999 0 0.12
                         rotation 0 0.9999999999999999 0 1.5707953071795862
                         children [
                           SliderJoint {
@@ -65,7 +65,7 @@ Robot {
                               }
                             ]
                             endPoint Solid {
-                              translation 0.21 0 0.09
+                              translation 0.21 0 0.17
                               rotation 0 1 0 -1.5707953071795862
                               children [
                                 Robotiq2f140Gripper {
