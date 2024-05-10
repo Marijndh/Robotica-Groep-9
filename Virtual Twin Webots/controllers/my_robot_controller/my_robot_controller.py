@@ -30,19 +30,20 @@ hinge_joint3 = robot.getDevice("hinge3")
 arm1_length = 500  # Length of the first arm
 arm2_length = 300   # Length of the second arm
 
+# Example target Cartesian coordinates
+target_x = 0
+target_y = 800
+    
+# Convert Cartesian coordinates to servo angles
+theta1, alpha, beta = cartesian_to_servo_angles(target_x, target_y, arm1_length, arm2_length)
+print("Theta1:", theta1, "Alpha:", alpha, "Beta:", beta)
+
 # Main control loop
 while robot.step(64) != -1:
-    # Example target Cartesian coordinates
-    target_x = 000
-    target_y = 800
-    
-    # Convert Cartesian coordinates to servo angles
-    theta1, alpha, beta = cartesian_to_servo_angles(target_x, target_y, arm1_length, arm2_length)
     
     # Set servo positions
-    hinge_joint3.setPosition(alpha)
+    hinge_joint3.setPosition(theta1)
     hinge_joint.setPosition(beta)  # Assuming this is for the second joint
-    
     # You might need to set additional joints depending on your robot configuration
     
     pass
