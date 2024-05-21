@@ -1,0 +1,21 @@
+[2.728s] Invoking command in '/home/ubuntu/ros2_ws/src/my_ax12_controller': PYTHONPATH=/home/ubuntu/ros2_ws/build/my_ax12_controller/prefix_override:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/my_ax12_controller build --build-base /home/ubuntu/ros2_ws/build/my_ax12_controller/build install --record /home/ubuntu/ros2_ws/build/my_ax12_controller/install.log --single-version-externally-managed install_data
+[3.786s] running egg_info
+[3.789s] writing ../../build/my_ax12_controller/my_ax12_controller.egg-info/PKG-INFO
+[3.790s] writing dependency_links to ../../build/my_ax12_controller/my_ax12_controller.egg-info/dependency_links.txt
+[3.791s] writing entry points to ../../build/my_ax12_controller/my_ax12_controller.egg-info/entry_points.txt
+[3.792s] writing requirements to ../../build/my_ax12_controller/my_ax12_controller.egg-info/requires.txt
+[3.792s] writing top-level names to ../../build/my_ax12_controller/my_ax12_controller.egg-info/top_level.txt
+[3.800s] reading manifest file '../../build/my_ax12_controller/my_ax12_controller.egg-info/SOURCES.txt'
+[3.803s] writing manifest file '../../build/my_ax12_controller/my_ax12_controller.egg-info/SOURCES.txt'
+[3.804s] running build
+[3.804s] running build_py
+[3.805s] running install
+[3.806s] running install_lib
+[3.811s] running install_data
+[3.811s] running install_egg_info
+[3.818s] removing '/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages/my_ax12_controller-0.0.0-py3.10.egg-info' (and everything under it)
+[3.819s] Copying ../../build/my_ax12_controller/my_ax12_controller.egg-info to /home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages/my_ax12_controller-0.0.0-py3.10.egg-info
+[3.825s] running install_scripts
+[3.901s] Installing dynamixel_control script to /home/ubuntu/ros2_ws/install/my_ax12_controller/lib/my_ax12_controller
+[3.902s] writing list of installed files to '/home/ubuntu/ros2_ws/build/my_ax12_controller/install.log'
+[4.012s] Invoked command in '/home/ubuntu/ros2_ws/src/my_ax12_controller' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/my_ax12_controller/prefix_override:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/my_ax12_controller build --build-base /home/ubuntu/ros2_ws/build/my_ax12_controller/build install --record /home/ubuntu/ros2_ws/build/my_ax12_controller/install.log --single-version-externally-managed install_data
