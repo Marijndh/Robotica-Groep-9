@@ -20,28 +20,21 @@ class Color:
 
 # Predefined colors with their HSV ranges
 colors = {
-    "red": Color("red", np.array([0, 150, 150]), np.array([6, 255, 255]), np.array([171, 150, 150]),
-                 np.array([179, 255, 255])),
-    "orange": Color("orange", np.array([7, 150, 150]), np.array([22, 255, 255])),
-    "yellow": Color("yellow", np.array([23, 150, 150]), np.array([43, 255, 255])),
-    "green": Color("green", np.array([44, 150, 150]), np.array([73, 255, 255])),
-    "cyan": Color("cyan", np.array([74, 150, 150]), np.array([95, 255, 255])),
-    "blue": Color("blue", np.array([95, 150, 150]), np.array([125, 255, 255])),
-    "purple": Color("purple", np.array([126, 150, 150]), np.array([142, 255, 255])),
-    "magenta": Color("magenta", np.array([143, 150, 150]), np.array([170, 255, 255])),
+    "red": Color("red", np.array([0, 120, 120]), np.array([15, 255, 255])),
+    "green": Color("green", np.array([40, 0, 0]), np.array([70, 255, 255])),
+    "blue": Color("blue", np.array([90, 50, 50]), np.array([140, 255, 255])),
+    "pink": Color("pink", np.array([170, 50, 50]), np.array([180, 255, 255])),
 }
 
 # List of primary and intermediate colors
 primary_colors = [
-    'red', 'green', 'blue', 'yellow', 'orange', 'purple',
-    'cyan', 'magenta',
+    'red', 'green', 'blue', 'pink'
 ]
 
 # Load and process frame
-frame = cv.imread('color_circle.png')
+frame = cv.imread('kleuren_tangen.jpg')
 frame = cv.resize(frame, (640, 640))
 hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-
 
 # Function to display each color mask in a separate window
 def display_individual_colors():
@@ -93,9 +86,9 @@ def display_all_colors():
 
 
 # Display individual colors
-#display_individual_colors()
+display_individual_colors()
 
 # Display all colors in one image
-display_all_colors()
+#display_all_colors()
 
 cv.destroyAllWindows()
