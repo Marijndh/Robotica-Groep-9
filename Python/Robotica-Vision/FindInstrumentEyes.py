@@ -23,8 +23,8 @@ def test():
     for cnr in range(len(contours)):
         cnt = contours[cnr]
         area = cv.contourArea(cnt)
-        #perimeter = cv.arcLength(cnt, True)
-        #factor = 4 * math.pi * area / perimeter ** 2
+        # perimeter = cv.arcLength(cnt, True)
+        # factor = 4 * math.pi * area / perimeter ** 2
         if 5000.0 < area < 400000:
             print(str(cnr)+": "+str(area))
             indexes.append(cnr)

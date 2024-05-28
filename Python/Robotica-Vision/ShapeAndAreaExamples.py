@@ -22,7 +22,8 @@ def draw_convexhull_and_center():
 
     _, thresh = cv.threshold(mask, 0, 255, cv.THRESH_BINARY)
     # find red object
-    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE,
+                                          cv.CHAIN_APPROX_SIMPLE)
     M = cv.moments(contours[0])
     cx = int(M['m10'] / M['m00'])
     cy = int(M['m01'] / M['m00'])
@@ -39,7 +40,8 @@ def filter_objects_based_on_area_and_factor():
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     grayBlur = cv.GaussianBlur(gray, (25, 25), 0)
     ret, th = cv.threshold(grayBlur, 180, 255, cv.THRESH_BINARY_INV)
-    contours, hierarchy = cv.findContours(th, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv.findContours(th, cv.RETR_TREE,
+                                          cv.CHAIN_APPROX_SIMPLE)
 
     hierarchy = hierarchy[0]
 
@@ -119,4 +121,5 @@ def find_eyes_inside_square():
             cv.drawContours(frame, [contour], 0, (0, 0, 255), 2)
             found_eyes.append(contour_to_point(contour))
 
-    print("Aantal ogen in elk vierkant:", count_points_in_squares(found_dices, found_eyes))
+    print("Aantal ogen in elk vierkant:",
+          count_points_in_squares(found_dices, found_eyes))
