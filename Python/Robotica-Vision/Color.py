@@ -20,10 +20,10 @@ class Color:
 
 # Predefined colors with their HSV ranges
 colors = {
-    "red": Color("red", np.array([0, 120, 120]), np.array([15, 255, 255])),
+    "red": Color("red", np.array([0, 200, 0]), np.array([10, 255, 255])),
     "green": Color("green", np.array([40, 0, 0]), np.array([70, 255, 255])),
     "blue": Color("blue", np.array([90, 50, 50]), np.array([140, 255, 255])),
-    "pink": Color("pink", np.array([170, 50, 50]), np.array([180, 255, 255])),
+    "pink": Color("pink", np.array([175, 50, 0]), np.array([180, 255, 255])),
 }
 
 # List of primary and intermediate colors
@@ -32,7 +32,7 @@ primary_colors = [
 ]
 
 # Load and process frame
-frame = cv.imread('kleuren_tangen.jpg')
+frame = cv.imread('Images/kleuren_tangen.jpg')
 frame = cv.resize(frame, (640, 640))
 hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
@@ -89,6 +89,6 @@ def display_all_colors():
 display_individual_colors()
 
 # Display all colors in one image
-#display_all_colors()
+display_all_colors()
 
 cv.destroyAllWindows()
