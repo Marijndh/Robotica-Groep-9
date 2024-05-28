@@ -84,7 +84,6 @@ def display_all_colors():
         cv.waitKey(0)
         cv.destroyAllWindows()
 
-
 # Display individual colors
 display_individual_colors()
 
