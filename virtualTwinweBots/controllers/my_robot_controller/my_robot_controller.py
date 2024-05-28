@@ -54,7 +54,8 @@ robot = Robot()
 
 # Get the hinge joints
 hinge_joint = robot.getDevice("hinge1")
-hinge_joint3 = robot.getDevice("hinge3")
+hinge_joint2 = robot.getDevice("hinge2")
+slider_joint = robot.getDevice("slider")
 
 # Set arm lengths
 L1 = 500  # Length of the first arm
@@ -78,6 +79,7 @@ while robot.step(64) != -1:
     # Update joint angles based on current position or target position if needed
     
     # Set servo positions (convert back to radians)
-    hinge_joint.setPosition(jointbase)
-    hinge_joint3.setPosition(jointmiddle)
+    hinge_joint.setPosition(1)
+    hinge_joint2.setPosition(1)
+    slider_joint.setPosition(0.6)
     # You might need to set additional joints depending on your robot configuration
