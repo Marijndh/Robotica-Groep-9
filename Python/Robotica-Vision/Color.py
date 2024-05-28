@@ -3,7 +3,8 @@ import numpy as np
 
 
 class Color:
-    def __init__(self, name, lower_bound, upper_bound, lower_bound2=None, upper_bound2=None):
+    def __init__(self, name, lower_bound, upper_bound, lower_bound2=None,
+                 upper_bound2=None):
         self.name = name
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
@@ -36,6 +37,7 @@ frame = cv.imread('Images/kleuren_tangen.jpg')
 frame = cv.resize(frame, (640, 640))
 hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
+
 # Function to display each color mask in a separate window
 def display_individual_colors():
     for color_name in primary_colors:
@@ -65,7 +67,8 @@ def display_all_colors():
             else:
                 combined_mask = combined_mask | mask
 
-            contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+            contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL,
+                                          cv.CHAIN_APPROX_SIMPLE)
             for contour in contours:
                 cv.drawContours(result_frame, [contour], -1, (0, 0, 0), 2)
                 M = cv.moments(contour)
@@ -74,7 +77,8 @@ def display_all_colors():
                     cY = int(M["m01"] / M["m00"])
                 else:
                     cX, cY = 0, 0
-                cv.putText(result_frame, color.name, (cX - 20, cY), cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2,
+                cv.putText(result_frame, color.name, (cX - 20, cY),
+                           cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2,
                            cv.LINE_AA)
 
     if combined_mask is not None:
