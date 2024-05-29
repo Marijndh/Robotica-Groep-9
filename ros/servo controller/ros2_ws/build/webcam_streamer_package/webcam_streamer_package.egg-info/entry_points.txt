@@ -1,0 +1,3 @@
+[console_scripts]
+webcam_streamer_node = webcam_streamer_package.webcam_streamer_node:main
+
