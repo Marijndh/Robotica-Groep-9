@@ -7,6 +7,8 @@ Deze documentatie biedt informatie over het aansturen van AX-12 servo's met behu
 ## Vereisten
 
 - Python 3
+- pip 3
+- ubuntu 22.04 (mogenlijk ook met andere maar niet getest)
 - ROS2 iron
 - Het `RPi.GPIO` pakket (voor Raspberry Pi GPIO-aansturing)
 

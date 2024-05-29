@@ -1,72 +1,117 @@
 import rclpy
 from rclpy.node import Node
+from std_msgs.msg import String
+import re
 import serial
 import RPi.GPIO as GPIO
-from std_msgs.msg import Float64
+from time import sleep
 
-class DynamixelController(Node):
+class ServoController(Node):
     def __init__(self):
-        super().__init__('dynamixel_controller')
+        super().__init__('servo_controller')
+        self.subscription = self.create_subscription(
+            String,
+            'servo_command',
+            self.command_callback,
+            10
+        )
+        self.subscription  # prevent unused variable warning
+
+        # Initialize serial port and GPIO pins
         self.direction_pin = 18
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.direction_pin, GPIO.OUT)
         GPIO.setwarnings(False)
-
         self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=1)
-        
-        self.ADDR_MX_OPERATING_MODE = 11#incorrect should be the adress of clockwise moving
-        self.ADDR_MX_GOAL_POSITION = 32
-        self.ADDR_MX_MOVING_SPEED = 32   # Address for setting moving speed
+
+        # Define servo operation parameters
+        self.ADDR_MX_GOAL_POSITION = 30
+        self.ADDR_MX_MOVING_SPEED = 32
         self.ADDR_MX_PRESENT_POSITION = 36
-        self.PROTOCOL_VERSION = 1.0
-        self.DXL_ID = 5
-        
-        self.create_subscription(Float64, 'servo_position', self.listener_callback, 10)
-        self.get_logger().info('Dynamixel Controller Node has been started')
-        #self.set_normal_mode()
 
-    #def set_normal_mode(self):
-        # Set the servo to normal mode
-        #packet = self.build_packet(self.DXL_ID, self.ADDR_MX_OPERATING_MODE, 0)
-        #self.send_packet(packet)
+    def command_callback(self, msg):
+        # Define regex pattern to match servo command format: "servo_id command duration position [value2]"
+        pattern = r'(\d+) (\d+) (\d+) (\d+)(?: (\d+))?'
+        match = re.match(pattern, msg.data)
+        if match:
+            # Extract parameters from regex groups
+            servo_id = int(match.group(1))
+            command = int(match.group(2))
+            duration = int(match.group(3))
+            value = int(match.group(4))
+            value2 = int(match.group(5)) if match.group(5) else None
 
-    def listener_callback(self, msg):
-        position = int(msg.data)
-        if 0 <= position <= 1023:
-            self.get_logger().info(f'Received position command: {position}')
-            self.set_position(position)
+            print("servo id:", servo_id)
+            print("command:", command)
+            print("duration(ms):", duration)
+            print("value:", value)
+            print("value2:", value2)
+
+            # Perform servo operation based on parameters
+            if value2 is not None:
+                self.execute_command(servo_id, command, value, value2)
+            elif command != 32:
+                self.execute_command(servo_id, command, value)
+            else:
+                self.move_for_duration(servo_id, command, duration, value)
         else:
-            self.get_logger().error(f'Invalid position value: {position}')
-    def degrees_to_position(self, degrees):
-        if 0 <= degrees <= 300:
-            return int(degrees * 1023 / 300)
+            self.get_logger().warn("Invalid command format")
+
+    def execute_command(self, servo_id, command, value, value2=None):
+        if value2 is not None:
+            packet = self.build_packet(servo_id, command, value, value2)
         else:
-            self.get_logger().error('Degrees out of range (0-300)')
-            return None
-    
-    def set_position_degrees(self, degrees):
-        position = self.degrees_to_position(degrees)
-        if position is not None:
-            self.set_position(position)
-        
-    def set_position(self, position):
-        packet = self.build_packet(self.DXL_ID, self.ADDR_MX_GOAL_POSITION, position)
-        self.get_logger().info(f'Sending packet: {packet.hex()}')
+            packet = self.build_packet(servo_id, command, value)
+        print(packet)
         self.send_packet(packet)
 
-    def build_packet(self, dxl_id, address, value):
-        length = 5
-        checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF)) & 0xFF
-        packet = bytearray([
-            0xFF, 0xFF,
-            dxl_id,
-            length,
-            3,
-            address,
-            value & 0xFF,
-            (value >> 8) & 0xFF,
-            checksum & 0xFF
-        ])
+    def move_for_duration(self, servo_id, command, duration, value, value2=None):
+        if value2 is not None:
+            self.execute_command(servo_id, command, value, value2)
+        else:
+            self.execute_command(servo_id, command, value)
+        
+        sleep(duration / 1000)
+        self.stop(servo_id)
+
+    def read_position(self, servo_id):
+        packet = self.build_packet(servo_id, self.ADDR_MX_PRESENT_POSITION, 0)
+        response = self.send_packet(packet)
+        if response:
+            position = self.parse_position_response(response)
+            return position
+        else:
+            return None
+
+    def build_packet(self, dxl_id, address, value, value2=None):
+        if value2 is not None:
+            length = 7  # Length of parameters + instruction + checksum
+            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF) + (value2 & 0xFF) + ((value2 >> 8) & 0xFF)) & 0xFF
+            packet = bytearray([
+                0xFF, 0xFF,
+                dxl_id,
+                length,
+                3,
+                address,
+                value & 0xFF,
+                (value >> 8) & 0xFF,
+                value2 & 0xFF,
+                (value2 >> 8) & 0xFF,
+                checksum & 0xFF
+            ])
+        else:
+            length = 5  # Length of parameters + instruction + checksum
+            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF)) & 0xFF
+            packet = bytearray([
+                0xFF, 0xFF,
+                dxl_id,
+                length,
+                3,
+                address,
+                value & 0xFF,
+                (value >> 8) & 0xFF,
+                checksum & 0xFF
+            ])
         return packet
 
     def send_packet(self, packet):
@@ -76,46 +121,24 @@ class DynamixelController(Node):
         GPIO.output(self.direction_pin, GPIO.LOW)
         response = self.serial_port.read(6)
         self.get_logger().info(f'Response: {response.hex()}')
-        self.parse_response(response)
+        return response
 
-    def parse_response(self, response):
+    def stop(self, servo_id):
+        packet = self.build_packet(servo_id, self.ADDR_MX_MOVING_SPEED, 0)
+        self.send_packet(packet)
+
+    def parse_position_response(self, response):
         if len(response) < 6:
             self.get_logger().error('Incomplete response received')
-            return
-        
-        header = response[:2]
-        dxl_id = response[2]
-        length = response[3]
-        error = response[4]
-        checksum = response[5]
-
-        if header != b'\xff\xff':
-            self.get_logger().error('Invalid header')
-            return
-
-        if error != 0:
-            self.get_logger().error(f'Error in response: {error:08b}')
-            self.log_error_details(error)
-
-    def log_error_details(self, error):
-        errors = {
-            0x01: "Input Voltage Error",
-            0x02: "Angle Limit Error",
-            0x04: "Overheating Error",
-            0x08: "Range Error",
-            0x10: "Checksum Error",
-            0x20: "Overload Error",
-            0x40: "Instruction Error",
-        }
-        for bit, message in errors.items():
-            if error & bit:
-                self.get_logger().error(message)
+            return None
+        position = (response[5] << 8) | response[6]
+        return position
 
 def main(args=None):
     rclpy.init(args=args)
-    dynamixel_controller = DynamixelController()
-    rclpy.spin(dynamixel_controller)
-    dynamixel_controller.destroy_node()
+    servo_controller = ServoController()
+    rclpy.spin(servo_controller)
+    servo_controller.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
