@@ -36,14 +36,13 @@ primary_colors = [
     'red', 'green', 'blue', 'pink'
 ]
 
-# Load and process frame
-frame = cv.imread('Images/blauwe-tang.jpeg')
-frame = cv.resize(frame, (640, 640))
-hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-
 
 # Function to display each color mask in a separate window
 def display_individual_colors():
+    # Load and process frame
+    frame = cv.imread('Images/blauwe-tang.jpeg')
+    frame = cv.resize(frame, (640, 640))
+    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     for color_name in primary_colors:
         if color_name in colors:
             color = colors[color_name]
@@ -58,8 +57,11 @@ def display_individual_colors():
 
 # Function to display all colors in one image with outlines and labels
 def display_all_colors():
+    # Load and process frame
+    frame = cv.imread('Images/blauwe-tang.jpeg')
+    frame = cv.resize(frame, (640, 640))
+    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     combined_mask = None
-    result_frame = frame.copy()
 
     for color_name in primary_colors:
         if color_name in colors:
@@ -83,10 +85,10 @@ def display_all_colors():
                         cY = int(M["m01"] / M["m00"])
                     else:
                         cX, cY = 0, 0
-                    cv.putText(result_frame, color.name, (cX - 20, cY),
+                    cv.putText(frame, color.name, (cX - 20, cY),
                                cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2,
                                cv.LINE_AA)
-            cv.drawContours(result_frame, result, -1, (0, 0, 0), 2)
+            cv.drawContours(frame, result, -1, (0, 0, 0), 2)
             print(color_name + ':' + str(len(result)))
 
     if combined_mask is not None:
