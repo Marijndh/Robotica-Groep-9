@@ -4,9 +4,10 @@ import numpy as np
 from FindInstruments import frame
 
 # Parameters
-table_radius = 50 # cm
-grid_resolution = 5 # cm per cel
+table_radius = 50  # cm
+grid_resolution = 5  # cm per cel
 num_cells = table_radius * 2 // grid_resolution
+
 
 # het maken van een grid
 def create_grid_on_image(frame, num_cells, grid_resolution):
@@ -16,6 +17,7 @@ def create_grid_on_image(frame, num_cells, grid_resolution):
         cv.line(frame, (0, i * cell_size), (width, i * cell_size), (0, 0, 0), 1)
         cv.line(frame, (i * cell_size, 0), (i * cell_size, height), (0, 0, 0), 1)
     return frame
+
 
 frame = create_grid_on_image(frame, num_cells, grid_resolution)
 
