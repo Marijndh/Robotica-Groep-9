@@ -5,6 +5,7 @@ from ColorFiltering import Color, primary_colors, colors
 frame = cv.imread('Images/twee_scharen.png')
 frame = cv.resize(frame, (640, 640))
 imgray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+imgray = cv.medianBlur(imgray,5)
 hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
 
@@ -57,7 +58,7 @@ def get_instrument_colors(instruments):
                     break
 
 
-_, thresh = cv.threshold(imgray, 80, 100, cv.THRESH_BINARY)
+_, thresh = cv.threshold(imgray, 127, 255, cv.THRESH_BINARY)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 hierarchy = hierarchy[0]
 instruments = []

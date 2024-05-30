@@ -1,33 +1,62 @@
-import cv2 
-import numpy as np 
+import cv2 as cv
+import numpy as np
+from ColorFiltering import Color, primary_colors, colors
 
-# Read image. 
-img = cv2.imread('Images/bulls-eye.jpg', cv2.IMREAD_COLOR)
 
-# Convert to grayscale.
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Functie om te controleren of een contour ellipsvormig is
+def is_ellipse(contour, min_aspect_ratio=0.5):
+    if len(contour) < 5:
+        return False, (0, 0)
+    ellipse = cv.fitEllipse(contour)
+    (x, y), (MA, ma), angle = ellipse
+    aspect_ratio = min(MA, ma) / max(MA, ma)
+    return aspect_ratio >= min_aspect_ratio, (int(x), int(y))
 
-# Blur using 3 * 3 kernel.
-gray_blurred = cv2.blur(gray, (3, 3))
+def find_bulls_eyes(inv_contours):
+    result = []
+    for contour in inv_contours:
+        is_ellipse_flag, center = is_ellipse(contour)
+        if is_ellipse_flag:
+            ellipse = cv.fitEllipse(contour)
+            cv.ellipse(img, ellipse, (0, 255, 0), 2)
 
-# Apply Hough transform on the blurred image.
-detected_circles = cv2.HoughCircles(gray_blurred,
-				cv2.HOUGH_GRADIENT, 1, 20, param1 = 50,
-			param2 = 30, minRadius = 100, maxRadius = 500)
+            # Maak een masker voor de cirkel
+            mask = np.zeros(gray_img.shape, dtype=np.uint8)
+            cv.circle(mask, center, 5, (255, 255, 255), -1)  # Aangenomen straal van 10 pixels
 
-# Draw circles that are detected.
-if detected_circles is not None:
+            # Bereken het gemiddelde HSV in de cirkel
+            hsv_img = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+            mean = cv.mean(hsv_img, mask=mask)
+            print(mean)
+            bulls_eye = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
+            if bulls_eye.is_color(mean[0], mean[1], mean[2]):
+                cv.circle(img, center, 5, (0, 0, 0), -1)
+                result.append(center)
+    return result
 
-	# Convert the circle parameters a, b and r to integers.
-	detected_circles = np.uint16(np.around(detected_circles))
+# Lees de afbeelding in
+img = cv.imread('Images/bulls-eye.jpg')
+img = cv.resize(img, (1080, 720))
 
-	for pt in detected_circles[0, :]:
-		a, b, r = pt[0], pt[1], pt[2]
+# Converteer de afbeelding naar grijswaarden
+gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-		# Draw the circumference of the circle.
-		cv2.circle(img, (a, b), r, (0, 255, 0), 2)
+# Pas een Gaussiaanse vervaging toe
+blurred_img = cv.GaussianBlur(gray_img, (9, 9), 2)
 
-		# Draw a small circle (of radius 1) to show the center.
-		cv2.circle(img, (a, b), 1, (0, 0, 255), 3)
-cv2.imshow("Detected Circle", img)
-cv2.waitKey(0)
+# Voer een drempelbewerking uit
+ret, thresh_img = cv.threshold(blurred_img, 127, 255, cv.THRESH_BINARY)
+
+# Inverse van de binaire afbeelding
+inv_thresh_img = cv.bitwise_not(thresh_img)
+
+# Detecteer contouren in de inverse afbeelding
+inv_contours, _ = cv.findContours(inv_thresh_img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+print('Bull_eyes locations:'+ find_bulls_eyes(inv_contours).__str__())
+
+
+# Toon de resultaten
+cv.imshow('Origineel met Ellipsen', img)
+cv.waitKey(0)
+cv.destroyAllWindows()
