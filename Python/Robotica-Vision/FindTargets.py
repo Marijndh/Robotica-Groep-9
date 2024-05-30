@@ -45,15 +45,12 @@ gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 blurred_img = cv.GaussianBlur(gray_img, (9, 9), 2)
 
 # Voer een drempelbewerking uit
-ret, thresh_img = cv.threshold(blurred_img, 127, 255, cv.THRESH_BINARY)
-
-# Inverse van de binaire afbeelding
-inv_thresh_img = cv.bitwise_not(thresh_img)
+ret, thresh_img = cv.threshold(blurred_img, 127, 255, cv.THRESH_BINARY_INV)
 
 # Detecteer contouren in de inverse afbeelding
-inv_contours, _ = cv.findContours(inv_thresh_img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+contours, _ = cv.findContours(thresh_img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
-print('Bull_eyes locations:'+ find_bulls_eyes(inv_contours).__str__())
+print('Bull_eyes locations:'+ find_bulls_eyes(contours).__str__())
 
 
 # Toon de resultaten
