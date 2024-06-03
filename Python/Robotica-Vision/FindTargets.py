@@ -18,7 +18,6 @@ def find_bulls_eyes(inv_contours):
         is_ellipse_flag, center = is_ellipse(contour)
         if is_ellipse_flag:
             ellipse = cv.fitEllipse(contour)
-            cv.ellipse(img, ellipse, (0, 255, 0), 2)
 
             # Maak een masker voor de cirkel
             mask = np.zeros(gray_img.shape, dtype=np.uint8)
@@ -31,6 +30,7 @@ def find_bulls_eyes(inv_contours):
             bulls_eye = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
             if bulls_eye.is_color(mean[0], mean[1], mean[2]):
                 cv.circle(img, center, 5, (0, 0, 0), -1)
+                cv.ellipse(img, ellipse, (0, 255, 0), 2)
                 result.append(center)
     return result
 
