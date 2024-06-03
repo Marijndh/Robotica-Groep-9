@@ -56,12 +56,27 @@ def get_point_of_target(coordinates, centroid):
 
     return categorized_points
 
+def get_gripper_degrees(punt, centroid):
+    # Vector bepalen van centroid naar punt van de tang
+    v = punt - centroid
 
-# Voorbeeld gebruik
-coordinates = [(10, 10), (50, 50), (100, 100), (70, 70)]
-centroid = (40, 40)
-result = get_point_of_target(coordinates, centroid)
-print(result)
+    # Oriëntatie berekenen
+    theta = np.arctan2(v[1], v[0])
+    hoek_graden = np.degrees(theta) + 90
+
+    # Zorg ervoor dat de hoek binnen 0-360 graden valt
+    if hoek_graden < 0:
+        hoek_graden += 360
+
+    lengte_lijn = 100  # Lengte van de lijn
+    eindpunt_x = int(centroid[0] + lengte_lijn * np.cos(np.radians(hoek_graden)))
+    eindpunt_y = int(centroid[1] + lengte_lijn * np.sin(np.radians(hoek_graden)))
+    eindpunt = (eindpunt_x, eindpunt_y)
+
+    # Teken de lijn van centroid naar eindpunt
+    cv.line(img, tuple(centroid), eindpunt, (0, 255, 0), 2)
+
+    print(f"Hoek voor de grijper: {hoek_graden} graden")
 
 img = cv.imread('Images/rechte-tang4.jpeg')
 img = cv.resize(img,(1080,720))
@@ -102,13 +117,16 @@ for contour in contours_yellow:
         points = [extreme_left, extreme_right, extreme_top, extreme_bottom]
 
         x, y, w, h = cv.boundingRect(contour)
-        print(points)
-        print(centroid)
         filtered = get_point_of_target(points, centroid)
 
-        cv.circle(img, filtered["handvat1"], 5, (255, 0, 0), -1)
-        cv.circle(img, filtered["handvat2"], 5, (255, 0, 0), -1)
-        cv.circle(img, filtered["punt"], 5, (0, 255, 0), -1)
+        punt = filtered["punt"]
+        handvat1 = filtered["handvat1"]
+        handvat2 = filtered["handvat2"]
+        get_gripper_degrees(punt, centroid)
+
+        cv.circle(img, handvat1, 5, (255, 0, 0), -1)
+        cv.circle(img, handvat2, 5, (255, 0, 0), -1)
+        cv.circle(img, punt, 5, (0, 255, 0), -1)
         cv.circle(img, centroid, 5, (0, 0, 0), -1)
 
 # Toon de resultaten
