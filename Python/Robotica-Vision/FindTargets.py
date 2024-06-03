@@ -50,7 +50,9 @@ ret, thresh_img = cv.threshold(blurred_img, 127, 255, cv.THRESH_BINARY_INV)
 # Detecteer contouren in de inverse afbeelding
 contours, _ = cv.findContours(thresh_img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
-print('Bull_eyes locations:'+ find_bulls_eyes(contours).__str__())
+bulls_eyes = find_bulls_eyes(contours)
+
+print('Bull_eyes locations:'+ bulls_eyes.__str__())
 
 
 # Toon de resultaten
