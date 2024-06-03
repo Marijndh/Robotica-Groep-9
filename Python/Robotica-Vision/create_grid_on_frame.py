@@ -3,6 +3,7 @@ import numpy as np
 
 from FindInstruments import frame
 
+# TODO: precisie kan nog worden aangepast
 # Parameters
 table_radius = 50  # cm
 grid_resolution = 5  # cm per cel
