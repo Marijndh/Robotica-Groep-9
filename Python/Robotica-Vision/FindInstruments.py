@@ -84,6 +84,6 @@ for i in instruments:
         print(str(i.index) + ": " + i.color)
     get_instrument_centroid(i)
 cv.imshow('Contours', frame)
-cv.imshow('Grid', create_grid_on_image(frame, 10, 640))
+cv.imshow('Grid', create_grid_on_image(frame, 40, 40))
 cv.waitKey(0)
 cv.destroyAllWindows()

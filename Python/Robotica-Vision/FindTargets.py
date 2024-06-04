@@ -58,6 +58,6 @@ print('Bull_eyes locations:'+ bulls_eyes.__str__())
 
 # Toon de resultaten
 cv.imshow('Origineel met Ellipsen', img)
-cv.imshow("grid", create_grid_on_image(img, 10, 50))
+cv.imshow("grid", create_grid_on_image(img, 40, 60))
 cv.waitKey(0)
 cv.destroyAllWindows()
