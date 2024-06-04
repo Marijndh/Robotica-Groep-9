@@ -1,7 +1,8 @@
 import cv2 as cv
 import numpy as np
-from ColorFiltering import Color, primary_colors, colors
 
+from ColorFiltering import Color
+from create_grid_on_frame import create_grid_on_image
 
 # Functie om te controleren of een contour ellipsvormig is
 def is_ellipse(contour, min_aspect_ratio=0.5):
@@ -57,5 +58,6 @@ print('Bull_eyes locations:'+ bulls_eyes.__str__())
 
 # Toon de resultaten
 cv.imshow('Origineel met Ellipsen', img)
+cv.imshow("grid", create_grid_on_image(img, 10, 50))
 cv.waitKey(0)
 cv.destroyAllWindows()

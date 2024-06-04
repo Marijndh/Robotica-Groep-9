@@ -1,11 +1,13 @@
 import numpy as np
 import cv2 as cv
-from ColorFiltering import Color, primary_colors, colors
+from ColorFiltering import primary_colors, colors
+from create_grid_on_frame import create_grid_on_image
+
 
 frame = cv.imread('Images/twee_scharen.png')
 frame = cv.resize(frame, (640, 640))
 imgray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-imgray = cv.medianBlur(imgray,5)
+imgray = cv.medianBlur(imgray, 5)
 hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
 
@@ -59,7 +61,8 @@ def get_instrument_colors(instruments):
 
 
 _, thresh = cv.threshold(imgray, 127, 255, cv.THRESH_BINARY)
-contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE,
+                                      cv.CHAIN_APPROX_SIMPLE)
 hierarchy = hierarchy[0]
 instruments = []
 for cnr in range(len(contours)):
@@ -81,5 +84,6 @@ for i in instruments:
         print(str(i.index) + ": " + i.color)
     get_instrument_centroid(i)
 cv.imshow('Contours', frame)
+cv.imshow('Grid', create_grid_on_image(frame, 10, 640))
 cv.waitKey(0)
 cv.destroyAllWindows()
