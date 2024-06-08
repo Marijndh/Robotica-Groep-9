@@ -1,0 +1,21 @@
+[6.556s] Invoking command in '/home/ubuntu/ros2_ws/src/arm_controller_package': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data
+[8.024s] running egg_info
+[8.027s] writing ../../build/arm_controller_package/arm_controller_package.egg-info/PKG-INFO
+[8.030s] writing dependency_links to ../../build/arm_controller_package/arm_controller_package.egg-info/dependency_links.txt
+[8.033s] writing entry points to ../../build/arm_controller_package/arm_controller_package.egg-info/entry_points.txt
+[8.034s] writing requirements to ../../build/arm_controller_package/arm_controller_package.egg-info/requires.txt
+[8.034s] writing top-level names to ../../build/arm_controller_package/arm_controller_package.egg-info/top_level.txt
+[8.043s] reading manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[8.049s] writing manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[8.049s] running build
+[8.050s] running build_py
+[8.054s] running install
+[8.056s] running install_lib
+[8.068s] running install_data
+[8.070s] running install_egg_info
+[8.079s] removing '/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info' (and everything under it)
+[8.083s] Copying ../../build/arm_controller_package/arm_controller_package.egg-info to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info
+[8.093s] running install_scripts
+[8.190s] Installing arm_controller script to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/arm_controller_package
+[8.194s] writing list of installed files to '/home/ubuntu/ros2_ws/build/arm_controller_package/install.log'
+[8.420s] Invoked command in '/home/ubuntu/ros2_ws/src/arm_controller_package' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data

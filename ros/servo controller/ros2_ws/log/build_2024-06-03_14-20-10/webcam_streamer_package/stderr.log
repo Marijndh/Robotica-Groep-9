@@ -1,0 +1,5 @@
+  File "/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py", line 6
+    import rclpy.qos import qos_profile_sensor_data
+                     ^^^^^^
+SyntaxError: invalid syntax
+

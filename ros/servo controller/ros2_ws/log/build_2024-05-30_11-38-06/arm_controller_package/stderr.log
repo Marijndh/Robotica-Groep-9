@@ -1,0 +1,5 @@
+  File "/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py", line 63
+    print("angles: {}, {}".format(angle1, angle2)
+         ^
+SyntaxError: '(' was never closed
+

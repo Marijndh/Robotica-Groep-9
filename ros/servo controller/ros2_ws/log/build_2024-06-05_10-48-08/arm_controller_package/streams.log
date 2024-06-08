@@ -1,0 +1,29 @@
+[7.130s] Invoking command in '/home/ubuntu/ros2_ws/src/arm_controller_package': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data
+[9.463s] running egg_info
+[9.467s] writing ../../build/arm_controller_package/arm_controller_package.egg-info/PKG-INFO
+[9.468s] writing dependency_links to ../../build/arm_controller_package/arm_controller_package.egg-info/dependency_links.txt
+[9.471s] writing entry points to ../../build/arm_controller_package/arm_controller_package.egg-info/entry_points.txt
+[9.472s] writing requirements to ../../build/arm_controller_package/arm_controller_package.egg-info/requires.txt
+[9.474s] writing top-level names to ../../build/arm_controller_package/arm_controller_package.egg-info/top_level.txt
+[9.483s] reading manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[9.488s] writing manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[9.489s] running build
+[9.490s] running build_py
+[9.491s] copying arm_controller_package/PiClient.py -> /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package
+[9.492s] running install
+[9.514s] running install_lib
+[9.529s] copying /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package/PiClient.py -> /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package
+[9.530s] byte-compiling /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py to PiClient.cpython-310.pyc
+[9.537s]   File "/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py", line 65
+[9.538s]     break:
+[9.540s]          ^
+[9.542s] SyntaxError: invalid syntax
+[9.543s] 
+[9.544s] running install_data
+[9.549s] running install_egg_info
+[9.550s] removing '/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info' (and everything under it)
+[9.557s] Copying ../../build/arm_controller_package/arm_controller_package.egg-info to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info
+[9.563s] running install_scripts
+[9.630s] Installing arm_controller script to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/arm_controller_package
+[9.633s] writing list of installed files to '/home/ubuntu/ros2_ws/build/arm_controller_package/install.log'
+[9.797s] Invoked command in '/home/ubuntu/ros2_ws/src/arm_controller_package' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data

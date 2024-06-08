@@ -1,0 +1,28 @@
+running egg_info
+writing ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/PKG-INFO
+writing dependency_links to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/dependency_links.txt
+writing entry points to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/entry_points.txt
+writing requirements to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/requires.txt
+writing top-level names to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/top_level.txt
+reading manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'
+running build
+running build_py
+copying webcam_streamer_package/webcam_streamer_node.py -> /home/ubuntu/ros2_ws/build/webcam_streamer_package/build/lib/webcam_streamer_package
+running install
+running install_lib
+copying /home/ubuntu/ros2_ws/build/webcam_streamer_package/build/lib/webcam_streamer_package/webcam_streamer_node.py -> /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package
+byte-compiling /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py to webcam_streamer_node.cpython-310.pyc
+running install_data
+  File "/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py", line 37
+    compressed_data = self.compress_image(pillow_Image.fromarray(frame)
+                                         ^
+SyntaxError: '(' was never closed
+
+running install_egg_info
+removing '/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/webcam_streamer_package/webcam_streamer_package.egg-info to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info
+running install_scripts
+Installing webcam_streamer_node script to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/webcam_streamer_package
+writing list of installed files to '/home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log'

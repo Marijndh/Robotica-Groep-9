@@ -1,0 +1,22 @@
+[5.856s] Invoking command in '/home/ubuntu/ros2_ws/src/webcam_streamer_package': PYTHONPATH=/home/ubuntu/ros2_ws/build/webcam_streamer_package/prefix_override:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/webcam_streamer_package build --build-base /home/ubuntu/ros2_ws/build/webcam_streamer_package/build install --record /home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log --single-version-externally-managed install_data
+[7.296s] running egg_info
+[7.299s] writing ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/PKG-INFO
+[7.302s] writing dependency_links to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/dependency_links.txt
+[7.304s] writing entry points to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/entry_points.txt
+[7.304s] writing requirements to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/requires.txt
+[7.306s] writing top-level names to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/top_level.txt
+[7.314s] reading manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'
+[7.316s] adding license file 'LICENSE'
+[7.319s] writing manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'
+[7.321s] running build
+[7.322s] running build_py
+[7.324s] running install
+[7.325s] running install_lib
+[7.332s] running install_data
+[7.333s] running install_egg_info
+[7.343s] removing '/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info' (and everything under it)
+[7.344s] Copying ../../build/webcam_streamer_package/webcam_streamer_package.egg-info to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info
+[7.350s] running install_scripts
+[7.455s] Installing webcam_streamer_node script to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/webcam_streamer_package
+[7.457s] writing list of installed files to '/home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log'
+[7.698s] Invoked command in '/home/ubuntu/ros2_ws/src/webcam_streamer_package' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/webcam_streamer_package/prefix_override:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/webcam_streamer_package build --build-base /home/ubuntu/ros2_ws/build/webcam_streamer_package/build install --record /home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log --single-version-externally-managed install_data

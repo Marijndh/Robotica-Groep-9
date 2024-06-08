@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libtracetools.so -o libtracetools.so CMakeFiles/tracetools.dir/src/tracetools.c.o CMakeFiles/tracetools.dir/src/utils.cpp.o CMakeFiles/tracetools.dir/src/tp_call.c.o  -llttng-ust -llttng-ust-common -ldl -rdynamic -ldl 

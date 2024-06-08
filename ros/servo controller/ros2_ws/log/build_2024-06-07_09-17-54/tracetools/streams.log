@@ -1,0 +1,47 @@
+[0.048s] Invoking command in '/home/ubuntu/ros2_ws/build/tracetools': CMAKE_PREFIX_PATH=/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron /usr/bin/cmake --build /home/ubuntu/ros2_ws/build/tracetools -- -j4 -l4
+[0.248s] [  6%] Built target ament_generate_version_header__tracetools
+[0.263s] [ 20%] Built target gtest_main
+[0.270s] [ 33%] Built target gtest
+[0.337s] [ 60%] Built target tracetools
+[0.421s] [ 73%] Built target tracetools_status
+[0.505s] [ 86%] Built target status
+[0.516s] [100%] Built target test_status
+[0.556s] Invoked command in '/home/ubuntu/ros2_ws/build/tracetools' returned '0': CMAKE_PREFIX_PATH=/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron /usr/bin/cmake --build /home/ubuntu/ros2_ws/build/tracetools -- -j4 -l4
+[0.832s] Invoking command in '/home/ubuntu/ros2_ws/build/tracetools': CMAKE_PREFIX_PATH=/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron /usr/bin/cmake --install /home/ubuntu/ros2_ws/build/tracetools
+[0.858s] -- Install configuration: ""
+[0.859s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/library_path.sh
+[0.859s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/library_path.dsv
+[0.859s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/version.h
+[0.860s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/libtracetools_status.so
+[0.862s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/tracetools/status
+[0.863s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools
+[0.863s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools
+[0.864s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/visibility_control.hpp
+[0.864s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/tp_call.h
+[0.865s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/config.h
+[0.865s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/status.h
+[0.865s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/tracetools.h
+[0.866s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/utils.hpp
+[0.866s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/libtracetools.so
+[0.866s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/package_run_dependencies/tracetools
+[0.867s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/parent_prefix_path/tracetools
+[0.867s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/ament_prefix_path.sh
+[0.867s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/ament_prefix_path.dsv
+[0.868s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/path.sh
+[0.868s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/path.dsv
+[0.869s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.bash
+[0.869s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.sh
+[0.869s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.zsh
+[0.870s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.dsv
+[0.870s] -- Installing: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/package.dsv
+[0.871s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/packages/tracetools
+[0.872s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetools_exportExport.cmake
+[0.872s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetools_exportExport-noconfig.cmake
+[0.872s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_targets-extras.cmake
+[0.873s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.873s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_libraries-extras.cmake
+[0.874s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_link_flags-extras.cmake
+[0.874s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetoolsConfig.cmake
+[0.874s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetoolsConfig-version.cmake
+[0.875s] -- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/package.xml
+[0.881s] Invoked command in '/home/ubuntu/ros2_ws/build/tracetools' returned '0': CMAKE_PREFIX_PATH=/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron /usr/bin/cmake --install /home/ubuntu/ros2_ws/build/tracetools

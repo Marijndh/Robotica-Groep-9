@@ -1,0 +1,85 @@
+[0.000000] (-) TimerEvent: {}
+[0.001483] (-) JobUnselected: {'identifier': 'arm_controller_package'}
+[0.001604] (-) JobUnselected: {'identifier': 'lttngpy'}
+[0.001684] (-) JobUnselected: {'identifier': 'my_ax12_servo_controller'}
+[0.001761] (-) JobUnselected: {'identifier': 'ros2trace'}
+[0.001835] (-) JobUnselected: {'identifier': 'test_ros2trace'}
+[0.001909] (-) JobUnselected: {'identifier': 'test_tracetools'}
+[0.001982] (-) JobUnselected: {'identifier': 'test_tracetools_launch'}
+[0.002054] (-) JobUnselected: {'identifier': 'tracetools_launch'}
+[0.002127] (-) JobUnselected: {'identifier': 'tracetools_read'}
+[0.002198] (-) JobUnselected: {'identifier': 'tracetools_test'}
+[0.002269] (-) JobUnselected: {'identifier': 'tracetools_trace'}
+[0.002339] (-) JobUnselected: {'identifier': 'webcam_streamer_package'}
+[0.002418] (tracetools) JobQueued: {'identifier': 'tracetools', 'dependencies': OrderedDict()}
+[0.002503] (tracetools) JobStarted: {'identifier': 'tracetools'}
+[0.041622] (tracetools) JobProgress: {'identifier': 'tracetools', 'progress': 'cmake'}
+[0.045212] (tracetools) JobProgress: {'identifier': 'tracetools', 'progress': 'build'}
+[0.048143] (tracetools) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/ubuntu/ros2_ws/build/tracetools', '--', '-j4', '-l4'], 'cwd': '/home/ubuntu/ros2_ws/build/tracetools', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'ubuntu'), ('SSH_CLIENT', '192.168.218.219 59542 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/aarch64-linux-gnu:/opt/ros/iron/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/ubuntu'), ('OLDPWD', '/home/ubuntu/ros2_ws/src'), ('SSH_TTY', '/dev/pts/2'), ('ROS_PYTHON_VERSION', '3'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLCON_PREFIX_PATH', '/home/ubuntu/ros2_ws/install'), ('ROS_DISTRO', 'iron'), ('LOGNAME', 'ubuntu'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm'), ('XDG_SESSION_ID', '5'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/ubuntu/.local/bin:/opt/ros/iron/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '69'), ('AMENT_PREFIX_PATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('ROS_AUTOMATIC_DISCOVERY_RANGE', 'SUBNET'), ('PWD', '/home/ubuntu/ros2_ws/build/tracetools'), ('SSH_CONNECTION', '192.168.218.219 59542 192.168.218.40 22'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron')]), 'shell': False}
+[0.099036] (-) TimerEvent: {}
+[0.199822] (-) TimerEvent: {}
+[0.220203] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target gtest_main\x1b[0m\n'}
+[0.221317] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target gtest\x1b[0m\n'}
+[0.256448] (tracetools) StdoutLine: {'line': b'[  6%] Built target ament_generate_version_header__tracetools\n'}
+[0.283498] (tracetools) StdoutLine: {'line': b'[ 20%] Built target gtest_main\n'}
+[0.287364] (tracetools) StdoutLine: {'line': b'[ 33%] Built target gtest\n'}
+[0.300023] (-) TimerEvent: {}
+[0.301927] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target tracetools\x1b[0m\n'}
+[0.359030] (tracetools) StdoutLine: {'line': b'[ 60%] Built target tracetools\n'}
+[0.399995] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target tracetools_status\x1b[0m\n'}
+[0.400507] (-) TimerEvent: {}
+[0.444091] (tracetools) StdoutLine: {'line': b'[ 73%] Built target tracetools_status\n'}
+[0.485939] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target status\x1b[0m\n'}
+[0.486659] (tracetools) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target test_status\x1b[0m\n'}
+[0.500748] (-) TimerEvent: {}
+[0.527461] (tracetools) StdoutLine: {'line': b'[ 86%] Built target status\n'}
+[0.546185] (tracetools) StdoutLine: {'line': b'[100%] Built target test_status\n'}
+[0.584416] (tracetools) CommandEnded: {'returncode': 0}
+[0.600966] (-) TimerEvent: {}
+[0.701789] (-) TimerEvent: {}
+[0.802528] (-) TimerEvent: {}
+[0.822950] (tracetools) JobProgress: {'identifier': 'tracetools', 'progress': 'install'}
+[0.856374] (tracetools) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/ubuntu/ros2_ws/build/tracetools'], 'cwd': '/home/ubuntu/ros2_ws/build/tracetools', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'ubuntu'), ('SSH_CLIENT', '192.168.218.219 59542 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/aarch64-linux-gnu:/opt/ros/iron/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/ubuntu'), ('OLDPWD', '/home/ubuntu/ros2_ws/src'), ('SSH_TTY', '/dev/pts/2'), ('ROS_PYTHON_VERSION', '3'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLCON_PREFIX_PATH', '/home/ubuntu/ros2_ws/install'), ('ROS_DISTRO', 'iron'), ('LOGNAME', 'ubuntu'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm'), ('XDG_SESSION_ID', '5'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/ubuntu/.local/bin:/opt/ros/iron/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '69'), ('AMENT_PREFIX_PATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('ROS_AUTOMATIC_DISCOVERY_RANGE', 'SUBNET'), ('PWD', '/home/ubuntu/ros2_ws/build/tracetools'), ('SSH_CONNECTION', '192.168.218.219 59542 192.168.218.40 22'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron')]), 'shell': False}
+[0.889285] (tracetools) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[0.889946] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/library_path.sh\n'}
+[0.890306] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/library_path.dsv\n'}
+[0.890729] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/version.h\n'}
+[0.891363] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/libtracetools_status.so\n'}
+[0.893141] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/tracetools/status\n'}
+[0.894080] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools\n'}
+[0.894547] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools\n'}
+[0.894925] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/visibility_control.hpp\n'}
+[0.895328] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/tp_call.h\n'}
+[0.895795] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/config.h\n'}
+[0.896192] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/status.h\n'}
+[0.896527] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/tracetools.h\n'}
+[0.896815] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/include/tracetools/tracetools/utils.hpp\n'}
+[0.897217] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/lib/libtracetools.so\n'}
+[0.897571] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/package_run_dependencies/tracetools\n'}
+[0.897979] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/parent_prefix_path/tracetools\n'}
+[0.898407] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/ament_prefix_path.sh\n'}
+[0.898711] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/ament_prefix_path.dsv\n'}
+[0.899143] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/path.sh\n'}
+[0.899457] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/environment/path.dsv\n'}
+[0.899902] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.bash\n'}
+[0.900317] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.sh\n'}
+[0.900733] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.zsh\n'}
+[0.901041] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/local_setup.dsv\n'}
+[0.901337] (tracetools) StdoutLine: {'line': b'-- Installing: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/package.dsv\n'}
+[0.901944] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/ament_index/resource_index/packages/tracetools\n'}
+[0.902659] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetools_exportExport.cmake\n'}
+[0.903057] (-) TimerEvent: {}
+[0.903460] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetools_exportExport-noconfig.cmake\n'}
+[0.904130] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[0.904634] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[0.904984] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[0.905368] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/ament_cmake_export_link_flags-extras.cmake\n'}
+[0.905771] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetoolsConfig.cmake\n'}
+[0.906066] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/cmake/tracetoolsConfig-version.cmake\n'}
+[0.906473] (tracetools) StdoutLine: {'line': b'-- Up-to-date: /home/ubuntu/ros2_ws/install/tracetools/share/tracetools/package.xml\n'}
+[0.910999] (tracetools) CommandEnded: {'returncode': 0}
+[1.003298] (-) TimerEvent: {}
+[1.104393] (-) TimerEvent: {}
+[1.205315] (-) TimerEvent: {}
+[1.239743] (tracetools) JobEnded: {'identifier': 'tracetools', 'rc': 0}
+[1.242435] (-) EventReactorShutdown: {}
