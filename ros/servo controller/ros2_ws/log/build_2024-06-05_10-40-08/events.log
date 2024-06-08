@@ -1,0 +1,160 @@
+[0.000000] (-) TimerEvent: {}
+[0.001249] (arm_controller_package) JobQueued: {'identifier': 'arm_controller_package', 'dependencies': OrderedDict()}
+[0.001480] (my_ax12_servo_controller) JobQueued: {'identifier': 'my_ax12_servo_controller', 'dependencies': OrderedDict()}
+[0.001752] (webcam_streamer_package) JobQueued: {'identifier': 'webcam_streamer_package', 'dependencies': OrderedDict()}
+[0.001905] (arm_controller_package) JobStarted: {'identifier': 'arm_controller_package'}
+[0.036962] (my_ax12_servo_controller) JobStarted: {'identifier': 'my_ax12_servo_controller'}
+[0.064180] (webcam_streamer_package) JobStarted: {'identifier': 'webcam_streamer_package'}
+[0.097953] (-) TimerEvent: {}
+[0.198643] (-) TimerEvent: {}
+[0.299362] (-) TimerEvent: {}
+[0.400042] (-) TimerEvent: {}
+[0.500708] (-) TimerEvent: {}
+[0.601405] (-) TimerEvent: {}
+[0.702117] (-) TimerEvent: {}
+[0.802870] (-) TimerEvent: {}
+[0.903481] (-) TimerEvent: {}
+[1.004100] (-) TimerEvent: {}
+[1.104750] (-) TimerEvent: {}
+[1.205354] (-) TimerEvent: {}
+[1.306014] (-) TimerEvent: {}
+[1.407067] (-) TimerEvent: {}
+[1.507921] (-) TimerEvent: {}
+[1.608543] (-) TimerEvent: {}
+[1.709178] (-) TimerEvent: {}
+[1.809817] (-) TimerEvent: {}
+[1.910440] (-) TimerEvent: {}
+[2.011087] (-) TimerEvent: {}
+[2.111685] (-) TimerEvent: {}
+[2.212270] (-) TimerEvent: {}
+[2.312899] (-) TimerEvent: {}
+[2.413518] (-) TimerEvent: {}
+[2.514298] (-) TimerEvent: {}
+[2.615289] (-) TimerEvent: {}
+[2.715992] (-) TimerEvent: {}
+[2.816677] (-) TimerEvent: {}
+[2.917318] (-) TimerEvent: {}
+[3.017927] (-) TimerEvent: {}
+[3.118554] (-) TimerEvent: {}
+[3.219143] (-) TimerEvent: {}
+[3.319735] (-) TimerEvent: {}
+[3.420320] (-) TimerEvent: {}
+[3.520914] (-) TimerEvent: {}
+[3.621556] (-) TimerEvent: {}
+[3.722186] (-) TimerEvent: {}
+[3.823019] (-) TimerEvent: {}
+[3.923794] (-) TimerEvent: {}
+[4.025785] (-) TimerEvent: {}
+[4.127901] (-) TimerEvent: {}
+[4.229891] (-) TimerEvent: {}
+[4.331665] (-) TimerEvent: {}
+[4.433558] (-) TimerEvent: {}
+[4.535423] (-) TimerEvent: {}
+[4.637393] (-) TimerEvent: {}
+[4.739447] (-) TimerEvent: {}
+[4.840963] (-) TimerEvent: {}
+[4.942672] (-) TimerEvent: {}
+[5.044401] (-) TimerEvent: {}
+[5.146331] (-) TimerEvent: {}
+[5.248042] (-) TimerEvent: {}
+[5.349753] (-) TimerEvent: {}
+[5.451888] (-) TimerEvent: {}
+[5.553963] (-) TimerEvent: {}
+[5.655446] (-) TimerEvent: {}
+[5.757490] (-) TimerEvent: {}
+[5.860815] (-) TimerEvent: {}
+[5.965318] (-) TimerEvent: {}
+[6.042699] (arm_controller_package) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/arm_controller_package', 'build', '--build-base', '/home/ubuntu/ros2_ws/build/arm_controller_package/build', 'install', '--record', '/home/ubuntu/ros2_ws/build/arm_controller_package/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/ubuntu/ros2_ws/src/arm_controller_package', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'ubuntu', 'SSH_CLIENT': '192.168.218.70 55539 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/aarch64-linux-gnu:/opt/ros/iron/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/ubuntu', 'OLDPWD': '/home/ubuntu', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/ubuntu/ros2_ws/install', 'ROS_DISTRO': 'iron', 'LOGNAME': 'ubuntu', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '11', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/ubuntu/.local/bin:/opt/ros/iron/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'ROS_DOMAIN_ID': '69', 'AMENT_PREFIX_PATH': '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/home/ubuntu/ros2_ws/build/arm_controller_package', 'SSH_CONNECTION': '192.168.218.70 55539 192.168.218.40 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages', 'COLCON': '1'}, 'shell': False}
+[6.065681] (-) TimerEvent: {}
+[6.074074] (my_ax12_servo_controller) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/my_ax12_servo_controller', 'build', '--build-base', '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/build', 'install', '--record', '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/ubuntu/ros2_ws/src/my_ax12_servo_controller', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'ubuntu', 'SSH_CLIENT': '192.168.218.70 55539 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/aarch64-linux-gnu:/opt/ros/iron/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/ubuntu', 'OLDPWD': '/home/ubuntu', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/ubuntu/ros2_ws/install', 'ROS_DISTRO': 'iron', 'LOGNAME': 'ubuntu', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '11', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/ubuntu/.local/bin:/opt/ros/iron/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'ROS_DOMAIN_ID': '69', 'AMENT_PREFIX_PATH': '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller', 'SSH_CONNECTION': '192.168.218.70 55539 192.168.218.40 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/prefix_override:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages', 'COLCON': '1'}, 'shell': False}
+[6.106621] (webcam_streamer_package) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/webcam_streamer_package', 'build', '--build-base', '/home/ubuntu/ros2_ws/build/webcam_streamer_package/build', 'install', '--record', '/home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/ubuntu/ros2_ws/src/webcam_streamer_package', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'ubuntu', 'SSH_CLIENT': '192.168.218.70 55539 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/aarch64-linux-gnu:/opt/ros/iron/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/ubuntu', 'OLDPWD': '/home/ubuntu', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/ubuntu/ros2_ws/install', 'ROS_DISTRO': 'iron', 'LOGNAME': 'ubuntu', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '11', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/ubuntu/.local/bin:/opt/ros/iron/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'ROS_DOMAIN_ID': '69', 'AMENT_PREFIX_PATH': '/home/ubuntu/ros2_ws/install/webcam_streamer_package:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller:/home/ubuntu/ros2_ws/install/my_ax12_controller:/home/ubuntu/ros2_ws/install/arm_controller_package:/opt/ros/iron', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/home/ubuntu/ros2_ws/build/webcam_streamer_package', 'SSH_CONNECTION': '192.168.218.70 55539 192.168.218.40 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/ubuntu/ros2_ws/build/webcam_streamer_package/prefix_override:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/my_ax12_controller/lib/python3.10/site-packages:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages', 'COLCON': '1'}, 'shell': False}
+[6.165868] (-) TimerEvent: {}
+[6.267685] (-) TimerEvent: {}
+[6.369664] (-) TimerEvent: {}
+[6.471708] (-) TimerEvent: {}
+[6.573723] (-) TimerEvent: {}
+[6.675413] (-) TimerEvent: {}
+[6.777228] (-) TimerEvent: {}
+[6.879078] (-) TimerEvent: {}
+[6.981019] (-) TimerEvent: {}
+[7.082602] (-) TimerEvent: {}
+[7.184363] (-) TimerEvent: {}
+[7.286268] (-) TimerEvent: {}
+[7.388201] (-) TimerEvent: {}
+[7.490278] (-) TimerEvent: {}
+[7.525749] (arm_controller_package) StdoutLine: {'line': b'running egg_info\n'}
+[7.530839] (arm_controller_package) StdoutLine: {'line': b'writing ../../build/arm_controller_package/arm_controller_package.egg-info/PKG-INFO\n'}
+[7.532112] (arm_controller_package) StdoutLine: {'line': b'writing dependency_links to ../../build/arm_controller_package/arm_controller_package.egg-info/dependency_links.txt\n'}
+[7.534770] (arm_controller_package) StdoutLine: {'line': b'writing entry points to ../../build/arm_controller_package/arm_controller_package.egg-info/entry_points.txt\n'}
+[7.536659] (my_ax12_servo_controller) StdoutLine: {'line': b'running egg_info\n'}
+[7.538001] (arm_controller_package) StdoutLine: {'line': b'writing requirements to ../../build/arm_controller_package/arm_controller_package.egg-info/requires.txt\n'}
+[7.538676] (arm_controller_package) StdoutLine: {'line': b'writing top-level names to ../../build/arm_controller_package/arm_controller_package.egg-info/top_level.txt\n'}
+[7.539733] (my_ax12_servo_controller) StdoutLine: {'line': b'writing ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/PKG-INFO\n'}
+[7.540857] (my_ax12_servo_controller) StdoutLine: {'line': b'writing dependency_links to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/dependency_links.txt\n'}
+[7.542535] (my_ax12_servo_controller) StdoutLine: {'line': b'writing entry points to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/entry_points.txt\n'}
+[7.544286] (my_ax12_servo_controller) StdoutLine: {'line': b'writing requirements to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/requires.txt\n'}
+[7.545238] (my_ax12_servo_controller) StdoutLine: {'line': b'writing top-level names to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/top_level.txt\n'}
+[7.546968] (arm_controller_package) StdoutLine: {'line': b"reading manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'\n"}
+[7.551671] (arm_controller_package) StdoutLine: {'line': b"writing manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'\n"}
+[7.552693] (arm_controller_package) StdoutLine: {'line': b'running build\n'}
+[7.553499] (arm_controller_package) StdoutLine: {'line': b'running build_py\n'}
+[7.554316] (my_ax12_servo_controller) StdoutLine: {'line': b"reading manifest file '../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/SOURCES.txt'\n"}
+[7.555417] (arm_controller_package) StdoutLine: {'line': b'running install\n'}
+[7.556239] (my_ax12_servo_controller) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[7.557073] (arm_controller_package) StdoutLine: {'line': b'running install_lib\n'}
+[7.558941] (my_ax12_servo_controller) StdoutLine: {'line': b"writing manifest file '../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/SOURCES.txt'\n"}
+[7.560387] (my_ax12_servo_controller) StdoutLine: {'line': b'running build\n'}
+[7.560934] (my_ax12_servo_controller) StdoutLine: {'line': b'running build_py\n'}
+[7.561729] (my_ax12_servo_controller) StdoutLine: {'line': b'running install\n'}
+[7.563368] (my_ax12_servo_controller) StdoutLine: {'line': b'running install_lib\n'}
+[7.564364] (arm_controller_package) StdoutLine: {'line': b'byte-compiling /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py to PiClient.cpython-310.pyc\n'}
+[7.566190] (arm_controller_package) StderrLine: {'line': b'Sorry: IndentationError: unindent does not match any outer indentation level (PiClient.py, line 79)\n'}
+[7.567047] (arm_controller_package) StdoutLine: {'line': b'running install_data\n'}
+[7.567802] (arm_controller_package) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.570048] (my_ax12_servo_controller) StdoutLine: {'line': b'running install_data\n'}
+[7.571016] (my_ax12_servo_controller) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.576955] (arm_controller_package) StdoutLine: {'line': b"removing '/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.579948] (arm_controller_package) StdoutLine: {'line': b'Copying ../../build/arm_controller_package/arm_controller_package.egg-info to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info\n'}
+[7.581615] (my_ax12_servo_controller) StdoutLine: {'line': b"removing '/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages/my_ax12_servo_controller-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.583616] (my_ax12_servo_controller) StdoutLine: {'line': b'Copying ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info to /home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages/my_ax12_servo_controller-0.0.0-py3.10.egg-info\n'}
+[7.584394] (webcam_streamer_package) StdoutLine: {'line': b'running egg_info\n'}
+[7.587129] (webcam_streamer_package) StdoutLine: {'line': b'writing ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/PKG-INFO\n'}
+[7.588540] (arm_controller_package) StdoutLine: {'line': b'running install_scripts\n'}
+[7.588988] (webcam_streamer_package) StdoutLine: {'line': b'writing dependency_links to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/dependency_links.txt\n'}
+[7.591215] (webcam_streamer_package) StdoutLine: {'line': b'writing entry points to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/entry_points.txt\n'}
+[7.593632] (-) TimerEvent: {}
+[7.595728] (my_ax12_servo_controller) StdoutLine: {'line': b'running install_scripts\n'}
+[7.596755] (webcam_streamer_package) StdoutLine: {'line': b'writing requirements to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/requires.txt\n'}
+[7.597435] (webcam_streamer_package) StdoutLine: {'line': b'writing top-level names to ../../build/webcam_streamer_package/webcam_streamer_package.egg-info/top_level.txt\n'}
+[7.603260] (webcam_streamer_package) StdoutLine: {'line': b"reading manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'\n"}
+[7.604975] (webcam_streamer_package) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[7.608331] (webcam_streamer_package) StdoutLine: {'line': b"writing manifest file '../../build/webcam_streamer_package/webcam_streamer_package.egg-info/SOURCES.txt'\n"}
+[7.609450] (webcam_streamer_package) StdoutLine: {'line': b'running build\n'}
+[7.610263] (webcam_streamer_package) StdoutLine: {'line': b'running build_py\n'}
+[7.611469] (webcam_streamer_package) StdoutLine: {'line': b'copying webcam_streamer_package/webcam_streamer_node.py -> /home/ubuntu/ros2_ws/build/webcam_streamer_package/build/lib/webcam_streamer_package\n'}
+[7.614143] (webcam_streamer_package) StdoutLine: {'line': b'running install\n'}
+[7.615902] (webcam_streamer_package) StdoutLine: {'line': b'running install_lib\n'}
+[7.620988] (webcam_streamer_package) StdoutLine: {'line': b'copying /home/ubuntu/ros2_ws/build/webcam_streamer_package/build/lib/webcam_streamer_package/webcam_streamer_node.py -> /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package\n'}
+[7.625620] (webcam_streamer_package) StdoutLine: {'line': b'byte-compiling /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py to webcam_streamer_node.cpython-310.pyc\n'}
+[7.630664] (webcam_streamer_package) StdoutLine: {'line': b'running install_data\n'}
+[7.631888] (webcam_streamer_package) StdoutLine: {'line': b'running install_egg_info\n'}
+[7.639769] (webcam_streamer_package) StdoutLine: {'line': b"removing '/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[7.642192] (webcam_streamer_package) StdoutLine: {'line': b'Copying ../../build/webcam_streamer_package/webcam_streamer_package.egg-info to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package-0.0.0-py3.10.egg-info\n'}
+[7.651249] (webcam_streamer_package) StdoutLine: {'line': b'running install_scripts\n'}
+[7.683632] (arm_controller_package) StdoutLine: {'line': b'Installing arm_controller script to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/arm_controller_package\n'}
+[7.686163] (arm_controller_package) StdoutLine: {'line': b"writing list of installed files to '/home/ubuntu/ros2_ws/build/arm_controller_package/install.log'\n"}
+[7.691684] (my_ax12_servo_controller) StdoutLine: {'line': b'Installing my_ax12_node script to /home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/my_ax12_servo_controller\n'}
+[7.694295] (-) TimerEvent: {}
+[7.699209] (my_ax12_servo_controller) StdoutLine: {'line': b"writing list of installed files to '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/install.log'\n"}
+[7.794735] (-) TimerEvent: {}
+[7.805089] (webcam_streamer_package) StdoutLine: {'line': b'Installing webcam_streamer_node script to /home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/webcam_streamer_package\n'}
+[7.809849] (webcam_streamer_package) StdoutLine: {'line': b"writing list of installed files to '/home/ubuntu/ros2_ws/build/webcam_streamer_package/install.log'\n"}
+[7.895169] (-) TimerEvent: {}
+[7.914251] (arm_controller_package) CommandEnded: {'returncode': 0}
+[7.990849] (arm_controller_package) JobEnded: {'identifier': 'arm_controller_package', 'rc': 0}
+[7.996329] (-) TimerEvent: {}
+[7.996789] (my_ax12_servo_controller) CommandEnded: {'returncode': 0}
+[8.023970] (my_ax12_servo_controller) JobEnded: {'identifier': 'my_ax12_servo_controller', 'rc': 0}
+[8.026257] (webcam_streamer_package) CommandEnded: {'returncode': 0}
+[8.051653] (webcam_streamer_package) JobEnded: {'identifier': 'webcam_streamer_package', 'rc': 0}
+[8.054349] (-) EventReactorShutdown: {}

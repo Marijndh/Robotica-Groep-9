@@ -1,0 +1,35 @@
+[6.629s] Invoking command in '/home/ubuntu/ros2_ws/src/arm_controller_package': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data
+[8.221s] running egg_info
+[8.225s] writing ../../build/arm_controller_package/arm_controller_package.egg-info/PKG-INFO
+[8.232s] writing dependency_links to ../../build/arm_controller_package/arm_controller_package.egg-info/dependency_links.txt
+[8.235s] writing entry points to ../../build/arm_controller_package/arm_controller_package.egg-info/entry_points.txt
+[8.239s] writing requirements to ../../build/arm_controller_package/arm_controller_package.egg-info/requires.txt
+[8.241s] writing top-level names to ../../build/arm_controller_package/arm_controller_package.egg-info/top_level.txt
+[8.259s] reading manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[8.271s] writing manifest file '../../build/arm_controller_package/arm_controller_package.egg-info/SOURCES.txt'
+[8.274s] running build
+[8.276s] running build_py
+[8.281s] copying arm_controller_package/Kinematics.py -> /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package
+[8.286s] copying arm_controller_package/PiClient.py -> /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package
+[8.291s] copying arm_controller_package/arm_controller.py -> /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package
+[8.297s] running install
+[8.299s] running install_lib
+[8.311s] copying /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package/Kinematics.py -> /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package
+[8.314s] copying /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package/PiClient.py -> /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package
+[8.317s] copying /home/ubuntu/ros2_ws/build/arm_controller_package/build/lib/arm_controller_package/arm_controller.py -> /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package
+[8.329s] byte-compiling /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/Kinematics.py to Kinematics.cpython-310.pyc
+[8.340s] byte-compiling /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py to PiClient.cpython-310.pyc
+[8.346s]   File "/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py", line 68
+[8.348s]     if move_gripper = True
+[8.350s]        ^^^^^^^^^^^^^^^^^^^
+[8.354s] SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?
+[8.358s] 
+[8.360s] byte-compiling /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/arm_controller.py to arm_controller.cpython-310.pyc
+[8.367s] running install_data
+[8.370s] running install_egg_info
+[8.382s] removing '/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info' (and everything under it)
+[8.385s] Copying ../../build/arm_controller_package/arm_controller_package.egg-info to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package-0.0.0-py3.10.egg-info
+[8.405s] running install_scripts
+[8.533s] Installing arm_controller script to /home/ubuntu/ros2_ws/install/arm_controller_package/lib/arm_controller_package
+[8.540s] writing list of installed files to '/home/ubuntu/ros2_ws/build/arm_controller_package/install.log'
+[8.642s] Invoked command in '/home/ubuntu/ros2_ws/src/arm_controller_package' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/arm_controller_package/prefix_override:/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/arm_controller_package build --build-base /home/ubuntu/ros2_ws/build/arm_controller_package/build install --record /home/ubuntu/ros2_ws/build/arm_controller_package/install.log --single-version-externally-managed install_data

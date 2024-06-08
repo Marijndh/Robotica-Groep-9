@@ -1,0 +1,17 @@
+[0.000000] (-) TimerEvent: {}
+[0.008805] (arm_controller_package) JobQueued: {'identifier': 'arm_controller_package', 'dependencies': OrderedDict()}
+[0.010461] (my_ax12_servo_controller) JobQueued: {'identifier': 'my_ax12_servo_controller', 'dependencies': OrderedDict()}
+[0.010637] (webcam_streamer_package) JobQueued: {'identifier': 'webcam_streamer_package', 'dependencies': OrderedDict()}
+[0.010793] (arm_controller_package) JobStarted: {'identifier': 'arm_controller_package'}
+[0.094348] (-) TimerEvent: {}
+[0.233358] (-) TimerEvent: {}
+[0.235871] (my_ax12_servo_controller) JobStarted: {'identifier': 'my_ax12_servo_controller'}
+[0.275786] (webcam_streamer_package) JobStarted: {'identifier': 'webcam_streamer_package'}
+[0.383791] (-) TimerEvent: {}
+[0.508065] (-) TimerEvent: {}
+[0.663987] (-) TimerEvent: {}
+[0.823029] (-) TimerEvent: {}
+[0.992283] (-) TimerEvent: {}
+[1.235465] (-) TimerEvent: {}
+[1.375865] (-) TimerEvent: {}
+[2.792036] (-) TimerEvent: {}

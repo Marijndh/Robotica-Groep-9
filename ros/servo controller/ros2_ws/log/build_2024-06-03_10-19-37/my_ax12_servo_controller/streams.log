@@ -1,0 +1,22 @@
+[5.912s] Invoking command in '/home/ubuntu/ros2_ws/src/my_ax12_servo_controller': PYTHONPATH=/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/prefix_override:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/my_ax12_servo_controller build --build-base /home/ubuntu/ros2_ws/build/my_ax12_servo_controller/build install --record /home/ubuntu/ros2_ws/build/my_ax12_servo_controller/install.log --single-version-externally-managed install_data
+[7.382s] running egg_info
+[7.385s] writing ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/PKG-INFO
+[7.386s] writing dependency_links to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/dependency_links.txt
+[7.388s] writing entry points to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/entry_points.txt
+[7.389s] writing requirements to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/requires.txt
+[7.390s] writing top-level names to ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/top_level.txt
+[7.400s] reading manifest file '../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/SOURCES.txt'
+[7.401s] adding license file 'LICENSE'
+[7.405s] writing manifest file '../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info/SOURCES.txt'
+[7.406s] running build
+[7.407s] running build_py
+[7.410s] running install
+[7.412s] running install_lib
+[7.418s] running install_data
+[7.419s] running install_egg_info
+[7.429s] removing '/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages/my_ax12_servo_controller-0.0.0-py3.10.egg-info' (and everything under it)
+[7.431s] Copying ../../build/my_ax12_servo_controller/my_ax12_servo_controller.egg-info to /home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages/my_ax12_servo_controller-0.0.0-py3.10.egg-info
+[7.440s] running install_scripts
+[7.547s] Installing my_ax12_node script to /home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/my_ax12_servo_controller
+[7.550s] writing list of installed files to '/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/install.log'
+[7.831s] Invoked command in '/home/ubuntu/ros2_ws/src/my_ax12_servo_controller' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/my_ax12_servo_controller/prefix_override:/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/my_ax12_servo_controller build --build-base /home/ubuntu/ros2_ws/build/my_ax12_servo_controller/build install --record /home/ubuntu/ros2_ws/build/my_ax12_servo_controller/install.log --single-version-externally-managed install_data
