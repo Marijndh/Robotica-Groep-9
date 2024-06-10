@@ -19,9 +19,6 @@ class Color:
         else:
             return False
 
-    def rgb_is_in_range(self, value):
-        print('aap')
-
 
 # Predefined colors with their HSV ranges
 colors = {

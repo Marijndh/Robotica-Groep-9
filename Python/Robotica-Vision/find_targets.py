@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-from ColorFiltering import Color
+from color_filtering import Color
 from create_grid_on_frame import create_grid_on_image
 
 width_img = 1080
