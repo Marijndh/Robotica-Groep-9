@@ -37,7 +37,7 @@ primary_colors = [
 # Function to display each color mask in a separate window
 def display_individual_colors():
     # Load and process frame
-    frame = cv.imread('Images/blauwe-tang.jpeg')
+    frame = cv.imread('../Images/blauwe-tang.jpeg')
     frame = cv.resize(frame, (640, 640))
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     for color_name in primary_colors:
@@ -55,7 +55,7 @@ def display_individual_colors():
 # Function to display all colors in one image with outlines and labels
 def display_all_colors():
     # Load and process frame
-    frame = cv.imread('Images/blauwe-tang.jpeg')
+    frame = cv.imread('../Images/blauwe-tang.jpeg')
     frame = cv.resize(frame, (640, 640))
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     combined_mask = None

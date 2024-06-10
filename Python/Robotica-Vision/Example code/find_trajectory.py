@@ -2,9 +2,7 @@ import os
 
 import numpy as np
 import cv2 as cv
-from color_filtering import primary_colors, colors
-from create_grid_on_frame import create_grid_on_image
-from find_instruments import Instrument, draw_instruments, find_children, get_instruments
+from find_instruments import find_children, get_instruments
 
 
 def predict_future_positions(points, num_future_points=4, degree=2):

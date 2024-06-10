@@ -58,7 +58,7 @@ def create_mask(center, gray_img):
 
 def main():
     # Lees de afbeelding in
-    img = cv.imread('Images/bulls-eye.jpg')
+    img = cv.imread('../Images/bulls-eye.jpg')
     img = cv.resize(img, (width_img, height_img))
 
     # Converteer de afbeelding naar grijswaarden

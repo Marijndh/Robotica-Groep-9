@@ -78,7 +78,7 @@ def get_gripper_degrees(punt, centroid):
 
     print(f"Hoek voor de grijper: {hoek_graden} graden")
 
-img = cv.imread('Images/rechte-tang4.jpeg')
+img = cv.imread('../Images/rechte-tang4.jpeg')
 img = cv.resize(img,(1080,720))
 
 hsv_img = cv.cvtColor(img, cv.COLOR_BGR2HSV)

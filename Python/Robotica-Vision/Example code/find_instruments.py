@@ -78,7 +78,7 @@ def get_instruments(contours):
 
 
 def main():
-    frame = cv.imread('Images/twee_scharen.png')
+    frame = cv.imread('../Images/twee_scharen.png')
     frame = cv.resize(frame, (1080, 720))
     imgray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     imgray = cv.medianBlur(imgray, 5)
