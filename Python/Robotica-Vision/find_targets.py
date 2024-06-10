@@ -8,6 +8,7 @@ width_img = 1080
 height_img = 720
 location_bullseye_cells = []
 
+
 # Functie om te controleren of een contour ellipsvormig is
 def is_ellipse(contour, min_aspect_ratio=0.5):
     if len(contour) < 5:
@@ -83,6 +84,7 @@ def main():
     cv.imshow("grid", create_grid_on_image(img, round(width_img / 2), round(height_img / 2)))
     cv.waitKey(0)
     cv.destroyAllWindows()
+
 
 if __name__ == '__main__':
     main()
