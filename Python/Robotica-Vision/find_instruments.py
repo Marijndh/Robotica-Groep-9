@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv
-from ColorFiltering import primary_colors, colors
+from color_filtering import primary_colors, colors
 from create_grid_on_frame import create_grid_on_image
 
 
