@@ -16,7 +16,8 @@ class GeometryUtils:
 
         # Predict future x-values based on the average step between x-values in the input
         average_step = np.mean(np.diff(x))
-        future_x = np.arange(x[-1] + average_step, x[-1] + average_step * (num_future_points + 1), average_step)
+        future_x = np.arange(x[-1] + average_step, x[-1] + average_step *
+                             (num_future_points + 1), average_step)
         future_y = polynomial(future_x)
 
         future_x = np.round(future_x).astype(int)

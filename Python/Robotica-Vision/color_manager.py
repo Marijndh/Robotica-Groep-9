@@ -1,5 +1,6 @@
 from color import Color
 
+
 class ColorManager:
     def __init__(self):
         self.colors = {

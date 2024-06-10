@@ -52,11 +52,11 @@ class Frame:
                 hull = cv.convexHull(contour)
                 m = cv.moments(contour)
                 if m["m00"] != 0:
-                    centroidX = int(m["m10"] / m["m00"])
-                    centroidY = int(m["m01"] / m["m00"])
+                    centroid_x = int(m["m10"] / m["m00"])
+                    centroid_y = int(m["m01"] / m["m00"])
                 else:
-                    centroidX, centroidY = 0, 0
-                centroid = [centroidX, centroidY]
+                    centroid_x, centroid_y = 0, 0
+                centroid = [centroid_x, centroid_y]
                 extreme_points = [
                     tuple(hull[hull[:, :, 0].argmin()][0]),
                     tuple(hull[hull[:, :, 0].argmax()][0]),

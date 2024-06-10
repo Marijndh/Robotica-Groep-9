@@ -5,6 +5,7 @@ from geometry_utils import GeometryUtils
 
 class Instrument:
     def __init__(self, body, index, children=None, centroid=None, points=None, rotation=0):
+        self.color = ""
         self.body = body
         self.index = index
         self.children = children if children is not None else []
@@ -24,7 +25,8 @@ class Instrument:
         """Calculate the centroid of the instrument's body."""
         M = cv.moments(self.body)
         if M["m00"] != 0:
-            self.centroid = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            self.centroid = (int(M["m10"] / M["m00"]),
+                             int(M["m01"] / M["m00"]))
         else:
             self.centroid = (0, 0)
 
@@ -43,10 +45,14 @@ class Instrument:
         else:
             self.rotation = 0
 
-    def predict_future_positions(self, points, num_future_points=4, degree=2):
+    @staticmethod
+    def predict_future_positions(points, num_future_points=4, degree=2):
         """Predict future positions based on given points."""
-        return GeometryUtils.predict_future_positions(points, num_future_points, degree)
+        return GeometryUtils.predict_future_positions(points,
+                                                      num_future_points,
+                                                      degree)
 
-    def is_ellipse(self, contour, min_aspect_ratio=0.5):
+    @staticmethod
+    def is_ellipse(contour, min_aspect_ratio=0.5):
         """Check if a contour is ellipse-shaped."""
         return GeometryUtils.is_ellipse(contour, min_aspect_ratio)

@@ -1,6 +1,6 @@
 import cv2 as cv
-import numpy as np
 from instrument import Instrument
+
 
 class FrameProcessor:
     def __init__(self, image_path):
@@ -15,11 +15,13 @@ class FrameProcessor:
 
     def process_frame(self):
         _, thresh = cv.threshold(self.gray_img, 127, 255, cv.THRESH_BINARY)
-        self.contours, self.hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+        self.contours, self.hierarchy = cv.findContours(thresh, cv.RETR_TREE,
+                                                        cv.CHAIN_APPROX_SIMPLE)
         self.hierarchy = self.hierarchy[0]
 
     def get_instruments(self):
-        self.instruments = [Instrument(body=contour, index=i) for i, contour in enumerate(self.contours)]
+        self.instruments = [Instrument(body=contour, index=i) for i,
+                            contour in enumerate(self.contours)]
         for instrument in self.instruments:
             instrument.calculate_centroid()
             instrument.calculate_rotation()

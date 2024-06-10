@@ -1,12 +1,14 @@
 import numpy as np
 import cv2 as cv
 
+
 class TargetProcessor:
     def __init__(self, img, contours):
         self.img = img
         self.contours = contours
 
-    def get_point_of_target(self, coordinates, centroid):
+    @staticmethod
+    def get_point_of_target(coordinates, centroid):
         points = np.array(coordinates)
         distances_to_centroid = np.linalg.norm(points - centroid, axis=1)
         point_index = np.argmax(distances_to_centroid)
@@ -43,7 +45,8 @@ class TargetProcessor:
         }
         return categorized_points
 
-    def get_gripper_degrees(self, point, centroid):
+    @staticmethod
+    def get_gripper_degrees(point, centroid):
         v = point - centroid
         theta = np.arctan2(v[1], v[0])
         degrees = np.degrees(theta) + 90
