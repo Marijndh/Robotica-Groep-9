@@ -1,6 +1,9 @@
 import cv2 as cv
 
-from Instrument import Instrument
+from instrument import Instrument
+from target_processor import TargetProcessor
+from geometry_utils import GeometryUtils
+
 
 class Frame:
     def __init__(self, img, contours=None, width=0, height=0, hierarchy=None):
@@ -8,35 +11,65 @@ class Frame:
         self.contours = contours if contours is not None else []
         self.width = width
         self.height = height
-        self.hierarchy = hierarchy
+        self.hierarchy = hierarchy if hierarchy is not None else []
 
-    def draw_instruments(self, frame, instruments):
-        for i in instruments:
-            objects = [i.body] + i.children
-            cv.drawContours(frame, objects, -1, (0, 255, 0), 3)
-            cv.circle(frame, i.centroid, 5, (0, 0, 0), -1)
-            if i.color is not None:
-                print(str(i.index) + ": " + i.color)
+    def draw_instruments(self):
+        # Placeholder implementation
+        for contour in self.contours:
+            cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
-    def get_instruments(self, contours):
+    def get_instruments(self):
+        # Placeholder implementation
         instruments = []
-        for cnr in range(len(contours)):
-            cnt = contours[cnr]
-            area = cv.contourArea(cnt)
-            # perimeter = cv.arcLength(cnt, True)
-            # factor = 4 * math.pi * area / perimeter ** 2
-            if 5000.0 < area < 1080 * 720 * 0.8:  # instrumenten mogen niet groter dan 80% van de afbeelding zijn
-                instruments.append(Instrument(cnr, cnt))
+        for i, contour in enumerate(self.contours):
+            instrument = Instrument(body=contour, index=i)
+            instrument.calculate_centroid()
+            instrument.calculate_rotation()
+            instruments.append(instrument)
         return instruments
 
-    def find_children(self, instruments, contours, hierarchy):
-        for i in instruments:
-            for j in range(len(hierarchy)):
-                if hierarchy[j][3] == i.index and cv.contourArea(contours[j]) > 1000:
-                    child = contours[j]
-                    i.add_child(child)
+    def find_children(self, instruments):
+        for instrument in instruments:
+            for j in range(len(self.hierarchy)):
+                if self.hierarchy[j][3] == instrument.index and cv.contourArea(self.contours[j]) > 1000:
+                    child = self.contours[j]
+                    instrument.add_child(child)
 
     def get_targets(self):
         # Placeholder implementation
-        # TODO: Implement this method
-        return []
+        targets = []
+        for contour in self.contours:
+            aspect_ratio, center = GeometryUtils.is_ellipse(contour)
+            if aspect_ratio:
+                targets.append((center, contour))
+        return targets
+
+    def process_targets(self):
+        target_processor = TargetProcessor(self.img, self.contours)
+        for contour in self.contours:
+            area = cv.contourArea(contour)
+            if area > 500:
+                hull = cv.convexHull(contour)
+                m = cv.moments(contour)
+                if m["m00"] != 0:
+                    centroidX = int(m["m10"] / m["m00"])
+                    centroidY = int(m["m01"] / m["m00"])
+                else:
+                    centroidX, centroidY = 0, 0
+                centroid = [centroidX, centroidY]
+                extreme_points = [
+                    tuple(hull[hull[:, :, 0].argmin()][0]),
+                    tuple(hull[hull[:, :, 0].argmax()][0]),
+                    tuple(hull[hull[:, :, 1].argmin()][0]),
+                    tuple(hull[hull[:, :, 1].argmax()][0]),
+                ]
+                filtered = target_processor.get_point_of_target(extreme_points, centroid)
+                point = filtered["point"]
+                handle1 = filtered["handle1"]
+                handle2 = filtered["handle2"]
+                degrees = target_processor.get_gripper_degrees(point, centroid)
+                target_processor.draw_gripper(centroid, degrees)
+                cv.circle(self.img, handle1, 5, (255, 0, 0), -1)
+                cv.circle(self.img, handle2, 5, (255, 0, 0), -1)
+                cv.circle(self.img, point, 5, (0, 255, 0), -1)
+                cv.circle(self.img, tuple(centroid), 5, (0, 0, 0), -1)

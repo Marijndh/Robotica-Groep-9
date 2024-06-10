@@ -1,55 +1,52 @@
-import numpy as np
 import cv2 as cv
 
+from geometry_utils import GeometryUtils
+
+
 class Instrument:
-    def __init__(self, body, children=None, centroid=None, points=None, rotation=0):
+    def __init__(self, body, index, children=None, centroid=None, points=None, rotation=0):
         self.body = body
+        self.index = index
         self.children = children if children is not None else []
         self.centroid = centroid
         self.points = points if points is not None else {}
         self.rotation = rotation
 
-    def set_hsv(self, hsv):
-        self.hsv = hsv
-
     def add_child(self, child):
+        """Add a child contour to the instrument."""
         self.children.append(child)
 
     def set_color(self, color):
+        """Set the color of the instrument."""
         self.color = color
 
     def calculate_centroid(self):
+        """Calculate the centroid of the instrument's body."""
+        M = cv.moments(self.body)
+        if M["m00"] != 0:
+            self.centroid = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        else:
+            self.centroid = (0, 0)
+
+    def get_points(self):
+        """Get the points of the instrument's body."""
         # Placeholder implementation
-        self.centroid = (0, 0)
+        self.points = self.body.reshape(-1, 2).tolist()
+        return self.points
 
-    def get_points(self, points, ):
-        points = np.array(points)
-        x = points[:, 0]
-        y = points[:, 1]
-
-        # Fit a polynomial to the given points
-        coefficients = np.polyfit(x, y, degree)
-        polynomial = np.poly1d(coefficients)
-
-        # Predict future x-values based on the average step between x-values in the input
-        average_step = np.mean(np.diff(x))
-        future_x = np.arange(x[-1] + average_step, x[-1] + average_step * (num_future_points + 1), average_step)
-        future_y = polynomial(future_x)
-
-        future_x = np.round(future_x).astype(int)
-        future_y = np.round(future_y).astype(int)
-
-        return list(zip(future_x, future_y))
-
+    # TODO: Waar wordt dit voor gebruikt?
     def calculate_rotation(self):
-        # Placeholder implementation
-        self.rotation = 0
+        """Calculate the rotation of the instrument's body."""
+        if len(self.body) >= 5:
+            ellipse = cv.fitEllipse(self.body)
+            self.rotation = ellipse[2]
+        else:
+            self.rotation = 0
 
-    def set_centroid(self, body):
-        # compute the center of the contour
-        M = cv.moments(body)
-        centroidX = int(M["m10"] / M["m00"])
-        centroidY = int(M["m01"] / M["m00"])
-        # draw the contour and center of the shape on the image
-        centroid = (centroidX, centroidY)
-        return centroid
+    def predict_future_positions(self, points, num_future_points=4, degree=2):
+        """Predict future positions based on given points."""
+        return GeometryUtils.predict_future_positions(points, num_future_points, degree)
+
+    def is_ellipse(self, contour, min_aspect_ratio=0.5):
+        """Check if a contour is ellipse-shaped."""
+        return GeometryUtils.is_ellipse(contour, min_aspect_ratio)

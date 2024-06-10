@@ -1,8 +1,6 @@
 import cv2 as cv
 import numpy as np
 
-import numpy as np
-
 
 def get_point_of_target(coordinates, centroid):
     points = np.array(coordinates)
