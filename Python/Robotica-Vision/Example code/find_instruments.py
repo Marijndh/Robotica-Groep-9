@@ -7,10 +7,10 @@ from create_grid_on_frame import create_grid_on_image
 def set_centroid(body):
     # compute the center of the contour
     M = cv.moments(body)
-    cX = int(M["m10"] / M["m00"])
-    cY = int(M["m01"] / M["m00"])
+    centroidX = int(M["m10"] / M["m00"])
+    centroidY = int(M["m01"] / M["m00"])
     # draw the contour and center of the shape on the image
-    centroid = (cX, cY)
+    centroid = (centroidX, centroidY)
     return centroid
 
 

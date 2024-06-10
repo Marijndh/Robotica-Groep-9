@@ -32,6 +32,7 @@ class Color:
 
 
 
+# TODO: better sollution for the color being global yes or no, the code needs to be object oriented
 # Predefined colors with their HSV ranges
 colors = {
     "red": Color("red", np.array([0, 200, 0]), np.array([20, 255, 255])),
