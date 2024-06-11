@@ -8,15 +8,15 @@ from color_manager import ColorManager
 class Frame:
     def __init__(self, path, width=0, height=0):
         self.img = cv.imread(path)
-        self.img = cv.resize(self.img, (1080, 720))
+        self.width = width
+        self.height = height
+        self.img = cv.resize(self.img, (width, height))
         self.gray_image = cv.cvtColor(self.img, cv.COLOR_BGR2GRAY)
         self.gray_image = cv.medianBlur(self.gray_image, 5)
         self.hsv_image = cv.cvtColor(self.img, cv.COLOR_BGR2HSV)
         self.thresh = cv.threshold(self.gray_image, 127, 255, cv.THRESH_BINARY)[1]
         self.contours, self.hierarchy = cv.findContours(self.thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
         self.hierarchy = self.hierarchy[0]
-        self.width = width
-        self.height = height
         self.instruments = []
         self.targets = []
 
