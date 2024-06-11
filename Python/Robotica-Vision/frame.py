@@ -10,13 +10,13 @@ from color import Color
 class Frame:
     def __init__(self, path, width=0, height=0):
         self.img = cv.imread(path)
-        self.img = cv.resize(self.img, (1080, 720))
+        self.width = width
+        self.height = height
+        self.img = cv.resize(self.img, (width, height))
         self.gray_image = cv.cvtColor(self.img, cv.COLOR_BGR2GRAY)
         self.gray_image = cv.medianBlur(self.gray_image, 5)
         self.hsv_image = cv.cvtColor(self.img, cv.COLOR_BGR2HSV)
         self.contours, self.hierarchy = None, None
-        self.width = width
-        self.height = height
         self.instruments = []
         self.targets = []
 
