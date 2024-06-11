@@ -1,9 +1,17 @@
 import cv2 as cv
-import numpy as np
+
+from geometry_utils import GeometryUtils
 
 
-def get_point_of_target(coordinates, centroid):
-    points = np.array(coordinates)
+def get_points(contour, centroid):
+    hull = cv.convexHull(contour)
+
+    extreme_left = tuple(hull[hull[:, :, 0].argmin()][0])
+    extreme_right = tuple(hull[hull[:, :, 0].argmax()][0])
+    extreme_top = tuple(hull[hull[:, :, 1].argmin()][0])
+    extreme_bottom = tuple(hull[hull[:, :, 1].argmax()][0])
+
+    points = np.array([extreme_left, extreme_right, extreme_top, extreme_bottom])
 
     # Bepaal de afstanden tussen elk punt en het gemiddelde (centroïde) punt
     distances_to_centroid = np.linalg.norm(points - centroid, axis=1)
@@ -54,58 +62,45 @@ def get_point_of_target(coordinates, centroid):
 
     return categorized_points
 
-img = cv.imread('../Images/rechte-tang4.jpeg')
-img = cv.resize(img,(1080,720))
 
-hsv_img = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+def calculate_centroid(body):
+    """Calculate the centroid of a contour body."""
+    M = cv.moments(body)
+    if M["m00"] != 0:
+        return int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
+    else:
+        return 0, 0
 
-yellow_lower = np.array([20, 100, 100])
-yellow_upper = np.array([30, 255, 255])
 
-yellow_mask = cv.inRange(hsv_img, yellow_lower, yellow_upper)
+def get_rotation(punt, centroid):
+    # Vector bepalen van centroid naar punt van de tang
+    v = punt - centroid
 
-# Voer morfologische operaties uit om de maskers te verbeteren
-kernel = np.ones((5, 5), np.uint8)
-yellow_mask = cv.morphologyEx(yellow_mask, cv.MORPH_CLOSE, kernel)
+    # Oriëntatie berekenen
+    theta = np.arctan2(v[1], v[0])
+    hoek_graden = np.degrees(theta) + 90
 
-contours_yellow, _ = cv.findContours(yellow_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    # Zorg ervoor dat de hoek binnen 0-360 graden valt
+    if hoek_graden < 0:
+        hoek_graden += 360
 
-cv.drawContours(img, contours_yellow, -1, (0, 255, 255), 2)
+    return hoek_graden
 
-for contour in contours_yellow:
-    area = cv.contourArea(contour)
-    if area > 500:
-        hull = cv.convexHull(contour)
 
-        M = cv.moments(contour)
-        if M["m00"] != 0:
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-        else:
-            cX, cY = 0, 0
-        centroid = [cX, cY]
+class Instrument:
+    def __init__(self, contour, index):
+        self.color = ""
+        self.body = contour.body
+        self.index = index
+        self.children = []
+        self.centroid = calculate_centroid(contour.body)
+        self.points = get_points(contour, self.centroid)
+        self.rotation = get_rotation(self.points["point"], self.centroid)
 
-        extreme_left = tuple(hull[hull[:, :, 0].argmin()][0])
-        extreme_right = tuple(hull[hull[:, :, 0].argmax()][0])
-        extreme_top = tuple(hull[hull[:, :, 1].argmin()][0])
-        extreme_bottom = tuple(hull[hull[:, :, 1].argmax()][0])
+    def add_child(self, child):
+        """Add a child contour to the instrument."""
+        self.children.append(child)
 
-        points = [extreme_left, extreme_right, extreme_top, extreme_bottom]
-
-        x, y, w, h = cv.boundingRect(contour)
-        filtered = get_point_of_target(points, centroid)
-
-        punt = filtered["punt"]
-        handvat1 = filtered["handvat1"]
-        handvat2 = filtered["handvat2"]
-        get_gripper_degrees(punt, centroid)
-
-        cv.circle(img, handvat1, 5, (255, 0, 0), -1)
-        cv.circle(img, handvat2, 5, (255, 0, 0), -1)
-        cv.circle(img, punt, 5, (0, 255, 0), -1)
-        cv.circle(img, centroid, 5, (0, 0, 0), -1)
-
-# Toon de resultaten
-cv.imshow('Tangvormig Object', img)
-cv.waitKey(0)
-cv.destroyAllWindows()
+    def set_color(self, color):
+        """Set the color of the instrument."""
+        self.color = color

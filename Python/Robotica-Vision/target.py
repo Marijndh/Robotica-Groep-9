@@ -3,10 +3,6 @@ class Target:
         self.hitpoint = hitpoint
         self.body = body
 
-    def draw_targets(self):
-        # Placeholder implementation
-        pass
-
     # possible code ?
     # def color_bulls_eye(center, ellipse, mean, img):
     # bulls_eye = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))

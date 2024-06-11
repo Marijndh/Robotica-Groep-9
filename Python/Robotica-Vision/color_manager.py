@@ -9,7 +9,7 @@ class ColorManager:
             "blue": Color("blue", [90, 50, 50], [140, 255, 255]),
             "pink": Color("pink", [165, 0, 0], [180, 255, 255]),
         }
-        self.primary_colors = ['red', 'green', 'blue', 'pink']
+        self.primary_colors = ['red', 'green', 'blue', 'pink', 'silver']
 
     def get_color(self, name):
         return self.colors.get(name)

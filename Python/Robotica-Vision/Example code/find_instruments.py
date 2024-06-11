@@ -93,7 +93,6 @@ def main():
     draw_instruments(frame, instruments)
 
     cv.imshow('Contours', frame)
-    cv.imshow('Grid', create_grid_on_image(frame, 40, 40))
     cv.waitKey(0)
     cv.destroyAllWindows()
 
