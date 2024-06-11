@@ -1,7 +1,8 @@
 import cv2 as cv
-
+import numpy as np
 from instrument import Instrument
 from geometry_utils import GeometryUtils
+from color_manager import ColorManager
 
 
 class Frame:
@@ -27,9 +28,13 @@ class Frame:
         for instrument in self.instruments:
             objects = [instrument.body] + instrument.children
             cv.drawContours(frame, objects, -1, (0, 255, 0), 3)
-            cv.circle(frame, i.centroid, 5, (0, 0, 0), -1)
+            cv.circle(frame, i.centroid, 10, (0, 0, 0), -1)
             if i.color is not None:
                 print(str(i.index) + ": " + i.color)
+
+    def print_instruments(self):
+        for instrument in self.instruments:
+            print(instrument.__str__())
 
     def find_instruments(self):
         contours = self.contours
@@ -39,22 +44,25 @@ class Frame:
             # perimeter = cv.arcLength(cnt, True)
             # factor = 4 * math.pi * area / perimeter ** 2
             if 5000.0 < area < 1080 * 720 * 0.8:  # instrumenten mogen niet groter dan 80% van de afbeelding zijn
-                self.instruments.append(Instrument(cnt, cnr))
+                self.instruments.append(Instrument(cnt, cnr, area))
 
     def find_children(self):
-        for instrument in instruments:
+        for instrument in self.instruments:
             for j in range(len(self.hierarchy)):
                 if self.hierarchy[j][3] == instrument.index and cv.contourArea(self.contours[j]) > 1000:
                     child = self.contours[j]
                     instrument.add_child(child)
 
     def get_instrument_colors(self):
+        color_manager = ColorManager()
         for instrument in self.instruments:
             mask = np.zeros(self.hsv_image.shape[:2], np.uint8)
             contours = [instrument.body] + instrument.children
             cv.drawContours(mask, contours, -1, 255, -1)
-            mean = cv.mean(hsv, mask=mask)
+            mean = cv.mean(self.hsv_image, mask=mask)
             instrument.set_hsv(mean)
+            primary_colors = color_manager.primary_colors
+            colors = color_manager.colors
             for color_name in primary_colors:
                 if color_name in colors:
                     color = colors[color_name]

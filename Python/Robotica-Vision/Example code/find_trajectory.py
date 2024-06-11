@@ -26,7 +26,7 @@ def predict_future_positions(points, num_future_points=4, degree=2):
 
 
 def main():
-    dirs = [r'Images/links-naar-rechts', r'Images/rechts-naar-links']
+    dirs = [r'../Images/links-naar-rechts', r'../Images/rechts-naar-links']
     for d in dirs:
         frame = None
         points = []

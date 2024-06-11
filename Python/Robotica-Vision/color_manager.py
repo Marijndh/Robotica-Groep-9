@@ -11,11 +11,8 @@ class ColorManager:
         }
         self.primary_colors = ['red', 'green', 'blue', 'pink', 'silver']
 
-    def get_color(self, name):
-        return self.colors.get(name)
-
-    def get_all_colors(self):
-        return self.colors.values()
-
     def get_primary_colors(self):
-        return [self.colors[color] for color in self.primary_colors]
+        return self.primary_colors
+
+    def get_colors(self):
+        return self.colors

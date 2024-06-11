@@ -1,5 +1,5 @@
 import cv2 as cv
-
+import numpy as np
 from geometry_utils import GeometryUtils
 
 
@@ -88,18 +88,27 @@ def get_rotation(punt, centroid):
 
 
 class Instrument:
-    def __init__(self, contour, index):
+    def __init__(self, body, index, area):
         self.color = ""
-        self.body = contour.body
+        self.body = body
         self.index = index
+        self.area = area
         self.children = []
-        self.centroid = calculate_centroid(contour.body)
-        self.points = get_points(contour, self.centroid)
-        self.rotation = get_rotation(self.points["point"], self.centroid)
+        self.centroid = calculate_centroid(body)
+        self.points = get_points(body, self.centroid)
+        self.rotation = get_rotation(self.points["punt"], self.centroid)
+        self.hsv_values = []
+
+    def __str__(self):
+        return str(self.index) + ": centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
+            + str(self.rotation) + ", area: " + str(self.area) + "\n"
 
     def add_child(self, child):
         """Add a child contour to the instrument."""
         self.children.append(child)
+
+    def set_hsv(self, hsv):
+        self.hsv_values = hsv
 
     def set_color(self, color):
         """Set the color of the instrument."""
