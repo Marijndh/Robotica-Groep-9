@@ -173,3 +173,5 @@ class Instrument:
                 if color.is_color(h, s, v):
                     self.color = color_name
                     break
+        if self.color == "":
+            self.color = 'silver'
