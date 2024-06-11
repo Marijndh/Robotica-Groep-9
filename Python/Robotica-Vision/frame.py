@@ -5,6 +5,7 @@ import geometry_utils
 from instrument import Instrument
 from geometry_utils import GeometryUtils
 from color import Color
+from target import Target
 
 
 class Frame:
@@ -14,7 +15,7 @@ class Frame:
         self.height = height
         self.img = cv.resize(self.img, (width, height))
         self.gray_image = cv.cvtColor(self.img, cv.COLOR_BGR2GRAY)
-        self.gray_image = cv.medianBlur(self.gray_image, 5)
+        self.gray_blurred = None
         self.hsv_image = cv.cvtColor(self.img, cv.COLOR_BGR2HSV)
         self.contours, self.hierarchy = None, None
         self.instruments = []
@@ -29,12 +30,14 @@ class Frame:
             objects = [instrument.body] + instrument.children
             cv.drawContours(self.img, objects, -1, (0, 255, 0), 3)
             cv.circle(self.img, instrument.centroid, 5, (0, 0, 0), -1)
+            instrument.draw_points(self.img)
 
     def print_instruments(self):
         for instrument in self.instruments:
             print(instrument.__str__())
 
     def find_instruments(self):
+        self.gray_blurred = cv.medianBlur(self.gray_image, 5)
         contours = self.contours
         for index in range(len(contours)):
             contour = contours[index]
@@ -53,29 +56,29 @@ class Frame:
                     child = self.contours[j]
                     instrument.add_child(child)
 
-    def check_bull_color(self, contour):
-        print(len(self.targets))
+    def check_bull_color(self, contour, center):
         ellipse = cv.fitEllipse(contour)
         mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
+        cv.circle(mask, center, 5, (255, 255, 255), -1)
         mean = cv.mean(self.hsv_image, mask=mask)
         expected_bulls_eye_color = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
         if expected_bulls_eye_color.is_color(mean[0], mean[1], mean[2]):
-            self.targets.append(center, ellipse)
+            self.targets.append(Target(center, ellipse))
 
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
-            if area > 5000:
+            if area > 10000 < self.width * self.height * 0.8:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
                 if is_ellipse_flag:
-                    self.check_bull_color(contour)
+                    self.check_bull_color(contour, center)
 
     def draw_targets(self):
         for target in self.targets:
             center = target.hitpoint
             ellipse = target.body
-            cv.circle(img, center, 5, (0, 0, 0), -1)
-            cv.ellipse(img, ellipse, (0, 255, 0), 2)
+            cv.circle(self.img, center, 5, (0, 0, 0), -1)
+            cv.ellipse(self.img, ellipse, (0, 255, 0), 2)
 
     def print_targets(self):
         for target in self.targets:

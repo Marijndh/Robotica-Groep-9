@@ -4,4 +4,4 @@ class Target:
         self.body = body
 
     def __str__(self):
-        return "Target: " + hitpoint.__str__()
+        return "Target: " + self.hitpoint.__str__()

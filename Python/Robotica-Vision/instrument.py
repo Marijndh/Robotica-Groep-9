@@ -14,23 +14,17 @@ def get_points(contour, centroid):
 
     points = np.array([extreme_left, extreme_right, extreme_top, extreme_bottom])
 
-    # Bepaal de afstanden tussen elk punt en het gemiddelde (centroïde) punt
     distances_to_centroid = np.linalg.norm(points - centroid, axis=1)
 
-    # Zoek de index van het punt dat het verst van het gemiddelde punt ligt, dit is de 'punt'
     point_index = np.argmax(distances_to_centroid)
     point = points[point_index]
 
-    # Nu hebben we het punt, laten we het verwijderen uit de lijst van punten om de resterende punten te analyseren
     remaining_points = np.delete(points, point_index, axis=0)
 
-    # Bepaal de richting van de lijn van het centroid naar de punt van de tang
     direction = point - centroid
 
-    # Draai de richting 90 graden om de loodrechte lijn te krijgen
     perpendicular_direction = np.array([-direction[1], direction[0]])
 
-    # Categoriseer punten op basis van hun positie ten opzichte van de twee lijnen
     handle1 = None
     handle2 = None
 
@@ -54,11 +48,10 @@ def get_points(contour, centroid):
                 if handle2 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle2 - centroid):
                     handle2 = pt
 
-    # Teruggeven van de gecategoriseerde punten
     categorized_points = {
-        'handvat1': handle1,
-        'handvat2': handle2,
-        'punt': point,
+        'handle1': handle1,
+        'handle2': handle2,
+        'point': point,
     }
 
     return categorized_points
@@ -73,19 +66,19 @@ def calculate_centroid(body):
         return 0, 0
 
 
-def get_rotation(punt, centroid):
-    # Vector bepalen van centroid naar punt van de tang
-    v = punt - centroid
+def get_rotation(point, centroid):
+    # Determine vector
+    vector = point - centroid
 
-    # Oriëntatie berekenen
-    theta = np.arctan2(v[1], v[0])
-    hoek_graden = np.degrees(theta) + 90
+    # Calculate orientation
+    theta = np.arctan2(vector[1], vector[0])
+    degrees = np.degrees(theta) + 90
 
-    # Zorg ervoor dat de hoek binnen 0-360 graden valt
-    if hoek_graden < 0:
-        hoek_graden += 360
+    # Make sure angle is between 0 and 360
+    if degrees < 0:
+        degrees += 360
 
-    return hoek_graden
+    return degrees
 
 
 class Instrument:
@@ -97,7 +90,7 @@ class Instrument:
         self.children = []
         self.centroid = calculate_centroid(body)
         self.points = get_points(body, self.centroid)
-        self.rotation = get_rotation(self.points["punt"], self.centroid)
+        self.rotation = get_rotation(self.points["point"], self.centroid)
 
     def __str__(self):
         return "Instrument (" + str(self.index) + "): centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
@@ -106,6 +99,14 @@ class Instrument:
     def add_child(self, child):
         """Add a child contour to the instrument."""
         self.children.append(child)
+
+    def draw_points(self, img):
+        point = self.points["point"]
+        handle1 = self.points["handle1"]
+        handle2 = self.points["handle2"]
+        cv.circle(img, handle1, 5, (0, 0, 0), -1)
+        cv.circle(img, handle2, 5, (0, 0, 0), -1)
+        cv.circle(img, point, 5, (0, 0, 0), -1)
 
     def get_color(self, hsv_image):
         color_manager = ColorManager()
