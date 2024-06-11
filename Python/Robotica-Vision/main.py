@@ -2,6 +2,7 @@ from instrument import Instrument
 from frame import Frame
 from color import Color
 from target import Target
+from server import Server
 
 
 def main():
@@ -14,5 +15,9 @@ def main():
     frame.show()
 
 
+# if __name__ == '__main__':
+#     main()
+
 if __name__ == '__main__':
-    main()
+    server = Server('localhost', 5000)
+    server.run()
