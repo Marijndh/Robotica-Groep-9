@@ -8,6 +8,14 @@ import cv2 as cv
 mode = 'instruments'
 #mode = 'targets'
 
+def determine_direction(initial_position, final_position):
+    x1, y1 = initial_position
+    x2, y2 = final_position
+
+    if x2 > x1:
+        return "r"
+    elif x2 < x1:
+        return "l"
 def calculate_speed(initial_position, final_position, time):
     x1, y1 = initial_position
     x2, y2 = final_position
@@ -19,7 +27,7 @@ def calculate_speed(initial_position, final_position, time):
 
 
 def main():
-    frame = Frame('Images/twee_scharen.png', 1080, 720)
+    frame = Frame('Images/kromme.jpg', 1080, 720)
     if mode == 'instruments':
         gray_blurred = cv.medianBlur(frame.gray_image, 5)
         _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)

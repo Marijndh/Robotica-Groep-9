@@ -15,7 +15,6 @@ class Frame:
         self.height = height
         self.img = cv.resize(self.img, (width, height))
         self.gray_image = cv.cvtColor(self.img, cv.COLOR_BGR2GRAY)
-        self.gray_blurred = None
         self.hsv_image = cv.cvtColor(self.img, cv.COLOR_BGR2HSV)
         self.contours, self.hierarchy = None, None
         self.instruments = []
@@ -44,7 +43,7 @@ class Frame:
             area = cv.contourArea(contour)
             # perimeter = cv.arcLength(contour, True)
             # factor = 4 * math.pi * area / perimeter ** 2
-            if 5000.0 < area < self.width * self.height * 0.8:  # instrument cant be bigger than 80 percent of the image
+            if 15000.0 < area < self.width * self.height * 0.8:  # instrument cant be bigger than 80 percent of the image
                 instrument = Instrument(contour, index, area)
                 self.instruments.append(instrument)
                 instrument.get_color(self.hsv_image)
@@ -72,6 +71,7 @@ class Frame:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
                 if is_ellipse_flag:
                     self.check_bull_color(contour, center)
+
 
     def draw_targets(self):
         for target in self.targets:

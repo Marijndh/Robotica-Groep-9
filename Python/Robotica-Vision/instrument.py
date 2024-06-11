@@ -4,7 +4,13 @@ from geometry_utils import GeometryUtils
 from color_manager import ColorManager
 
 
-def get_points(contour, centroid):
+import numpy as np
+import cv2 as cv
+
+import numpy as np
+import cv2 as cv
+
+def get_points(contour, centroid, type):
     hull = cv.convexHull(contour)
 
     extreme_left = tuple(hull[hull[:, :, 0].argmin()][0])
@@ -21,32 +27,65 @@ def get_points(contour, centroid):
 
     remaining_points = np.delete(points, point_index, axis=0)
 
-    direction = point - centroid
+    if type == 'straight':
+        direction = point - centroid
+        perpendicular_direction = np.array([-direction[1], direction[0]])
 
-    perpendicular_direction = np.array([-direction[1], direction[0]])
+        handle1 = None
+        handle2 = None
 
-    handle1 = None
-    handle2 = None
+        for pt in remaining_points:
+            vector = pt - centroid
+            dot_product_main = np.dot(vector, direction)
+            dot_product_perp = np.dot(vector, perpendicular_direction)
 
-    for pt in remaining_points:
-        vector = pt - centroid
-        dot_product_main = np.dot(vector, direction)
-        dot_product_perp = np.dot(vector, perpendicular_direction)
-
-        if dot_product_main > 0:
-            if dot_product_perp > 0:
-                if handle1 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle1 - centroid):
-                    handle1 = pt
+            if dot_product_main > 0:
+                if dot_product_perp > 0:
+                    if handle1 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle1 - centroid):
+                        handle1 = pt
+                else:
+                    if handle2 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle2 - centroid):
+                        handle2 = pt
             else:
-                if handle2 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle2 - centroid):
-                    handle2 = pt
+                if dot_product_perp > 0:
+                    if handle1 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle1 - centroid):
+                        handle1 = pt
+                else:
+                    if handle2 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle2 - centroid):
+                        handle2 = pt
+    elif type == 'crooked':
+        # Define the line from point to centroid
+        direction = point - centroid
+        normal_direction = np.array([-direction[1], direction[0]])
+
+        handle1 = None
+        handle2 = None
+        same_side_points = []
+
+        for pt in remaining_points:
+            vector = pt - centroid
+            # Check if point is on the same side of the line
+            dot_product = np.dot(vector, normal_direction)
+
+            if dot_product > 0:
+                same_side_points.append(pt)
+            else:
+                same_side_points.append(pt)
+
+        # Ensure we have at least two points on the same side
+        if len(same_side_points) >= 2:
+            min_distance = float('inf')
+            for i in range(len(same_side_points) - 1):
+                for j in range(i + 1, len(same_side_points)):
+                    dist = np.linalg.norm(same_side_points[i] - same_side_points[j])
+                    if dist < min_distance:
+                        min_distance = dist
+                        handle1 = same_side_points[i]
+                        handle2 = same_side_points[j]
         else:
-            if dot_product_perp > 0:
-                if handle1 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle1 - centroid):
-                    handle1 = pt
-            else:
-                if handle2 is None or np.linalg.norm(pt - centroid) < np.linalg.norm(handle2 - centroid):
-                    handle2 = pt
+            # This is a fallback in case our logic has an issue (shouldn't occur with proper input)
+            if len(same_side_points) == 1:
+                handle1 = same_side_points[0]
 
     categorized_points = {
         'handle1': handle1,
@@ -55,6 +94,8 @@ def get_points(contour, centroid):
     }
 
     return categorized_points
+
+
 
 
 def calculate_centroid(body):
@@ -80,6 +121,12 @@ def get_rotation(point, centroid):
 
     return degrees
 
+def get_instrument_type(body, centroid):
+    distance = cv.pointPolygonTest(body, centroid, measureDist=False)
+    if distance > 0:
+        return 'straight'
+    elif distance < 0:
+        return 'crooked'
 
 class Instrument:
     def __init__(self, body, index, area):
@@ -89,12 +136,13 @@ class Instrument:
         self.area = area
         self.children = []
         self.centroid = calculate_centroid(body)
-        self.points = get_points(body, self.centroid)
+        self.type = get_instrument_type(body,self.centroid)
+        self.points = get_points(body, self.centroid, self.type)
         self.rotation = get_rotation(self.points["point"], self.centroid)
 
     def __str__(self):
         return "Instrument (" + str(self.index) + "): centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
-            + str(self.rotation) + ", area: " + str(self.area) + "\n"
+            + str(self.rotation) + ", area: " + str(self.area) + ", type: "+ self.type +"\n"
 
     def add_child(self, child):
         """Add a child contour to the instrument."""
@@ -106,7 +154,7 @@ class Instrument:
         handle2 = self.points["handle2"]
         cv.circle(img, handle1, 5, (0, 0, 0), -1)
         cv.circle(img, handle2, 5, (0, 0, 0), -1)
-        cv.circle(img, point, 5, (0, 0, 0), -1)
+        cv.circle(img, point, 5, (150, 65, 132), -1)
 
     def get_color(self, hsv_image):
         color_manager = ColorManager()
