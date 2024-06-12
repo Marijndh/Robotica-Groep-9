@@ -1,4 +1,8 @@
+import sys
 import numpy as np
+from servo.servo_controller import ServoController
+
+
 
 class Kinematics:
     def __init__(self, link1, link2, range_l1, range_l2):
@@ -9,6 +13,45 @@ class Kinematics:
         self.theta1_max = np.deg2rad(range_l1)
         self.theta2_min = np.deg2rad(-range_l2)
         self.theta2_max = np.deg2rad(range_l2)
+        self.servo_controller = ServoController()
+        #hele arm naar basis positities 
+        self.servo_controller.execute_command(self.servobase_id, 30, 512,50)
+        self.servo_controller.execute_command(self.servomid_id, 30, 512,50)
+        #self.servo_controller.execute_command(41, 32, self.pos_z,50) #TODO change to be command 32 for move with the wheelmode
+        self.servo_controller.execute_command(41, 30, self.ax12_range,50) 
+        self.servo_axisZ_id = 41
+        self.servobase_id = 5
+        self.servomid_id = 3
+        self.gripper_servo_id = 1
+        self.range_l1 = 90
+        self.range_l2 = 100
+        
+    def map_angle_to_servo_position(self, angle,range_link):
+        offset = (300-(range_link*2))/2 
+        return int((1023 / 300) * (offset + angle+range_link))
+
+    def get_encoder(self):
+        something = something
+
+    def get_servo_load(self):
+        self.servo_controller.execute_getstatus() #load opvragen 
+
+    def translate_z(self):
+        something = something
+
+    def kinematics(self):
+        something = something
+        #servos aansturen naar hoek x
+        self.servo_controller.execute_command(servobase_id, 30,)
+        
+
+
+
+        #grijp ophalen functie uit bluetooth_controller
+        #grijpen open/dicht
+        #z as bepalen wheelmode encoder afstemmen, while true totdat Z as zoveel beweegt
+
+
 
     def inverse_kinematics(self, x, y):
         # Calculate Distance
