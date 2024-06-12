@@ -5,3 +5,8 @@
 
 # python
 __pycache__/
+
+.vscode
+/Python/host-tjalling/.vscode
+*.pyc
+
