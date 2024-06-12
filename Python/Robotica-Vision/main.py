@@ -27,7 +27,8 @@ def calculate_speed(initial_position, final_position, time):
 
 
 def main():
-    frame = Frame('Images/silver2.jpg', 1080, 720)
+    img = cv.imread('Images/silver2.jpg')
+    frame = Frame(img, 1080, 720)
     if mode == 'instruments':
         gray_blurred = cv.medianBlur(frame.gray_image, 5)
         _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)

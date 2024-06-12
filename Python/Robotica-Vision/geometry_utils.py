@@ -34,3 +34,18 @@ class GeometryUtils:
         (x, y), (MA, ma), angle = ellipse
         aspect_ratio = min(MA, ma) / max(MA, ma)
         return aspect_ratio >= min_aspect_ratio, (int(x), int(y))
+
+    @staticmethod
+    def calculate_distance(centroid1, centroid2):
+        return math.sqrt((centroid1[0] - centroid2[0]) ** 2 + (centroid1[1] - centroid2[1] ** 2))
+
+    @staticmethod
+    def find_closest_object(obj, objects):
+        min_distance = float('inf')
+        closest_obj = None
+        for other_obj in objects:
+            distance = calculate_distance(obj.centroid, other_obj.centroid)
+            if distance < min_distance:
+                min_distance = distance
+                closest_obj = other_obj
+        return closest_obj

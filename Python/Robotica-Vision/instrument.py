@@ -27,12 +27,12 @@ def get_points(contour, centroid, type):
 
     remaining_points = np.delete(points, point_index, axis=0)
 
+    handle1 = None
+    handle2 = None
+
     if type == 'straight':
         direction = point - centroid
         perpendicular_direction = np.array([-direction[1], direction[0]])
-
-        handle1 = None
-        handle2 = None
 
         for pt in remaining_points:
             vector = pt - centroid
@@ -58,8 +58,6 @@ def get_points(contour, centroid, type):
         direction = point - centroid
         normal_direction = np.array([-direction[1], direction[0]])
 
-        handle1 = None
-        handle2 = None
         same_side_points = []
 
         for pt in remaining_points:
@@ -139,6 +137,7 @@ class Instrument:
         self.type = get_instrument_type(body,self.centroid)
         self.points = get_points(body, self.centroid, self.type)
         self.rotation = get_rotation(self.points["point"], self.centroid)
+        self.direction = 'Not found'
 
     def __str__(self):
         return "Instrument (" + str(self.index) + "): centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
@@ -155,6 +154,15 @@ class Instrument:
         cv.circle(img, handle1, 5, (0, 0, 0), -1)
         cv.circle(img, handle2, 5, (0, 0, 0), -1)
         cv.circle(img, point, 5, (150, 65, 132), -1)
+
+    def determine_direction(self, previous_x):
+        original_x = self.centroid[0]
+        if original_x > previous_x:
+            self.direction = 'East'
+        elif original_x < previous_x:
+            self.direction = 'West'
+        else:
+            self.direction = 'Stationary'
 
     def get_color(self, hsv_image):
         color_manager = ColorManager()

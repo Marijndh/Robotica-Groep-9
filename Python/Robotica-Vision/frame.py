@@ -7,10 +7,9 @@ from geometry_utils import GeometryUtils
 from color import Color
 from target import Target
 
-
 class Frame:
-    def __init__(self, path, width=0, height=0):
-        self.img = cv.imread(path)
+    def __init__(self, img, width=0, height=0):
+        self.img = img
         self.width = width
         self.height = height
         self.img = cv.resize(self.img, (width, height))
@@ -43,7 +42,7 @@ class Frame:
             area = cv.contourArea(contour)
             # perimeter = cv.arcLength(contour, True)
             # factor = 4 * math.pi * area / perimeter ** 2
-            if 15000.0 < area < self.width * self.height * 0.8:  # instrument cant be bigger than 80 percent of the image
+            if 3000.0 < area < 4000:  # instrument cant be bigger than 80 percent of the image
                 instrument = Instrument(contour, index, area)
                 self.instruments.append(instrument)
                 instrument.get_color(self.hsv_image)
@@ -72,6 +71,17 @@ class Frame:
                 if is_ellipse_flag:
                     self.check_bull_color(contour, center)
 
+    def compare_instruments(self, previous_instruments):
+        current_instruments = self.instruments
+        for cur_instrument in current_instruments:
+            same_color = []
+            for prev_instrument in previous_instruments:
+                if cur_instrument.color == prev_instrument.color:
+                    same_color.append(cur_instrument)
+            result = GeometryUtils.find_closest_object(cur_instrument,same_color)
+            cur_instrument.determine_direction(previous_x)
+
+
 
     def draw_targets(self):
         for target in self.targets:
@@ -86,5 +96,3 @@ class Frame:
 
     def show(self):
         cv.imshow('Result', self.img)
-        cv.waitKey(0)
-        cv.destroyAllWindows()
