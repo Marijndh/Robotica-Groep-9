@@ -1,3 +1,5 @@
+import math
+
 from instrument import Instrument
 from frame import Frame
 from color import Color
@@ -5,9 +7,10 @@ from target import Target
 from server import Server
 import cv2 as cv
 
-
 mode = 'instruments'
-#mode = 'targets'
+
+
+# mode = 'targets'
 
 def determine_direction(initial_position, final_position):
     x1, y1 = initial_position
@@ -17,11 +20,13 @@ def determine_direction(initial_position, final_position):
         return "r"
     elif x2 < x1:
         return "l"
+
+
 def calculate_speed(initial_position, final_position, time):
     x1, y1 = initial_position
     x2, y2 = final_position
     # Calculate the distance in pixels
-    distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+    distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     # Calculate the speed in pixels per second
     speed = distance / time
     return speed
@@ -54,4 +59,5 @@ def main():
 
 if __name__ == '__main__':
     server = Server('localhost', 5000)
+    server.setup_routes()
     server.run()
