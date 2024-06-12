@@ -76,10 +76,15 @@ class Frame:
         for cur_instrument in current_instruments:
             same_color = []
             for prev_instrument in previous_instruments:
-                if cur_instrument.color == prev_instrument.color:
-                    same_color.append(cur_instrument)
-            result = GeometryUtils.find_closest_object(cur_instrument,same_color)
-            cur_instrument.determine_direction(previous_x)
+                if cur_instrument.color == prev_instrument.color and cur_instrument.centroid != prev_instrument.centroid\
+                and cur_instrument.centroid[0] != prev_instrument.centroid[0]:
+                    same_color.append(prev_instrument)
+            if len(same_color) > 0:
+                result = GeometryUtils.find_closest_object(cur_instrument, same_color)
+                if result is not None:
+                    cur_instrument.determine_direction(result.centroid[0])
+                else:
+                    cur_instrument.direction = 'Stationary'
 
 
 

@@ -22,6 +22,7 @@ while (True):
                 frame.compare_instruments(previous_instruments)
             previous_instruments = frame.instruments
             frame.draw_instruments()
+            frame.print_instruments()
         frame.show()
 
     if cv.waitKey(1) & 0xFF == ord('q'):

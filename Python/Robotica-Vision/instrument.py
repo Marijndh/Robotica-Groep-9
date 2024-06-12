@@ -141,7 +141,7 @@ class Instrument:
 
     def __str__(self):
         return "Instrument (" + str(self.index) + "): centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
-            + str(self.rotation) + ", area: " + str(self.area) + ", type: "+ self.type +"\n"
+            + str(self.rotation) + ", area: " + str(self.area) + ", type: " + self.type +", direction: "+ self.direction +"\n"
 
     def add_child(self, child):
         """Add a child contour to the instrument."""
@@ -161,8 +161,6 @@ class Instrument:
             self.direction = 'East'
         elif original_x < previous_x:
             self.direction = 'West'
-        else:
-            self.direction = 'Stationary'
 
     def get_color(self, hsv_image):
         color_manager = ColorManager()

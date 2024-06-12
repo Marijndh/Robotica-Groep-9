@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import math
 
 
 class GeometryUtils:
@@ -37,14 +38,14 @@ class GeometryUtils:
 
     @staticmethod
     def calculate_distance(centroid1, centroid2):
-        return math.sqrt((centroid1[0] - centroid2[0]) ** 2 + (centroid1[1] - centroid2[1] ** 2))
+        return math.sqrt((centroid1[0] - centroid2[0]) ** 2 + (centroid1[1] - centroid2[1]) ** 2)
 
     @staticmethod
     def find_closest_object(obj, objects):
         min_distance = float('inf')
         closest_obj = None
         for other_obj in objects:
-            distance = calculate_distance(obj.centroid, other_obj.centroid)
+            distance = GeometryUtils.calculate_distance(obj.centroid, other_obj.centroid)
             if distance < min_distance:
                 min_distance = distance
                 closest_obj = other_obj
