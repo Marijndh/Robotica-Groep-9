@@ -5,7 +5,8 @@ from webcam.webcam import Webcam
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
-from controls.controls import control_rgb_led
+from controls.controls import Leds
+#import controls.controls
 
 class FlaskServer(object):
     def __init__(self, app, **configs):
@@ -15,13 +16,14 @@ class FlaskServer(object):
         self.link2 = 173
         self.range_l1 = 90
         self.range_l2 = 100
-        self.bluetooth_controller = BluetoothController(self.link1,self.link2,self.range_l1,self.range_l2)
+        #self.bluetooth_controller = BluetoothController(self.link1,self.link2,self.range_l1,self.range_l2)
         self.webcam = None
+        self.leds = Leds()
         self.servo_controller = ServoController()
         self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)  
         self.servo_controller.execute_command(1, 30, 512,50)# initialise the servo's to its straight ahead starting position
         self.servo_controller.execute_command(2, 30, 512,50)
-        self.bluetooth_controller.start() 
+        #self.bluetooth_controller.start() 
     # Set configuration
     def configs(self, **configs):
         for config, value in configs:
@@ -44,7 +46,8 @@ class FlaskServer(object):
     def live_feed(self):
         if self.webcam is None:
             self.webcam = Webcam()
-        return Response(self.webcam.generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        num_frames = int(request.args.get('num_frames', 0))
+        return Response(self.webcam.generate_frames(num_frames), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     # Page to retrieve an image capture from webcam
     def capture(self):
@@ -104,9 +107,9 @@ class FlaskServer(object):
         servo_base_position = self.map_angle_to_servo_position(joint_base,self.range_l1)
         servo_middle_position = self.map_angle_to_servo_position(joint_middle,self.range_l2)
 
-        # Function to move the servos
-        def move_servo(servo_id, command, value,speed):
-            self.servo_controller.execute_command(servo_id, command, value,speed)
+    # Function to move the servos
+    def move_servo(servo_id, command, value,speed):
+        self.servo_controller.execute_command(servo_id, command, value,speed)
 
         # Create threads for moving servos concurrently
         base_thread = threading.Thread(target=move_servo, args=(1, 30, servo_base_position,30))
@@ -132,7 +135,7 @@ class FlaskServer(object):
         brightness_b = data.get('brightness_b')
         if brightness_r is None or brightness_g is None or brightness_b is None:
             return jsonify({"status": "error", "message": "Invalid parameters"}), 400
-        control_rgb_led(brightness_r, brightness_g, brightness_b)
+        self.leds.control_rgb_led(brightness_r, brightness_g, brightness_b)
         return jsonify({"status": "success", "message": "Brightness changed"})
 
 def main():
