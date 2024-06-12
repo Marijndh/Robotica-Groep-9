@@ -125,10 +125,13 @@ def get_instrument_type(body, centroid):
         return 'straight'
     elif distance < 0:
         return 'crooked'
+    else:
+        return 'unknown'
 
 class Instrument:
     def __init__(self, body, index, area):
         self.color = ""
+        self.hsv = []
         self.body = body
         self.index = index
         self.area = area
@@ -141,7 +144,7 @@ class Instrument:
 
     def __str__(self):
         return "Instrument (" + str(self.index) + "): centroid:" + self.centroid.__str__() + ", color: " + self.color + ", rotation: "\
-            + str(self.rotation) + ", area: " + str(self.area) + ", type: " + self.type +", direction: "+ self.direction +"\n"
+            + str(self.rotation) + ", area: " + str(self.area) + ", type: " + self.type +", direction: "+ self.direction +", hsv: "+ str(self.hsv) + "\n"
 
     def add_child(self, child):
         """Add a child contour to the instrument."""
@@ -168,6 +171,7 @@ class Instrument:
         contours = [self.body] + self.children
         cv.drawContours(mask, contours, -1, 255, -1)
         mean = cv.mean(hsv_image, mask=mask)
+        self.hsv = mean
         primary_colors = color_manager.primary_colors
         colors = color_manager.colors
         h = mean[0]
