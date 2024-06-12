@@ -5,6 +5,7 @@ from webcam.webcam import Webcam
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
+from controls.controls import control_rgb_led
 
 class FlaskServer(object):
     def __init__(self, app, **configs):
@@ -125,7 +126,14 @@ class FlaskServer(object):
 
     def controls(self):
         # Implement controls logic here stuff like led and encoder maybe controller to?
-        pass
+        data = request.json
+        brightness_r = data.get('brightness_r')
+        brightness_g = data.get('brightness_g')
+        brightness_b = data.get('brightness_b')
+        if brightness_r is None or brightness_g is None or brightness_b is None:
+            return jsonify({"status": "error", "message": "Invalid parameters"}), 400
+        control_rgb_led(brightness_r, brightness_g, brightness_b)
+        return jsonify({"status": "success", "message": "Brightness changed"})
 
 def main():
     # Initialise server
@@ -140,7 +148,7 @@ def main():
     
     app.add_endpoint('/servo/command', 'servo_command', app.servo_command, methods=['POST'])
     app.add_endpoint('/servo/kinematics', 'kinematics', app.servo_kinematics, methods=['POST'])
-    app.add_endpoint('/controls', 'controls', app.controls, methods=['POST'])
+    app.add_endpoint('/controls/controls', 'controls', app.controls, methods=['POST'])
     
 # Run the app
     app.run(host='0.0.0.0', port=5000)
