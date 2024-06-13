@@ -3,13 +3,6 @@ import numpy as np
 from geometry_utils import GeometryUtils
 from color_manager import ColorManager
 
-
-import numpy as np
-import cv2 as cv
-
-import numpy as np
-import cv2 as cv
-
 def get_points(contour, centroid, type):
     hull = cv.convexHull(contour)
 
@@ -94,17 +87,6 @@ def get_points(contour, centroid, type):
     return categorized_points
 
 
-
-
-def calculate_centroid(body):
-    """Calculate the centroid of a contour body."""
-    M = cv.moments(body)
-    if M["m00"] != 0:
-        return int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
-    else:
-        return 0, 0
-
-
 def get_rotation(point, centroid):
     # Determine vector
     vector = point - centroid
@@ -136,7 +118,7 @@ class Instrument:
         self.index = index
         self.area = area
         self.children = []
-        self.centroid = calculate_centroid(body)
+        self.centroid = GeometryUtils.calculate_centroid(body)
         self.type = get_instrument_type(body,self.centroid)
         self.points = get_points(body, self.centroid, self.type)
         self.rotation = get_rotation(self.points["point"], self.centroid)
@@ -157,13 +139,6 @@ class Instrument:
         cv.circle(img, handle1, 5, (0, 0, 0), -1)
         cv.circle(img, handle2, 5, (0, 0, 0), -1)
         cv.circle(img, point, 5, (150, 65, 132), -1)
-
-    def determine_direction(self, previous_x):
-        original_x = self.centroid[0]
-        if original_x > previous_x:
-            self.direction = 'East'
-        elif original_x < previous_x:
-            self.direction = 'West'
 
     def get_color(self, hsv_image):
         color_manager = ColorManager()
