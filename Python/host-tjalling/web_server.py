@@ -6,24 +6,27 @@ from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
 from controls.controls import Leds
+from controls.controls import Encoder
 #import controls.controls
 
 class FlaskServer(object):
     def __init__(self, app, **configs):
         self.app = app
         self.configs(**configs)
-        self.link1 = 199
-        self.link2 = 173
-        self.range_l1 = 90
-        self.range_l2 = 100
-        #self.bluetooth_controller = BluetoothController(self.link1,self.link2,self.range_l1,self.range_l2)
+        self.link1 = 300 
+        self.link2 = 300
+        self.range_l1 = 100
+        self.range_l2 = 120
+        self.bluetooth_controller = BluetoothController(self.link1,self.link2,self.range_l1,self.range_l2)
         self.webcam = None
+        self.encoder = Encoder()
         self.leds = Leds()
         self.servo_controller = ServoController()
         self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)  
-        self.servo_controller.execute_command(1, 30, 512,50)# initialise the servo's to its straight ahead starting position
-        self.servo_controller.execute_command(2, 30, 512,50)
-        #self.bluetooth_controller.start() 
+        self.servo_controller.execute_command(1, 30, 512, 50)# initialise the servo's to its straight ahead starting position
+        self.servo_controller.execute_command(2, 30, 512, 50)
+        self.bluetooth_controller.start() 
+   
     # Set configuration
     def configs(self, **configs):
         for config, value in configs:
@@ -84,7 +87,8 @@ class FlaskServer(object):
         return self.servo_controller.servo_command()
 
     def map_angle_to_servo_position(self, angle,range_link):
-        offset = (300-(range_link*2))/2 
+        offset = (300-(range_link*2))/2
+        print(int((1023 / 300) * (offset + angle+range_link)))
         return int((1023 / 300) * (offset + angle+range_link))
 
 
@@ -138,6 +142,24 @@ class FlaskServer(object):
         self.leds.control_rgb_led(brightness_r, brightness_g, brightness_b)
         return jsonify({"status": "success", "message": "Brightness changed"})
 
+    def read_encoder(self):
+        data = request.json
+        if 'action' not in data:
+            return jsonify({"status": "error", "message": "Invalid parameters"}), 400
+
+        if data['action'] == 'read_angle':
+            angle = self.encoder.read_angle()
+            return jsonify({"status": "success", "angle": angle})
+
+        elif data['action'] == 'read_direction':
+            direction = self.encoder.read_direction()
+            return jsonify({"status": "success", "direction": direction})
+
+        else:
+            return jsonify({"status": "error", "message": "Invalid action"}), 400
+
+
+
 def main():
     # Initialise server
     flask = Flask(__name__)
@@ -149,6 +171,7 @@ def main():
     app.add_endpoint('/webcam', 'webcam', app.live_feed, methods=['GET'])
     app.add_endpoint('/image', 'image', app.capture, methods=['GET'])
     
+    app.add_endpoint('/encoder', 'encoder', app.read_encoder, methods=['POST'])
     app.add_endpoint('/servo/command', 'servo_command', app.servo_command, methods=['POST'])
     app.add_endpoint('/servo/kinematics', 'kinematics', app.servo_kinematics, methods=['POST'])
     app.add_endpoint('/controls/controls', 'controls', app.controls, methods=['POST'])

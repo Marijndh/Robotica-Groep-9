@@ -21,7 +21,10 @@ class ServoController:
     # Method to execute a get status command on a servo
     def execute_getstatus(self, servo_id, command, duration):
         packet = self.build_packet(servo_id, command, duration)  # Build the packet
-        return self.send_packet(packet)  # Send the packet and return the response
+        respondse = self.send_packet(packet)
+        decoded = self.decode_response(respondse)
+        paramters = self.parse_parameters(decoded)
+        return type(int(paramters)) # Send the packet and return the response
 
     # Method to execute a command on a servo
     def execute_command(self, servo_id, command, value, value2=None):
@@ -81,29 +84,43 @@ class ServoController:
                 checksum & 0xFF
             ])
         return packet
+    
 
-    # Method to decode the response from the servo
     def decode_response(self, response):
         header = response[:2]
-        if header != b'\xff\xff':  # Check for valid header
+        if header != b'\xff\xff':
             return "Invalid header"
+            
+
         servo_id = response[2]
         length = response[3]
         error = response[4]
         parameters = response[5:-1]
         checksum = response[-1]
+
         calculated_checksum = (~sum(response[2:-1]) & 0xFF)
-        if calculated_checksum != checksum:  # Validate checksum
+        if calculated_checksum != checksum:
             return "Checksum error"
-        parameters_as_int = int.from_bytes(parameters, byteorder='little')  # Convert parameters to integer
+
+        # Convert parameters to int
+        parameters_as_int = int.from_bytes(parameters, byteorder='little')
         decoded_data = {
             "servo_id": servo_id,
             "length": length,
             "error": error,
-            "parameters": parameters_as_int,
+            "parameters": parameters_as_int,  # Store as integer
             "checksum": checksum
         }
+
         return decoded_data
+
+    def parse_parameters(self, parameters):
+        # Example parsing, adjust according to the specific parameter being read
+        if len(parameters) == 2:
+            value = int.from_bytes(parameters, byteorder='little')
+            return value
+        return int(parameters.hex(), 16)
+
 
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
