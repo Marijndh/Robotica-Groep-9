@@ -8,13 +8,13 @@ import cv2 as cv
 import numpy as np
 
 # TODO make methods for each mode, clean-up main method
-# TODO replace videocapture with images from Raspberry Pi
+# TODO replace videocapture with images from Raspberry Pi -> image_requester.py
 # TODO determine target (closest option to gripper)
 # TODO map pixel to coordinate usefull for servo's
 # TODO get mode from Raspberry using http request
 # TODO add mode to search for certain color
 # TODO add method to determine gripper location
-# TODO implement finding trajectory for target
+# TODO implement finding trajectory for target -> Example code/find_trajectory.py
 def main():
     vid = cv.VideoCapture(0, cv.CAP_DSHOW)
     previous_objects = []
