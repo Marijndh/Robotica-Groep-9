@@ -2,6 +2,8 @@
 
 In deze folder bevind zich de code voor onze robot 
 
-Wees ervan bewust dat de ontwikkeling op moment van inleveren nog in volle gang is en niet alle componenten nog in elkaar overlopen.
+Wees ervan bewust dat de ontwikkeling op moment van inleveren nog in volle gang is en niet alle componenten in elkaar overlopen.
+Voor vision is er aan de hand van TODO's is aangegeven wat er nog gedaan gaat worden, bij deze TODO's kan er verwezen worden naar een bestand in Vision/Example code.
+Dit betekend dat de functionaliteit al is uitgedacht, maar nog geïmplementeerd moet worden in de main functie. 
 
-Zo werkt de live-feed tussen de Vision nog niet gedaan aan de hand van de camera die verbonden is met de Pi en worden er vanaf de Pi nog geen waardes opgehaald wat nog wel geïmplementeerd gaat worden. 
+link naar repository: [Marijndh/Robotica-Groep-9](https://github.com/Marijndh/Robotica-Groep-9)
