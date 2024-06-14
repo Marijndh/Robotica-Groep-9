@@ -292,14 +292,19 @@ class BluetoothController:
 
 
     def start(self):
-        while True:
-            if self.client is None:
-                print("Connecting...")
-                mac_address = "D4:8A:FC:A4:AF:06"
-                self.client = BluetoothClient(mac_address, self.data_received)
-                if self.client.connected:
-                    print("Connected")
-                    self.handle_input("init")
-                    break
-                else:
-                    sleep(1000)
+        def attempt_connection():
+            while True:
+                if self.client is None:
+                    print("Connecting...")
+                    mac_address = "D4:8A:FC:A4:AF:06"
+                    self.client = BluetoothClient(mac_address, self.data_received)
+                    if self.client.connected:
+                        print("Connected")
+                        self.handle_input("init")
+                        break
+                    else:
+                        sleep(0.1)
+
+        connection_thread = threading.Thread(target=attempt_connection)
+        connection_thread.start()
+        connection_thread.join()
