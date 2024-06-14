@@ -70,16 +70,10 @@ class GeometryUtils:
 
     @staticmethod
     def get_direction_and_speed(target, previous_objects, time):
-        same_color = []
-        for prev_obj in previous_objects:
-            if target.color == prev_obj.color and cur_obj.centroid != prev_obj.centroid \
-                    and cur_obj.centroid[0] != prev_obj.centroid[0]:
-                same_color.append(prev_obj)
-            if len(same_color) > 0:
-                result, length = GeometryUtils.find_closest_object(cur_obj.centroid, same_color)
-                if result is not None:
-                    direction = GeometryUtils.determine_direction(result.centroid[0], cur_obj.centroid[0])
-                    speed = length/time
-                    return direction, speed
-                else:
-                    return 'Stationary', 0
+        result, length = GeometryUtils.find_closest_object(target.centroid, previous_objects)
+        if result is not None:
+            direction = GeometryUtils.determine_direction(result.centroid[0], target.centroid[0])
+            speed = length/time
+            return direction, speed
+        else:
+            return 'Stationary', 0

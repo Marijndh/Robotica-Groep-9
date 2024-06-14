@@ -5,12 +5,11 @@ from geometry_utils import GeometryUtils
 
 
 class Brick:
-    def __init__(self, body, index, type):
+    def __init__(self, body, index):
         self.color = ""
         self.hsv = []
         self.index = index
         self.body = body
-        self.type = type
         self.centroid = GeometryUtils.calculate_centroid(body)
         self.direction = 'Not found'
 

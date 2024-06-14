@@ -88,17 +88,15 @@ class Frame:
         for index in range(len(contours)):
             contour = contours[index]
             area = cv.contourArea(contour)
-            if 4000 < area < 8000:
+            if 300 < area < 500:
                 approx = cv.approxPolyDP(contour, 0.04 * cv.arcLength(contour, True), True)
                 if len(approx) == 4:
                     x, y, w, h = cv.boundingRect(contour)
                     ratio = float(w) / h
-                    if 0.9 <= ratio <= 1.1:
-                        brick = Brick(contour, index, 'Square')
-                        self.bricks.append(brick)
-                        brick.get_color(self.hsv_image, self.gray_image)
-                    else:
-                        brick = Brick(contour, index, 'Rectangle')
+                    # Controleer of de verhouding dicht bij 1:1 ligt voor vierkanten en rechthoeken
+                    if 1.5 > ratio > 1.2:
+                        print(ratio)
+                        brick = Brick(contour, index)
                         self.bricks.append(brick)
                         brick.get_color(self.hsv_image, self.gray_image)
 
@@ -110,6 +108,23 @@ class Frame:
     def print_bricks(self):
         for brick in self.bricks:
             print(brick.__str__())
+
+    def find_robot(self):
+        self.find_bricks()
+        for brick in self.bricks:
+            cv.drawContours(self.img, [brick.body], -1, (0, 255, 0), 4)
+        print(len(self.bricks))
+        if len(self.bricks) == 1:
+            return self.bricks[0].centroid
+        else:
+            amount_blue = []
+            for brick in self.bricks:
+                if brick.color == 'blue':
+                    amount_blue.append(brick)
+            if len(amount_blue) == 1:
+                return amount_blue[0].centroid
+        return self.width/2, self.height/2
+
 
     def show(self):
         cv.imshow('Result', self.img)

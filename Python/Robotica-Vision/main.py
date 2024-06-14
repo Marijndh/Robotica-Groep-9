@@ -7,48 +7,21 @@ from target import Target
 import cv2 as cv
 import numpy as np
 from geometry_utils import GeometryUtils
-
-mode = 'instruments'
-def do_nothing(x):
-    pass
-
-def set_mode(value):
-    global mode
-    match value:
-        case 1:
-            mode = 'instruments'
-        case 2:
-            mode = 'targets'
-        case 3:
-            mode = 'bricks'
-
+from robot import Robot
 
 def main():
     vid = cv.VideoCapture(0, cv.CAP_DSHOW)
     previous_objects = []
     direction = 'Stationary'
-    cv.namedWindow('Onze fantastische vision')
-    cv.createTrackbar('Brightness', 'Onze fantastische vision', 0, 255, do_nothing)
-    cv.createTrackbar('Saturation', 'Onze fantastische vision', 0, 255, do_nothing)
-    cv.createTrackbar('Modes', 'Onze fantastische vision', 1, 3, set_mode)
+    robot = Robot()
 
     while True:
+        mode = robot.get_mode()
         ret, img = vid.read()
-        brightness = cv.getTrackbarPos('Brightness', 'Onze fantastische vision')
-        saturation = cv.getTrackbarPos('Saturation', 'Onze fantastische vision')
-        hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-
-        # Adjust the brightness value (V)
-        h, s, v = cv.split(hsv)
-        v = cv.add(v, brightness)  # Adjust this value as needed
-        s = cv.add(s, saturation)
-        final_hsv = cv.merge((h, s, v))
-
-        # Convert back to BGR
-        img = cv.cvtColor(final_hsv, cv.COLOR_HSV2BGR)
-
+        time = 1
+        img = cv.imread('Images/webcam.png')
         if ret:
-            frame = Frame(img, 640, 480)
+            frame = Frame(img, 1280, 720)
             if mode == 'instruments':
                 gray_blurred = cv.GaussianBlur(frame.gray_image, (5, 5), 0)
                 _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)
@@ -57,12 +30,14 @@ def main():
                     frame.hierarchy = hierarchy[0]
                     frame.find_instruments()
                     frame.find_children()
-                    target = frame.get_best_option()
-                    if previous_objects:
-                        direction, speed = GeometryUtils.get_direction_and_speed(target, previous_objects, time)
-                    previous_objects = frame.instruments
-                    frame.draw_instruments()
-                    frame.print_instruments()
+                    robot.location = frame.find_robot()
+                    print(robot.location)
+                    if len(frame.instruments) > 0:
+                        target, length = GeometryUtils.find_closest_object(robot.location, frame.instruments)
+                        if previous_objects:
+                            direction, speed = GeometryUtils.get_direction_and_speed(target, previous_objects, time)
+                            #time_to_get_to_location = length/speed
+                        previous_objects = frame.instruments
             elif mode == 'targets':
                 gray_blurred = cv.GaussianBlur(frame.gray_image, (9, 9), 2)
                 _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY_INV)
