@@ -1,6 +1,7 @@
 import time
 import RPi.GPIO as GPIO
 import threading
+import smbus
 
 class Led:
     def __init__(self, pin):
@@ -48,6 +49,8 @@ class Leds:
         self.green_led.set_brightness(self.green_brightness)
         self.blue_led.set_brightness(self.blue_brightness)
 
+
+    
         # def keep_alive():
         #     try:
         #         while True:  # keep the script running
@@ -61,3 +64,21 @@ class Leds:
         # Start the keep_alive function in a new thread
         #threading.Thread(target=keep_alive).start()
     
+
+class Encoder:
+    def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        self.bus = smbus.SMBus(1)  # Use I2C bus 1
+        self.address = 0x36  # Address of the AS5600 encoder
+        self.direction_pin = 22  # BCM pin for the direction pin
+        GPIO.setup(self.direction_pin, GPIO.IN)
+
+    def read_angle(self):
+        # Read the angle from the AS5600 encoder
+        angle = self.bus.read_word_data(self.address, 0x0E)
+        return angle
+
+    def read_direction(self):
+        # Read the direction from the direction pin
+        direction = GPIO.input(self.direction_pin)
+        return direction
