@@ -7,6 +7,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 import time
 
+
 class WebCam:
     def __init__(self):
         self.camera = cv2.VideoCapture(-1)
@@ -31,6 +32,7 @@ class WebCam:
         else:
             ret, buffer = cv2.imencode('.jpg', frame)
             return buffer.tobytes()
+
 
 class ServoController:
     ADDR_MX_MOVING_SPEED = 32
@@ -65,7 +67,8 @@ class ServoController:
     def build_packet(self, dxl_id, address, readsize, value=None, value2=None):
         if value2 is not None:
             length = 7
-            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF) + (value2 & 0xFF) + ((value2 >> 8) & 0xFF)) & 0xFF
+            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF) + (value2 & 0xFF) + (
+                        (value2 >> 8) & 0xFF)) & 0xFF
             packet = bytearray([
                 0xFF, 0xFF,
                 dxl_id,
@@ -153,11 +156,13 @@ class ServoController:
         else:
             parameter_value = decoded_response['parameters']
             parameter_hex = hex(parameter_value)
-            return {"status": "success", "response": decoded_response, "parameter_value": parameter_value, "parameter_hex": parameter_hex}
+            return {"status": "success", "response": decoded_response, "parameter_value": parameter_value,
+                    "parameter_hex": parameter_hex}
 
     def stop(self, servo_id):
         packet = self.build_packet(servo_id, self.ADDR_MX_MOVING_SPEED, None, 0)
         self.send_packet(packet)
+
 
 class WebServer:
     def __init__(self):
@@ -218,10 +223,11 @@ class WebServer:
                     response = self.servo_controller.execute_command(servo_id, command, value, value2)
             elif command == 32:
                 self.servo_controller.move_for_duration(servo_id, command, duration, value)
-            
+
             return jsonify({"status": "success", "response": response}), 200
         else:
             return jsonify({"status": "error", "message": "Invalid command format"}), 400
+
 
 if __name__ == '__main__':
     print("Starting WebServer...")

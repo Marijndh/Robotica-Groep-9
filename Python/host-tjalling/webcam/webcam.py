@@ -6,7 +6,6 @@ class Webcam:
     def __init__(self):
         self.camera = None
         self.connect_camera()
-        
 
     def connect_camera(self):
         # Open a connection to the webcam
@@ -14,7 +13,7 @@ class Webcam:
 
         # Set the resolution to 640x480
         self.set_resolution(640, 480)
-   
+
     def set_resolution(self, width, height):
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -38,8 +37,8 @@ class Webcam:
                 yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
                 count += 1
 
-                if num_frames > 0 and count > num_frames:
-                   break
+                if 0 < num_frames < count:
+                    break
 
     def image(self):
         # Capture a single frame

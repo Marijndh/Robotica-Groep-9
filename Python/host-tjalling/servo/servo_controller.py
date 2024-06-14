@@ -5,6 +5,7 @@ import re
 from time import sleep
 from flask import request, jsonify
 
+
 class ServoController:
     ADDR_MX_MOVING_SPEED = 32  # Address for the moving speed register of the servo
 
@@ -21,10 +22,10 @@ class ServoController:
     # Method to execute a get status command on a servo
     def execute_getstatus(self, servo_id, command, duration):
         packet = self.build_packet(servo_id, command, duration)  # Build the packet
-        respondse = self.send_packet(packet)
-        decoded = self.decode_response(respondse)
-        paramters = self.parse_parameters(decoded)
-        return type(int(paramters)) # Send the packet and return the response
+        response = self.send_packet(packet)
+        decoded = self.decode_response(response)
+        parameters = self.parse_parameters(decoded)
+        return type(int(parameters))  # Send the packet and return the response
 
     # Method to execute a command on a servo
     def execute_command(self, servo_id, command, value, value2=None):
@@ -45,7 +46,8 @@ class ServoController:
     def build_packet(self, dxl_id, address, readsize, value=None, value2=None):
         if value2 is not None:
             length = 7
-            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF) + (value2 & 0xFF) + ((value2 >> 8) & 0xFF)) & 0xFF
+            checksum = ~(dxl_id + length + 3 + address + (value & 0xFF) + ((value >> 8) & 0xFF) + (value2 & 0xFF) + (
+                        (value2 >> 8) & 0xFF)) & 0xFF
             packet = bytearray([
                 0xFF, 0xFF,
                 dxl_id,
@@ -84,13 +86,11 @@ class ServoController:
                 checksum & 0xFF
             ])
         return packet
-    
 
     def decode_response(self, response):
         header = response[:2]
         if header != b'\xff\xff':
             return "Invalid header"
-            
 
         servo_id = response[2]
         length = response[3]
@@ -121,14 +121,14 @@ class ServoController:
             return value
         return int(parameters.hex(), 16)
 
-
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
         GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
         self.serial_port.write(packet)  # Write packet to the serial port
         while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
             time.sleep(0.000000001)
-        time.sleep(0.000001)# Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
+        time.sleep(
+            0.000001)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
         GPIO.output(self.direction_pin, GPIO.LOW)  # Set direction to receive data
         response = bytearray()
         no_input = False
@@ -149,7 +149,8 @@ class ServoController:
         else:
             parameter_value = decoded_response['parameters']
             parameter_hex = hex(parameter_value)
-            return {"status": "success", "response": decoded_response, "parameter_value": parameter_value, "parameter_hex": parameter_hex}
+            return {"status": "success", "response": decoded_response, "parameter_value": parameter_value,
+                    "parameter_hex": parameter_hex}
 
     # Method to stop the servo
     def stop(self, servo_id):

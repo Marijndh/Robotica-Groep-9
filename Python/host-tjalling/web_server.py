@@ -7,26 +7,33 @@ from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
 from controls.controls import Leds
 from controls.controls import Encoder
-#import controls.controls
+
+
+def map_angle_to_servo_position(angle, range_link):
+    offset = (300 - (range_link * 2)) / 2
+    print(int((1023 / 300) * (offset + angle + range_link)))
+    return int((1023 / 300) * (offset + angle + range_link))
+
 
 class FlaskServer(object):
     def __init__(self, app, **configs):
         self.app = app
         self.configs(**configs)
-        self.link1 = 300 
+        self.link1 = 300
         self.link2 = 300
         self.range_l1 = 100
         self.range_l2 = 120
-        self.bluetooth_controller = BluetoothController(self.link1,self.link2,self.range_l1,self.range_l2)
+        self.bluetooth_controller = BluetoothController(self.link1, self.link2, self.range_l1, self.range_l2)
         self.webcam = None
         self.encoder = Encoder()
         self.leds = Leds()
         self.servo_controller = ServoController()
-        self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)  
-        self.servo_controller.execute_command(1, 30, 512, 50)# initialise the servo's to its straight ahead starting position
+        self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)
+        self.servo_controller.execute_command(1, 30, 512,
+                                              50)  # initialise the servo's to its straight ahead starting position
         self.servo_controller.execute_command(2, 30, 512, 50)
-        self.bluetooth_controller.start() 
-   
+        self.bluetooth_controller.start()
+
     # Set configuration
     def configs(self, **configs):
         for config, value in configs:
@@ -86,12 +93,6 @@ class FlaskServer(object):
     def servo_command(self):
         return self.servo_controller.servo_command()
 
-    def map_angle_to_servo_position(self, angle,range_link):
-        offset = (300-(range_link*2))/2
-        print(int((1023 / 300) * (offset + angle+range_link)))
-        return int((1023 / 300) * (offset + angle+range_link))
-
-
     def servo_kinematics(self):
         data = request.json
         command_string = data.get('command')
@@ -108,16 +109,16 @@ class FlaskServer(object):
         joint_base, joint_middle = self.kinematics.inverse_kinematics(x, y)
 
         # Map angles to servo positions
-        servo_base_position = self.map_angle_to_servo_position(joint_base,self.range_l1)
-        servo_middle_position = self.map_angle_to_servo_position(joint_middle,self.range_l2)
+        servo_base_position = map_angle_to_servo_position(joint_base, self.range_l1)
+        servo_middle_position = map_angle_to_servo_position(joint_middle, self.range_l2)
 
     # Function to move the servos
-    def move_servo(servo_id, command, value,speed):
-        self.servo_controller.execute_command(servo_id, command, value,speed)
+    def move_servo(self, command, value, speed):
+        self.servo_controller.execute_command(self, command, value, speed)
 
         # Create threads for moving servos concurrently
-        base_thread = threading.Thread(target=move_servo, args=(1, 30, servo_base_position,30))
-        middle_thread = threading.Thread(target=move_servo, args=(2, 30, servo_middle_position,30))
+        base_thread = threading.Thread(target=move_servo, args=(1, 30, servo_base_position, 30))
+        middle_thread = threading.Thread(target=move_servo, args=(2, 30, servo_middle_position, 30))
 
         # Start the threads
         base_thread.start()
@@ -129,7 +130,6 @@ class FlaskServer(object):
 
         return jsonify({"status": "success", "joint_base": joint_base, "joint_middle": joint_middle,
                         "servo_base_position": servo_base_position, "servo_middle_position": servo_middle_position})
-
 
     def controls(self):
         # Implement controls logic here stuff like led and encoder maybe controller to?
@@ -159,7 +159,6 @@ class FlaskServer(object):
             return jsonify({"status": "error", "message": "Invalid action"}), 400
 
 
-
 def main():
     # Initialise server
     flask = Flask(__name__)
@@ -170,13 +169,13 @@ def main():
     app.add_endpoint('/', 'index', app.index, methods=['GET'])
     app.add_endpoint('/webcam', 'webcam', app.live_feed, methods=['GET'])
     app.add_endpoint('/image', 'image', app.capture, methods=['GET'])
-    
+
     app.add_endpoint('/encoder', 'encoder', app.read_encoder, methods=['POST'])
     app.add_endpoint('/servo/command', 'servo_command', app.servo_command, methods=['POST'])
     app.add_endpoint('/servo/kinematics', 'kinematics', app.servo_kinematics, methods=['POST'])
     app.add_endpoint('/controls/controls', 'controls', app.controls, methods=['POST'])
-    
-# Run the app
+
+    # Run the app
     app.run(host='0.0.0.0', port=5000)
 
 

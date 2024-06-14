@@ -1,7 +1,6 @@
-import time
 import RPi.GPIO as GPIO
-import threading
 import smbus
+
 
 class Led:
     def __init__(self, pin):
@@ -14,18 +13,18 @@ class Led:
         self.green_brightness = 0
         self.red_brightness = 0
 
-
     def set_brightness(self, brightness):
         if brightness > 0:
             if not self.is_pwm_running:
                 self.pwm.start(brightness)
                 self.is_pwm_running = True
             self.pwm.ChangeDutyCycle(brightness)
-            #GPIO.output(self.pin, GPIO.HIGH)
+            # GPIO.output(self.pin, GPIO.HIGH)
         else:
             if self.is_pwm_running and brightness == 0:
                 self.pwm.stop()
                 self.is_pwm_running = False
+
 
 class Leds:
     def __init__(self):
@@ -37,7 +36,7 @@ class Leds:
         self.green_led = Led(27)
         self.blue_led = Led(17)
 
-    def control_rgb_led(self,red_brightness, green_brightness, blue_brightness):
+    def control_rgb_led(self, red_brightness, green_brightness, blue_brightness):
         self.red_brightness = red_brightness
         self.green_brightness = green_brightness
         self.blue_brightness = blue_brightness
@@ -48,9 +47,6 @@ class Leds:
         self.red_led.set_brightness(self.red_brightness)
         self.green_led.set_brightness(self.green_brightness)
         self.blue_led.set_brightness(self.blue_brightness)
-
-
-    
         # def keep_alive():
         #     try:
         #         while True:  # keep the script running
@@ -62,8 +58,8 @@ class Leds:
         #         GPIO.cleanup()  # cleanup GPIO on Ctrl+C exit
 
         # Start the keep_alive function in a new thread
-        #threading.Thread(target=keep_alive).start()
-    
+        # threading.Thread(target=keep_alive).start()
+
 
 class Encoder:
     def __init__(self):
@@ -82,3 +78,4 @@ class Encoder:
         # Read the direction from the direction pin
         direction = GPIO.input(self.direction_pin)
         return direction
+

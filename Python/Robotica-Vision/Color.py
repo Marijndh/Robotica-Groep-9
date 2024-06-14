@@ -1,6 +1,8 @@
 import numpy as np
 import cv2 as cv
 import math
+
+
 def find_color(color):
     frame = cv.imread('image.jpg')
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
@@ -37,5 +39,6 @@ def find_color(color):
     k = cv.waitKey(0)
     print(k)
     cv.destroyAllWindows()
+
 
 find_color("r")
