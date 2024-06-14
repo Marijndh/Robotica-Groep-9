@@ -177,6 +177,10 @@ class BluetoothController:
         self.pos_x = target_x
         self.pos_y = target_y
 
+    def threaded_move_x_y(self, target_x, target_y):
+        thread = threading.Thread(target=self.move_x_y, args=(target_x, target_y))
+        thread.start()
+    
     def move_x_y(self, target_x, target_y):
         if self.is_within_reach(target_x, target_y):
             self.pos_x, self.pos_y = target_x, target_y
