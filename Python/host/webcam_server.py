@@ -12,6 +12,7 @@ camera = cv2.VideoCapture(-1)
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
+
 def generate_frames():
     while True:
         # Capture frame-by-frame
@@ -27,14 +28,17 @@ def generate_frames():
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 @app.route('/')
 def index():
     return "Webcam streaming. Go to /video_feed to see the feed."
+
 
 @app.route('/image')
 def image():
@@ -48,6 +52,7 @@ def image():
 
         # Concatenate frame one by one and show result
         return Response(buffer.tobytes(), mimetype='image/jpeg')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

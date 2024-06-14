@@ -1,6 +1,7 @@
 from .PiClient import PiClient
 from servo.servo_controller import ServoController  # Import ServoController
 
+
 class ArmController:
     def __init__(self):
         self.servo_controller = ServoController()
@@ -19,12 +20,14 @@ class ArmController:
         # Implement this method if servo_controller.py has a similar functionality
         pass
 
+
 def main():
     arm_controller = ArmController()
 
     # Start pi client and look for bluetooth connection
     client = PiClient(199, 173, 90, 100, arm_controller)
     client.start()
+
 
 if __name__ == '__main__':
     main()
