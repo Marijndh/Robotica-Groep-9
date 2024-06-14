@@ -14,4 +14,3 @@ class Color:
         upper = self.upper_bound
         lower = self.lower_bound
         return lower[0] < h < upper[0] and lower[1] < s < upper[1] and lower[2] < v < upper[2]
-

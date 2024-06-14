@@ -35,4 +35,3 @@ if __name__ == '__main__':
     server = Server('localhost', 5000)
     server.setup_routes()  # Moved this line after creating the server instance
     server.run()
-

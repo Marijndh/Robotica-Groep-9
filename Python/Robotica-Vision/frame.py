@@ -7,6 +7,7 @@ from geometry_utils import GeometryUtils
 from color import Color
 from target import Target
 
+
 class Frame:
     def __init__(self, img, width=0, height=0):
         self.img = img
@@ -50,7 +51,8 @@ class Frame:
     def find_children(self):
         for instrument in self.instruments:
             for j in range(len(self.hierarchy)):
-                if self.hierarchy[j][3] == instrument.index and cv.contourArea(self.contours[j]) > 1000:
+                if self.hierarchy[j][3] == instrument.index and cv.contourArea(
+                        self.contours[j]) > 1000:
                     child = self.contours[j]
                     instrument.add_child(child)
 
