@@ -50,3 +50,19 @@ class GeometryUtils:
                 min_distance = distance
                 closest_obj = other_obj
         return closest_obj
+
+    @staticmethod
+    def calculate_centroid(body):
+        """Calculate the centroid of a contour body."""
+        M = cv.moments(body)
+        if M["m00"] != 0:
+            return int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"])
+        else:
+            return 0, 0
+
+    @staticmethod
+    def determine_direction(previous_x, current_x):
+        if current_x > previous_x:
+            return 'East'
+        elif current_x < previous_x:
+            return 'West'
