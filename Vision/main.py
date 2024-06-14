@@ -7,44 +7,20 @@ from target import Target
 import cv2 as cv
 import numpy as np
 
-mode = 'instruments'
-def do_nothing(x):
-    pass
-
-def set_mode(value):
-    global mode
-    match value:
-        case 1:
-            mode = 'instruments'
-        case 2:
-            mode = 'targets'
-        case 3:
-            mode = 'bricks'
-
-
+# TODO make methods for each mode, clean-up main method
+# TODO replace videocapture with images from Raspberry Pi
+# TODO determine target (closest option to gripper)
+# TODO map pixel to coordinate usefull for servo's
+# TODO get mode from Raspberry using http request
+# TODO add mode to search for certain color
+# TODO add method to determine gripper location
+# TODO implement finding trajectory for target
 def main():
     vid = cv.VideoCapture(0, cv.CAP_DSHOW)
     previous_objects = []
-    cv.namedWindow('Onze fantastische vision')
-    cv.createTrackbar('Brightness', 'Onze fantastische vision', 0, 255, do_nothing)
-    cv.createTrackbar('Saturation', 'Onze fantastische vision', 0, 255, do_nothing)
-    cv.createTrackbar('Modes', 'Onze fantastische vision', 1, 3, set_mode)
 
     while True:
         ret, img = vid.read()
-        brightness = cv.getTrackbarPos('Brightness', 'Onze fantastische vision')
-        saturation = cv.getTrackbarPos('Saturation', 'Onze fantastische vision')
-        hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-
-        # Adjust the brightness value (V)
-        h, s, v = cv.split(hsv)
-        v = cv.add(v, brightness)  # Adjust this value as needed
-        s = cv.add(s, saturation)
-        final_hsv = cv.merge((h, s, v))
-
-        # Convert back to BGR
-        img = cv.cvtColor(final_hsv, cv.COLOR_HSV2BGR)
-
         if ret:
             frame = Frame(img, 640, 480)
             if mode == 'instruments':

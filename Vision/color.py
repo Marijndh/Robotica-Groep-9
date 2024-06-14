@@ -1,6 +1,6 @@
 import cv2 as cv
 
-
+# Class to determine if certain hsv values fit the defined color
 class Color:
     def __init__(self, name, lower_bound, upper_bound):
         self.name = name

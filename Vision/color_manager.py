@@ -1,8 +1,7 @@
 from color import Color
 
 
-# Color maneger verantwoordelijk voor het hsv bereik van de kleuren en de primaire kleuren die deze representeert
-# deze kunnen dan worden opgehaald door de get_colors en get_primary_colors functies
+# Predefining color values to determine colour of objects easier
 class ColorManager:
     def __init__(self):
         self.colors = {

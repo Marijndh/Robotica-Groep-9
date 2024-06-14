@@ -23,10 +23,12 @@ class Frame:
         self.targets = []
         self.bricks = []
 
+    # Draw the found contours on the image
     def draw_contours(self):
         for contour in self.contours:
             cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
+    # Find the instruments within the image
     def find_instruments(self):
         contours = self.contours
         for index in range(len(contours)):
@@ -38,6 +40,7 @@ class Frame:
                 self.instruments.append(instrument)
                 instrument.get_color(self.hsv_image)
 
+    # Find the children of each instrument within the frame
     def find_children(self):
         for instrument in self.instruments:
             for j in range(len(self.hierarchy)):
@@ -46,6 +49,8 @@ class Frame:
                     child = self.contours[j]
                     instrument.add_child(child)
 
+    # Compare the objects of this frame and the previous frame in order to find the direction of each instrument
+    # TODO change to finding direction based of one object
     def compare_instruments(self, previous_objects, search):
         current_objects = []
         if search == 'target':
@@ -68,6 +73,7 @@ class Frame:
                 else:
                     cur_obj.direction = 'Stationary'
 
+    # Draw the found instruments on the frame
     def draw_instruments(self):
         for instrument in self.instruments:
             objects = [instrument.body] + instrument.children
@@ -75,10 +81,12 @@ class Frame:
             cv.circle(self.img, instrument.centroid, 5, (0, 0, 0), -1)
             instrument.draw_points(self.img)
 
+    # Print the details of every found instrument
     def print_instruments(self):
         for instrument in self.instruments:
             print(instrument.__str__())
 
+    # Find every target within the frame
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
@@ -87,6 +95,7 @@ class Frame:
                 if is_ellipse_flag:
                     self.check_bull_color(contour, center)
 
+    # Draw the targets on the image
     def draw_targets(self):
         for target in self.targets:
             center = target.hitpoint
@@ -94,10 +103,12 @@ class Frame:
             cv.circle(self.img, center, 5, (0, 0, 0), -1)
             cv.ellipse(self.img, ellipse, (0, 255, 0), 2)
 
+    # Print details of targets
     def print_targets(self):
         for target in self.targets:
             print(target.__str__())
 
+    # Check if the found contour is the right one by checking the color of the center
     def check_bull_color(self, contour, center):
         ellipse = cv.fitEllipse(contour)
         mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
@@ -107,6 +118,7 @@ class Frame:
         if expected_bulls_eye_color.is_color(mean[0], mean[1], mean[2]):
             self.targets.append(Target(center, ellipse))
 
+    # Find every brick (rectangle or square) within the frame
     def find_bricks(self):
         contours = self.contours
         for index in range(len(contours)):
@@ -126,14 +138,17 @@ class Frame:
                         self.bricks.append(brick)
                         brick.get_color(self.hsv_image, self.gray_image)
 
+    # Draw each brick on the image
     def draw_bricks(self):
         for brick in self.bricks:
             cv.putText(self.img, brick.color, brick.centroid, cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
             cv.drawContours(self.img, [brick.body], -1, (0, 255, 0), 1)
 
+    # Print details of bricks
     def print_bricks(self):
         for brick in self.bricks:
             print(brick.__str__())
 
+    # Show the resulting image
     def show(self):
         cv.imshow('Result', self.img)

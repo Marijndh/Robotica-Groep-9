@@ -9,8 +9,10 @@ class ImageRequester:
     def __init__(self):
         self.hostname = 'ubuntu'
         self.IP = socket.gethostbyname(self.hostname)
-        #self.IP = '192.168.218.40'
+        # self.IP = '192.168.218.40'
 
+    # Fetch an image from the Raspberry Pi by putting a certain post request to the webserver
+    # In order to work you have to be on the samen network as the Raspberry
     def fetch_image(self, amount):
         images = []
         response = requests.get('http://' + self.IP + ':5000/webcam?num_frames=' + str(amount), stream=True)
@@ -54,13 +56,3 @@ class ImageRequester:
                     return images
 
         return images
-
-
-t = ImageRequester()
-s = time.time()
-images = t.fetch_image(10)
-e = time.time()
-print(f'Time taken: {e-s}; Images: {len(images)}')
-for i in range(len(images)):
-    cv2.imshow("cam", images[i])
-    cv2.waitKey(int(((e-s)/len(images))*1000))
