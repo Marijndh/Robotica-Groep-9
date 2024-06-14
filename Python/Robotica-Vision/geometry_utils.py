@@ -41,15 +41,15 @@ class GeometryUtils:
         return math.sqrt((centroid1[0] - centroid2[0]) ** 2 + (centroid1[1] - centroid2[1]) ** 2)
 
     @staticmethod
-    def find_closest_object(obj, objects):
+    def find_closest_object(point, objects):
         min_distance = float('inf')
         closest_obj = None
         for other_obj in objects:
-            distance = GeometryUtils.calculate_distance(obj.centroid, other_obj.centroid)
+            distance = GeometryUtils.calculate_distance(point, other_obj.centroid)
             if distance < min_distance:
                 min_distance = distance
                 closest_obj = other_obj
-        return closest_obj
+        return closest_obj, min_distance
 
     @staticmethod
     def calculate_centroid(body):
@@ -66,3 +66,20 @@ class GeometryUtils:
             return 'East'
         elif current_x < previous_x:
             return 'West'
+
+
+    @staticmethod
+    def get_direction_and_speed(target, previous_objects, time):
+        same_color = []
+        for prev_obj in previous_objects:
+            if target.color == prev_obj.color and cur_obj.centroid != prev_obj.centroid \
+                    and cur_obj.centroid[0] != prev_obj.centroid[0]:
+                same_color.append(prev_obj)
+            if len(same_color) > 0:
+                result, length = GeometryUtils.find_closest_object(cur_obj.centroid, same_color)
+                if result is not None:
+                    direction = GeometryUtils.determine_direction(result.centroid[0], cur_obj.centroid[0])
+                    speed = length/time
+                    return direction, speed
+                else:
+                    return 'Stationary', 0

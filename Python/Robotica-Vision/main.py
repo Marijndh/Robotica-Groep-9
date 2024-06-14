@@ -6,6 +6,7 @@ from color import Color
 from target import Target
 import cv2 as cv
 import numpy as np
+from geometry_utils import GeometryUtils
 
 mode = 'instruments'
 def do_nothing(x):
@@ -25,6 +26,7 @@ def set_mode(value):
 def main():
     vid = cv.VideoCapture(0, cv.CAP_DSHOW)
     previous_objects = []
+    direction = 'Stationary'
     cv.namedWindow('Onze fantastische vision')
     cv.createTrackbar('Brightness', 'Onze fantastische vision', 0, 255, do_nothing)
     cv.createTrackbar('Saturation', 'Onze fantastische vision', 0, 255, do_nothing)
@@ -55,8 +57,9 @@ def main():
                     frame.hierarchy = hierarchy[0]
                     frame.find_instruments()
                     frame.find_children()
+                    target = frame.get_best_option()
                     if previous_objects:
-                        frame.compare_instruments(previous_objects, 'instrument')
+                        direction, speed = GeometryUtils.get_direction_and_speed(target, previous_objects, time)
                     previous_objects = frame.instruments
                     frame.draw_instruments()
                     frame.print_instruments()

@@ -9,7 +9,6 @@ from target import Target
 from brick import Brick
 
 
-
 class Frame:
     def __init__(self, img, width=0, height=0):
         self.img = img
@@ -45,29 +44,6 @@ class Frame:
                         self.contours[j]) > 1000:
                     child = self.contours[j]
                     instrument.add_child(child)
-
-    def compare_instruments(self, previous_objects, search):
-        current_objects = []
-        if search == 'target':
-            current_objects = self.targets
-        elif search == 'instrument':
-            current_objects = self.instruments
-        elif search == 'brick':
-            current_objects = self.bricks
-        for cur_obj in current_objects:
-            same_color = []
-            for prev_obj in previous_objects:
-                if cur_obj.color == prev_obj.color and cur_obj.centroid != prev_obj.centroid \
-                        and cur_obj.centroid[0] != prev_obj.centroid[0]:
-                    same_color.append(prev_obj)
-            if len(same_color) > 0:
-                result = GeometryUtils.find_closest_object(cur_obj, same_color)
-                if result is not None:
-                    direction = GeometryUtils.determine_direction(result.centroid[0], cur_obj.centroid[0])
-                    cur_obj.direction = direction
-                else:
-                    cur_obj.direction = 'Stationary'
-
     def draw_instruments(self):
         for instrument in self.instruments:
             objects = [instrument.body] + instrument.children
