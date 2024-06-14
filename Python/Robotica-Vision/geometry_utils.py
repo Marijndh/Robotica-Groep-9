@@ -67,7 +67,6 @@ class GeometryUtils:
         elif current_x < previous_x:
             return 'West'
 
-
     @staticmethod
     def get_direction_and_speed(target, previous_objects, time):
         result, length = GeometryUtils.find_closest_object(target.centroid, previous_objects)

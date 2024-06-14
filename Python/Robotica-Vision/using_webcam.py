@@ -1,15 +1,13 @@
-import math
-
-from instrument import Instrument
-from frame import Frame
-from color import Color
-from target import Target
 import cv2 as cv
-import numpy as np
+
+from frame import Frame
 
 mode = 'instruments'
+
+
 def do_nothing(x):
     pass
+
 
 def set_mode(value):
     global mode
@@ -37,8 +35,10 @@ def main():
         hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
         # Adjust the brightness value (V)
+        # Adjust the saturation value (S)
+        # Adjust this values as needed
         h, s, v = cv.split(hsv)
-        v = cv.add(v, brightness)  # Adjust this value as needed
+        v = cv.add(v, brightness)
         s = cv.add(s, saturation)
         final_hsv = cv.merge((h, s, v))
 
