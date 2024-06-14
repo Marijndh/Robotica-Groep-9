@@ -45,15 +45,15 @@ class GeometryUtils:
 
     # Find the closest object to the given object out of a list of objects
     @staticmethod
-    def find_closest_object(obj, objects):
+    def find_closest_object(point, objects):
         min_distance = float('inf')
         closest_obj = None
         for other_obj in objects:
-            distance = GeometryUtils.calculate_distance(obj.centroid, other_obj.centroid)
+            distance = GeometryUtils.calculate_distance(point, other_obj.centroid)
             if distance < min_distance:
                 min_distance = distance
                 closest_obj = other_obj
-        return closest_obj
+        return closest_obj, min_distance
 
     # Returns the centroid of a given body
     @staticmethod
@@ -71,3 +71,13 @@ class GeometryUtils:
             return 'East'
         elif current_x < previous_x:
             return 'West'
+
+    @staticmethod
+    def get_direction_and_speed(target, previous_objects, time):
+        result, length = GeometryUtils.find_closest_object(target.centroid, previous_objects)
+        if result is not None:
+            direction = GeometryUtils.determine_direction(result.centroid[0], target.centroid[0])
+            speed = length/time
+            return direction, speed
+        else:
+            return 'Stationary', 0
