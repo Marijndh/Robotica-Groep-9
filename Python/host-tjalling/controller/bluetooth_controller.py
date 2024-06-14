@@ -1,6 +1,6 @@
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics  # Correct import for Kinematics
-import threading
+
 import sys
 from bluedot.btcomm import BluetoothClient
 from time import sleep
@@ -177,10 +177,6 @@ class BluetoothController:
         self.pos_x = target_x
         self.pos_y = target_y
 
-    def threaded_move_x_y(self, target_x, target_y):
-        thread = threading.Thread(target=self.move_x_y, args=(target_x, target_y))
-        thread.start()
-    
     def move_x_y(self, target_x, target_y):
         if self.is_within_reach(target_x, target_y):
             self.pos_x, self.pos_y = target_x, target_y
@@ -236,7 +232,7 @@ class BluetoothController:
                 except Exception as e:
                     print("Error opening: ", e)
 
-            # If the gripper is currently open close it
+        # If the gripper is currently open close it
         elif gripper_open == True:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
