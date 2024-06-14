@@ -31,9 +31,8 @@ class Frame:
         for index in range(len(contours)):
             contour = contours[index]
             area = cv.contourArea(contour)
-            # perimeter = cv.arcLength(contour, True)
-            # factor = 4 * math.pi * area / perimeter ** 2
-            if 3000.0 < area < 4000:  # instrument cant be bigger than 80 percent of the image
+            # area is calibrated based on the camera position and size of the instruments
+            if 3000.0 < area < 4000:
                 instrument = Instrument(contour, index, area)
                 self.instruments.append(instrument)
                 instrument.get_color(self.hsv_image)
@@ -111,7 +110,7 @@ class Frame:
         for index in range(len(contours)):
             contour = contours[index]
             area = cv.contourArea(contour)
-            if 400 < area < self.width * self.height * 0.5:
+            if 4000 < area < 8000:
                 approx = cv.approxPolyDP(contour, 0.04 * cv.arcLength(contour, True), True)
                 if len(approx) == 4:
                     x, y, w, h = cv.boundingRect(contour)

@@ -22,12 +22,15 @@ class Brick:
     def get_color(self, hsv_image, gray_image):
         color_manager = ColorManager()
         mask = np.zeros(gray_image.shape, dtype=np.uint8)
-        cv.circle(mask, self.centroid, 5, (255, 255, 255), -1)
+        cv.circle(mask, self.centroid, 4, (255, 255, 255), -1)
         mean = cv.mean(hsv_image, mask=mask)
+        mask2 = np.zeros(gray_image.shape, dtype=np.uint8)
+        cv.drawContours(mask2, [self.body], -1, (255, 255, 255), -1)
+        mean2 = cv.mean(hsv_image, mask=mask)
         h = mean[0]
         s = mean[1]
         v = mean[2]
-        self.hsv = mean
+        self.hsv = mean2
         primary_colors = color_manager.primary_colors
         colors = color_manager.colors
         for color_name in primary_colors:
