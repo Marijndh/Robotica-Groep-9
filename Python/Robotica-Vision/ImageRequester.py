@@ -9,7 +9,7 @@ class ImageRequester:
     def __init__(self):
         self.hostname = 'ubuntu'
         self.IP = socket.gethostbyname(self.hostname)
-        #self.IP = '192.168.218.40'
+        # self.IP = '192.168.218.40'
 
     def fetch_image(self, amount):
         images = []

@@ -1,16 +1,14 @@
-import math
-
-from instrument import Instrument
-from frame import Frame
-from color import Color
-from target import Target
 import cv2 as cv
-import numpy as np
+
+from frame import Frame
 from geometry_utils import GeometryUtils
 
 mode = 'instruments'
+
+
 def do_nothing(x):
     pass
+
 
 def set_mode(value):
     global mode

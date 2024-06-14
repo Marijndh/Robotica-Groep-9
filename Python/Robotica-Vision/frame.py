@@ -1,12 +1,11 @@
 import cv2 as cv
 import numpy as np
 
-import geometry_utils
-from instrument import Instrument
-from geometry_utils import GeometryUtils
-from color import Color
-from target import Target
 from brick import Brick
+from color import Color
+from geometry_utils import GeometryUtils
+from instrument import Instrument
+from target import Target
 
 
 class Frame:

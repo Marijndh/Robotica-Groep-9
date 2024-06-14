@@ -3,6 +3,7 @@ import numpy as np
 from geometry_utils import GeometryUtils
 from color_manager import ColorManager
 
+
 def get_points(contour, centroid, type):
     hull = cv.convexHull(contour)
 
@@ -101,6 +102,7 @@ def get_rotation(point, centroid):
 
     return degrees
 
+
 def get_instrument_type(body, centroid):
     distance = cv.pointPolygonTest(body, centroid, measureDist=False)
     if distance > 0:
@@ -109,6 +111,7 @@ def get_instrument_type(body, centroid):
         return 'crooked'
     else:
         return 'unknown'
+
 
 class Instrument:
     def __init__(self, body, index, area):
@@ -119,7 +122,7 @@ class Instrument:
         self.area = area
         self.children = []
         self.centroid = GeometryUtils.calculate_centroid(body)
-        self.type = get_instrument_type(body,self.centroid)
+        self.type = get_instrument_type(body, self.centroid)
         self.points = get_points(body, self.centroid, self.type)
         self.rotation = get_rotation(self.points["point"], self.centroid)
         self.direction = 'Not found'
