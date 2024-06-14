@@ -43,6 +43,7 @@ class Frame:
                         self.contours[j]) > 1000:
                     child = self.contours[j]
                     instrument.add_child(child)
+
     def draw_instruments(self):
         for instrument in self.instruments:
             objects = [instrument.body] + instrument.children

@@ -35,8 +35,10 @@ def main():
         hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
         # Adjust the brightness value (V)
+        # Adjust the saturation value (S)
+        # Adjust this values as needed
         h, s, v = cv.split(hsv)
-        v = cv.add(v, brightness)  # Adjust this value as needed
+        v = cv.add(v, brightness)
         s = cv.add(s, saturation)
         final_hsv = cv.merge((h, s, v))
 
