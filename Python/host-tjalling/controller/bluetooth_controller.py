@@ -1,6 +1,6 @@
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics  # Correct import for Kinematics
-
+import threading
 import sys
 from bluedot.btcomm import BluetoothClient
 from time import sleep
@@ -236,29 +236,29 @@ class BluetoothController:
                 except Exception as e:
                     print("Error opening: ", e)
 
-        # If the gripper is currently open close it
-    elif gripper_open == True:
-        # While the target position is within the valid range
-        while 0 <= target_gripper <= 820:
-            try:
-                # Get the current load on the servo
-                # load = self.servo_controller.execute_getstatus(5, 40,2)
-                # print("load is:", load)
-                # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
-                # if load > 400 and load < 1023:
-                #    gripper_open = False
-                #    self.gripper_open = gripper_open
-                #    break
-                if target_gripper <= 50:
-                    # If its not experiencing load then it is not closed and we need to close it
-                    gripper_open = False
-                    self.gripper_open = gripper_open
-                    break
-                else:
-                    target_gripper -= 40
-                    self.servo_controller.execute_command(5, 30, target_gripper, 300)
-            except Exception as e:
-                print("Error closing: ", e)
+            # If the gripper is currently open close it
+        elif gripper_open == True:
+            # While the target position is within the valid range
+            while 0 <= target_gripper <= 820:
+                try:
+                    # Get the current load on the servo
+                    # load = self.servo_controller.execute_getstatus(5, 40,2)
+                    # print("load is:", load)
+                    # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
+                    # if load > 400 and load < 1023:
+                    #    gripper_open = False
+                    #    self.gripper_open = gripper_open
+                    #    break
+                    if target_gripper <= 50:
+                        # If its not experiencing load then it is not closed and we need to close it
+                        gripper_open = False
+                        self.gripper_open = gripper_open
+                        break
+                    else:
+                        target_gripper -= 40
+                        self.servo_controller.execute_command(5, 30, target_gripper, 300)
+                except Exception as e:
+                    print("Error closing: ", e)
 
     def move_z_axis(self, target_z):
         # Check if the target position is above or below the current position
