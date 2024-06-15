@@ -112,24 +112,7 @@ class FlaskServer(object):
         servo_base_position = map_angle_to_servo_position(joint_base, self.range_l1)
         servo_middle_position = map_angle_to_servo_position(joint_middle, self.range_l2)
 
-    # Function to move the servos
-    def move_servo(self, command, value, speed):
-        self.servo_controller.execute_command(self, command, value, speed)
 
-        # Create threads for moving servos concurrently
-        base_thread = threading.Thread(target=move_servo, args=(1, 30, servo_base_position, 30))
-        middle_thread = threading.Thread(target=move_servo, args=(2, 30, servo_middle_position, 30))
-
-        # Start the threads
-        base_thread.start()
-        middle_thread.start()
-
-        # Wait for both threads to finish
-        base_thread.join()
-        middle_thread.join()
-
-        return jsonify({"status": "success", "joint_base": joint_base, "joint_middle": joint_middle,
-                        "servo_base_position": servo_base_position, "servo_middle_position": servo_middle_position})
 
     def controls(self):
         # Implement controls logic here stuff like led and encoder maybe controller to?
