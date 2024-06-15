@@ -42,7 +42,7 @@ class ServoController:
         sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
         self.stop(servo_id)  # Stop the servo after the duration
 
-    # Method to build a packet for communication with the servo
+    # Method to build a packet for communication with the servo(should be switchcase or something as its not dry now)
     def build_packet(self, dxl_id, address, readsize, value=None, value2=None):
         if value2 is not None:
             length = 7
