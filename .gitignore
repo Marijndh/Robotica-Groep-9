@@ -2,6 +2,10 @@
 .idea
 
 .DS_Store
-/Python/host-tjalling/.vscode
 
+# python
+__pycache__/
+
+.vscode
+/Python/host-tjalling/.vscode
 *.pyc
