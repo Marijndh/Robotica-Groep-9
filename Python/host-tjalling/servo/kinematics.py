@@ -5,7 +5,7 @@ class Kinematics:
     def __init__(self, link1, link2, range_l1, range_l2):
         self.Link1 = link1
         self.Link2 = link2
-        # Define the angle limits in radians
+        # Define the angle limits for the joints
         self.theta1_min = np.deg2rad(-range_l1)
         self.theta1_max = np.deg2rad(range_l1)
         self.theta2_min = np.deg2rad(-range_l2)
@@ -28,17 +28,12 @@ class Kinematics:
             theta2 = -theta2
         # Calculate Shoulder Angle
         theta1 = np.arctan2(y, x) - np.arctan2(self.Link2 * np.sin(theta2), self.Link1 + self.Link2 * np.cos(theta2))
-
         # Clamp the angles to their respective limits
         theta1 = np.clip(theta1, self.theta1_min, self.theta1_max)
         theta2 = np.clip(theta2, self.theta2_min, self.theta2_max)
-
         # Convert angles to degrees
         theta1_deg = np.rad2deg(theta1)
         theta2_deg = np.rad2deg(theta2)
-
-        # print("theta1",(300-theta1_deg))
-        # print("theta2",theta2_deg)
 
         return (2 * self.theta1_max) - theta1_deg, theta2_deg
 

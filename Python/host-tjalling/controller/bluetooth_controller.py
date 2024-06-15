@@ -1,5 +1,5 @@
 from servo.servo_controller import ServoController
-from servo.kinematics import Kinematics  # Correct import for Kinematics
+from servo.kinematics import Kinematics  # Correct import for Kinematics as its in a different sibling folder
 import threading
 import sys
 from bluedot.btcomm import BluetoothClient
@@ -8,6 +8,15 @@ sys.path.append("..")
 
 
 class BluetoothController:
+    """
+        Initializes the BluetoothController with given links and ranges, sets up initial positions and servo controller.
+
+        Args:
+            link1 (float): Length of the first link of the robot arm.
+            link2 (float): Length of the second link of the robot arm.
+            range1 (float): Range of motion for the first servo.
+            range2 (float): Range of motion for the second servo.
+    """
     def __init__(self, link1, link2, range1, range2):
         self.link1, self.link2 = link1, link2
         self.range1, self.range2 = range1, range2
@@ -31,7 +40,6 @@ class BluetoothController:
         self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
         self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
         self.servo_controller.execute_command(2, 30, self.pos_r,50) #TODO change to be command 32 for move with the wheelmode
-        # self.servo_controller.execute_command(41, 30, self.ax12_range,50)
 
     """
     Executes a command to control the servo motors.
@@ -40,19 +48,10 @@ class BluetoothController:
         angle0 (int): The desired angle for servo1.
         angle1 (int): The desired angle for servo2.
     """
-
     def command(self, angle1, angle2):
         print(f'Angle1: {(2*self.range1)-angle1}, Angle2: {angle2}')
-        # base_thread = threading.Thread(target=self.servo_controller.execute_command, args=(self.servobase_id, 30, self.map_angle_to_servo_position(angle1,self.range1), 80))
-
-        # mid_thread = threading.Thread(target=self.servo_controller.execute_command, args=(self.servomid_id, 30, self.map_angle_to_servo_position(angle2,self.range2), 80))      
-
-        # base_thread.start()
-        # mid_thread.start()
-
-        # base_thread.join()
-        # mid_thread.join()
-
+        
+        # TODO make multithreaded
         self.servo_controller.execute_command(self.servobase_id, 30, self.map_angle_to_servo_position(angle1, self.range1), 200)
 
         self.servo_controller.execute_command(self.servomid_id, 30, self.map_angle_to_servo_position(angle2, self.range2), 200)
@@ -100,14 +99,9 @@ class BluetoothController:
 
         # Process each message separately they are split by a semicolon(;)
         messages = input.split(';')
-
-        # for message in messages:
         # Remove leading and trailing whitespace from the message
         message = messages[0]
         message = message.strip()
-
-        # if not message:
-        #    continue
         print("Message: ", message)
 
         # Process the message based on its content
@@ -115,58 +109,51 @@ class BluetoothController:
             case "forward":
                 # If the target x position is within the valid range
                 if target_x < (self.ax12_range*self.max_pos_multiplier):
-                    # if target_x < 600:
                     target_x += 20
                     self.move_x_y(target_x, target_y)
-                # messages.clear()
 
             case "backward":
                 # If the target x position is within the valid range
                 if target_x > -(self.ax12_range*self.max_pos_multiplier):
-                    #if target_x > 10:
                     target_x -= 20
                     self.move_x_y(target_x, target_y)   
-                # messages.clear()
+
             case "left":
                 # If the target y position is within the valid range
                 if target_y < (self.ax12_range*self.max_pos_multiplier):
-                    #if target_y < 600:
                     target_y += 20
                     self.move_x_y(target_x, target_y)
-                # messages.clear()
 
             case "right":
                 # If the target y position is within the valid range
                 if target_y > -(self.ax12_range*self.max_pos_multiplier):
-                    #if target_y > 10:
                     target_y -= 20
                     self.move_x_y(target_x, target_y)
 
-                # messages.clear()
             case "up":
                 # If the target z position is within the valid range
                 if target_z < 1000:
                     target_z += 20
 
                 self.move_z_axis(target_z)
-                # messages.clear()
+
             case "down":
                 # If the target z position is within the valid range
                 if target_z > 80:
                     target_z -= 20
                 self.move_z_axis(target_z)
-                # messages.clear()
+
             case "Grijpen":
                 self.open_close_gripper(target_gripper, gripper_open)
-                # messages.clear()
+
             case "cw":
                 self.pos_r += 20
                 self.move_r_axis(self.pos_r)
-                # messages.clear()
+
             case "ccw":
                 self.pos_r -= 20
                 self.move_r_axis(self.pos_r)
-                # messages.clear()
+
             # move to start position xy and z
             case "init":  
                 self.move_x_y(target_x, target_y)
@@ -174,13 +161,28 @@ class BluetoothController:
 
             case _:
                 print("Invalid input: ", input)
+        # set the position to the new target position(possible not needed?)
         self.pos_x = target_x
         self.pos_y = target_y
 
+    """
+    Starts a new thread to move to the target x and y coordinates.
+
+    Args:
+        target_x (float): Target x-coordinate.
+        target_y (float): Target y-coordinate.
+    """
     def threaded_move_x_y(self, target_x, target_y):
         thread = threading.Thread(target=self.move_x_y, args=(target_x, target_y))
         thread.start()
     
+    """
+    Moves to the target x and y coordinates if they are within reach.
+
+    Args:
+        target_x (float): Target x-coordinate.
+        target_y (float): Target y-coordinate.
+    """
     def move_x_y(self, target_x, target_y):
         if self.is_within_reach(target_x, target_y):
             self.pos_x, self.pos_y = target_x, target_y
@@ -199,16 +201,12 @@ class BluetoothController:
             print("Target position is out of reach", target_x, target_y)
 
     """
-    This function controls the opening and closing of a gripper using a servo controller.
+    Opens or closes the gripper based on the current state.
 
-    Parameters:
-        target_gripper (int): The target position for the gripper.
-    gripper_open (bool): The current state of the gripper. If True, the gripper is open. If False, the gripper is closed.
-
-    Returns:
-        None
+    Args:
+        target_gripper (float): Target position for the gripper.
+        gripper_open (bool): Whether the gripper should be open or closed.
     """
-
     def open_close_gripper(self, target_gripper, gripper_open):
 
         # If the gripper is currently closed open it
@@ -216,15 +214,7 @@ class BluetoothController:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
                 try:
-                    # Get the current load on the servo
-                    # load = self.servo_controller.execute_getstatus(5,40,2)
-                    # print("load is:",load)
-                    # If the load is within a certain range,the gripper is open(means it is experiencing external load)
-                    # if load > 1600 and load < 2048:
-                        # gripper_open = True 
-                        # self.gripper_open = gripper_open
-                        # break
-                    # If it is not experiencing load but is open past the threshold it is open
+                    # TODO: Implement load detection and make it so it waits for a load
                     if target_gripper >= 750:
                         gripper_open = True
                         self.gripper_open = gripper_open
@@ -241,16 +231,8 @@ class BluetoothController:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
                 try:
-                    # Get the current load on the servo
-                    # load = self.servo_controller.execute_getstatus(5, 40,2)
-                    # print("load is:", load)
-                    # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
-                    # if load > 400 and load < 1023:
-                    #    gripper_open = False
-                    #    self.gripper_open = gripper_open
-                    #    break
+                    # TODO: Implement load detection and make it so it waits for a load
                     if target_gripper <= 50:
-                        # If its not experiencing load then it is not closed and we need to close it
                         gripper_open = False
                         self.gripper_open = gripper_open
                         break
@@ -269,31 +251,63 @@ class BluetoothController:
             # Move down
             self.servo_controller.move_for_duration(41, 32, target_z, 400)
         else:
-            # Target position is the same as the current position, do nothing
+            # Target position is the same as the current position, do nothing maybe unnecessary
             pass
         # Update the current position
         self.pos_z = target_z
 
+    """
+    Moves the rotation-axis to the target position.
+
+    Args:
+        target_r (float): Target position for the rotation-axis of the gripper.
+    """
     def move_r_axis(self, target_r):
         self.servo_controller.execute_command(self.servorotation_id, 30, target_r, 600)
-
+    
+    """
+    check if the target position is within reach
+    
+    Args:
+        target_x (float): Target x-coordinate.
+        target_y (float): Target y-coordinate.
+    """
     def is_within_reach(self, target_x, target_y):
         distance = (target_x**2 + target_y**2)**0.5
         return 10 < distance <= self.max_reach
+    
+    """
+    Handles received data.
 
+    Args:
+        data (str): The received data string.
+    """
     def data_received(self, data):
         if data is not None and isinstance(data, str):
             print("Received data: ", data)
             self.handle_input(data)
 
+    """
+    Maps the given angle to a servo position.
+
+    Args:
+        angle (float): The angle to map.
+        range_link (float): The range of motion for the servo.
+
+    Returns:
+        int: The mapped servo position.
+    """
     def map_angle_to_servo_position(self, angle, range_link):
         offset = (300 - (range_link * 2)) / 2
         position = int((1023 / 300) * (offset + angle + range_link))
-        # Invert the position
-        # inverted_position = 1023 - position
         print(position)
         return position
-
+    
+    """
+    Starts the BluetoothController, attempts to connect to the Bluetooth client (multithreaded so it does not block).
+    Returns:
+        None(TODO change to say its returned or a thread or something so no rogue threads are left behind)
+    """
     def start(self):
         def attempt_connection():
             while True:
