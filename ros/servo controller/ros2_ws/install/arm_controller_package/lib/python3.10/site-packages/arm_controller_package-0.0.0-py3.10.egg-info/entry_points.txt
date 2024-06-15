@@ -1,3 +1,0 @@
-[console_scripts]
-arm_controller = arm_controller_package.arm_controller:main
-

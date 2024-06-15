@@ -1,5 +1,0 @@
-  File "/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py", line 25
-    continue
-    ^^^^^^^^
-SyntaxError: expected 'except' or 'finally' block
-

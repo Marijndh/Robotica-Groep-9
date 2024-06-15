@@ -1,5 +1,0 @@
-  File "/home/ubuntu/ros2_ws/install/my_ax12_servo_controller/lib/python3.10/site-packages/my_ax12_servo_controller/my_ax12_node.py", line 59
-    elif value is not None && value2 is None:
-                            ^
-SyntaxError: invalid syntax
-
