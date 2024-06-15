@@ -236,7 +236,7 @@ class BluetoothController:
                 except Exception as e:
                     print("Error opening: ", e)
 
-            # If the gripper is currently open close it
+        # If the gripper is currently open close it
         elif gripper_open == True:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
