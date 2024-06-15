@@ -1,5 +1,0 @@
-  File "/home/ubuntu/ros2_ws/install/arm_controller_package/lib/python3.10/site-packages/arm_controller_package/PiClient.py", line 65
-    break:
-         ^
-SyntaxError: invalid syntax
-

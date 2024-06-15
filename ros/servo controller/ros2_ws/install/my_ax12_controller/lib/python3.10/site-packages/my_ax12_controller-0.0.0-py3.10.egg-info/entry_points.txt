@@ -1,3 +1,0 @@
-[console_scripts]
-dynamixel_control = my_ax12_controller.dynamixel_control:main
-

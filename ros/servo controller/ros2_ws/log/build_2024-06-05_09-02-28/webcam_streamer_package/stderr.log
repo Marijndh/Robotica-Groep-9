@@ -1,5 +1,0 @@
-  File "/home/ubuntu/ros2_ws/install/webcam_streamer_package/lib/python3.10/site-packages/webcam_streamer_package/webcam_streamer_node.py", line 37
-    compressed_data = self.compress_image(pillow_Image.fromarray(frame)
-                                         ^
-SyntaxError: '(' was never closed
-

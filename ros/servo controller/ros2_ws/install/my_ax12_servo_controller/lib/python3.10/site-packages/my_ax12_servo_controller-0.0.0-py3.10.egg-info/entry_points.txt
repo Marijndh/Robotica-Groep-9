@@ -1,3 +1,0 @@
-[console_scripts]
-my_ax12_node = my_ax12_servo_controller.my_ax12_node:main
-
