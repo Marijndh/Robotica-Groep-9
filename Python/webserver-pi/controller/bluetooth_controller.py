@@ -69,9 +69,9 @@ class BluetoothController:
         thread1.join()
         thread2.join()
 
-    def execute_command_threaded(self, address, angle, range_link, speed):
+    def execute_command_threaded(self, id, address, angle, range_link, speed):
         self.servo_controller.execute_command(
-            self.servobase_id,
+            id,
             address,
             self.map_angle_to_servo_position(angle, range_link),
             speed)
@@ -131,25 +131,25 @@ class BluetoothController:
             case "forward":
                 # If the target x position is within the valid range
                 if target_x < (self.ax12_range*self.max_pos_multiplier):
-                    target_x += 20
+                    target_x += 40
                     self.move_x_y(target_x, target_y)
 
             case "backward":
                 # If the target x position is within the valid range
                 if target_x > -(self.ax12_range*self.max_pos_multiplier):
-                    target_x -= 20
+                    target_x -= 40
                     self.move_x_y(target_x, target_y)
 
             case "left":
                 # If the target y position is within the valid range
                 if target_y < (self.ax12_range*self.max_pos_multiplier):
-                    target_y += 20
+                    target_y += 40
                     self.move_x_y(target_x, target_y)
 
             case "right":
                 # If the target y position is within the valid range
                 if target_y > -(self.ax12_range*self.max_pos_multiplier):
-                    target_y -= 20
+                    target_y -= 40
                     self.move_x_y(target_x, target_y)
 
             case "up":

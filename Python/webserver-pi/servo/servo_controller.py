@@ -1,3 +1,4 @@
+import threading
 import RPi.GPIO as GPIO
 import serial
 import time
@@ -11,6 +12,7 @@ class ServoController:
 
     def __init__(self):
         print("Initializing ServoController...")
+        self.lock = threading.Lock()
         self.direction_pin = 18  # GPIO pin used for direction control
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.direction_pin, GPIO.OUT)
@@ -124,6 +126,7 @@ class ServoController:
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
         # lock so no other thread can write/read at the same time
+        self.lock.acquire()
         GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
         self.serial_port.write(packet)  # Write packet to the serial port
         while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
@@ -144,6 +147,7 @@ class ServoController:
                 break
             if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
                 break
+        self.lock.release()
         # free the lock
         decoded_response = self.decode_response(response)  # Decode the response
         if isinstance(decoded_response, str):
