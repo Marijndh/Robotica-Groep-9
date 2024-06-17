@@ -42,6 +42,7 @@ class BluetoothController:
         self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
         self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
         # TODO change to be command 32 for move with the wheelmode
+        # Wat bedoel je hiermee? @tjalling
         self.servo_controller.execute_command(2, 30, self.pos_r, 50)
 
     """
@@ -56,17 +57,33 @@ class BluetoothController:
         print(f'Angle1: {(2*self.range1)-angle1}, Angle2: {angle2}')
 
         # TODO make multithreaded
-        self.servo_controller.execute_command(
-                self.servobase_id,
-                30,
-                self.map_angle_to_servo_position(angle1, self.range1),
-                200)
+        # @tjalling is dit wat je bedoelde?
+        # self.servo_controller.execute_command(
+        #         self.servobase_id,
+        #         30,
+        #         self.map_angle_to_servo_position(angle1, self.range1),
+        #         200)
+        #
+        # self.servo_controller.execute_command(
+        #         self.servomid_id,
+        #         30,
+        #         self.map_angle_to_servo_position(angle2, self.range2),
+        #         200)
+        thread1 = threading.Thread(target=self.execute_command_threaded, args=(self.servobase_id, 30, angle1, self.range1, 200))
+        thread2 = threading.Thread(target=self.execute_command_threaded, args=(self.servomid_id, 30, angle2, self.range2, 200))
 
+        thread1.start()
+        thread2.start()
+
+        thread1.join()
+        thread2.join()
+
+    def execute_command_threaded(self, address, angle, range_link, speed):
         self.servo_controller.execute_command(
-                self.servomid_id,
-                30,
-                self.map_angle_to_servo_position(angle2, self.range2),
-                200)
+            self.servobase_id,
+            address,
+            self.map_angle_to_servo_position(angle, range_link),
+            speed)
 
     """
     Converts the given angle in degrees to the corresponding unit value for the AX-12 servo motor.
