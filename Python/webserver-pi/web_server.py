@@ -6,7 +6,8 @@ from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
 from controls.controls import Leds
-from controls.controls import Encoder
+from controls.controls import UltrasonicSensor
+
 
 
 def map_angle_to_servo_position(angle, range_link):
@@ -25,7 +26,7 @@ class FlaskServer(object):
         self.range_l2 = 150
         self.bluetooth_controller = BluetoothController(self.link1, self.link2, self.range_l1, self.range_l2)
         self.webcam = None
-        self.encoder = Encoder()
+        self.sensor = UltrasonicSensor()
         self.leds = Leds()
         self.servo_controller = ServoController()
         self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)
@@ -144,18 +145,16 @@ class FlaskServer(object):
         self.leds.control_rgb_led(brightness_r, brightness_g, brightness_b)
         return jsonify({"status": "success", "message": "Brightness changed"})
 
-    def read_encoder(self):
+    def read_height(self):
         data = request.json
+        print("data",data)
         if 'action' not in data:
             return jsonify({"status": "error", "message": "Invalid parameters"}), 400
 
-        if data['action'] == 'read_angle':
-            angle = self.encoder.read_angle()
-            return jsonify({"status": "success", "angle": angle})
-
-        elif data['action'] == 'read_direction':
-            direction = self.encoder.read_direction()
-            return jsonify({"status": "success", "direction": direction})
+        if data['action'] == 'read_distance':
+            print("reading distance")
+            distance = self.sensor.read_distance()
+            return jsonify({"status": "success", "distance": distance})
 
         else:
             return jsonify({"status": "error", "message": "Invalid action"}), 400
@@ -172,7 +171,7 @@ def main():
     app.add_endpoint('/webcam', 'webcam', app.live_feed, methods=['GET'])
     app.add_endpoint('/image', 'image', app.capture, methods=['GET'])
 
-    app.add_endpoint('/encoder', 'encoder', app.read_encoder, methods=['POST'])
+    app.add_endpoint('/controls/height', 'height', app.read_height, methods=['POST'])
     app.add_endpoint('/servo/command', 'servo_command', app.servo_command, methods=['POST'])
     app.add_endpoint('/servo/kinematics', 'kinematics', app.servo_kinematics, methods=['POST'])
     app.add_endpoint('/controls/controls', 'controls', app.controls, methods=['POST'])
