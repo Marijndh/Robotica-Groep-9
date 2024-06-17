@@ -9,7 +9,8 @@ sys.path.append("..")
 
 class BluetoothController:
     """
-        Initializes the BluetoothController with given links and ranges, sets up initial positions and servo controller.
+        Initializes the BluetoothController with given links and ranges,
+        sets up initial positions and servo controller.
 
         Args:
             link1 (float): Length of the first link of the robot arm.
@@ -17,6 +18,7 @@ class BluetoothController:
             range1 (float): Range of motion for the first servo.
             range2 (float): Range of motion for the second servo.
     """
+
     def __init__(self, link1, link2, range1, range2):
         self.link1, self.link2 = link1, link2
         self.range1, self.range2 = range1, range2
@@ -39,7 +41,8 @@ class BluetoothController:
         self.servo_controller = ServoController()
         self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
         self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
-        self.servo_controller.execute_command(2, 30, self.pos_r,50) #TODO change to be command 32 for move with the wheelmode
+        # TODO change to be command 32 for move with the wheelmode
+        self.servo_controller.execute_command(2, 30, self.pos_r, 50)
 
     """
     Executes a command to control the servo motors.
@@ -48,13 +51,22 @@ class BluetoothController:
         angle0 (int): The desired angle for servo1.
         angle1 (int): The desired angle for servo2.
     """
+
     def command(self, angle1, angle2):
         print(f'Angle1: {(2*self.range1)-angle1}, Angle2: {angle2}')
-        
-        # TODO make multithreaded
-        self.servo_controller.execute_command(self.servobase_id, 30, self.map_angle_to_servo_position(angle1, self.range1), 200)
 
-        self.servo_controller.execute_command(self.servomid_id, 30, self.map_angle_to_servo_position(angle2, self.range2), 200)
+        # TODO make multithreaded
+        self.servo_controller.execute_command(
+                self.servobase_id,
+                30,
+                self.map_angle_to_servo_position(angle1, self.range1),
+                200)
+
+        self.servo_controller.execute_command(
+                self.servomid_id,
+                30,
+                self.map_angle_to_servo_position(angle2, self.range2),
+                200)
 
     """
     Converts the given angle in degrees to the corresponding unit value for the AX-12 servo motor.
@@ -70,7 +82,8 @@ class BluetoothController:
         return round((1023 / self.ax12_range) * degrees)
 
     """
-        Handles the input commands for the Bluetooth controller. The input commands are used to control the movement of the robot.
+        Handles the input commands for the Bluetooth controller.
+        The input commands are used to control the movement of the robot.
 
         The commands include:
             - "forward": Moves the robot forward by increasing the x position.
@@ -93,6 +106,7 @@ class BluetoothController:
         target_x = self.pos_x
         target_y = self.pos_y
         target_z = self.pos_z
+        # target_r is never used waarom ??
         target_r = self.pos_r
         target_gripper = self.pos_gripper
         gripper_open = self.gripper_open
@@ -116,7 +130,7 @@ class BluetoothController:
                 # If the target x position is within the valid range
                 if target_x > -(self.ax12_range*self.max_pos_multiplier):
                     target_x -= 20
-                    self.move_x_y(target_x, target_y)   
+                    self.move_x_y(target_x, target_y)
 
             case "left":
                 # If the target y position is within the valid range
@@ -155,7 +169,7 @@ class BluetoothController:
                 self.move_r_axis(self.pos_r)
 
             # move to start position xy and z
-            case "init":  
+            case "init":
                 self.move_x_y(target_x, target_y)
                 self.move_z_axis(target_z)
 
@@ -172,10 +186,13 @@ class BluetoothController:
         target_x (float): Target x-coordinate.
         target_y (float): Target y-coordinate.
     """
+
     def threaded_move_x_y(self, target_x, target_y):
-        thread = threading.Thread(target=self.move_x_y, args=(target_x, target_y))
+        thread = threading.Thread(
+                target=self.move_x_y,
+                args=(target_x, target_y))
         thread.start()
-    
+
     """
     Moves to the target x and y coordinates if they are within reach.
 
@@ -191,7 +208,7 @@ class BluetoothController:
             # self.servo_controller.execute_command(self.servomid_id, 30,target_y, 30)
 
             self.command(angle1, angle2)
-            print("Target position reached",target_x,target_y)
+            print("Target position reached", target_x, target_y)
         else:
             self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
             self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
@@ -207,6 +224,7 @@ class BluetoothController:
         target_gripper (float): Target position for the gripper.
         gripper_open (bool): Whether the gripper should be open or closed.
     """
+
     def open_close_gripper(self, target_gripper, gripper_open):
 
         # If the gripper is currently closed open it
@@ -262,26 +280,27 @@ class BluetoothController:
     Args:
         target_r (float): Target position for the rotation-axis of the gripper.
     """
+
     def move_r_axis(self, target_r):
         self.servo_controller.execute_command(self.servorotation_id, 30, target_r, 600)
-    
+
     """
     check if the target position is within reach
-    
     Args:
         target_x (float): Target x-coordinate.
         target_y (float): Target y-coordinate.
     """
+
     def is_within_reach(self, target_x, target_y):
         distance = (target_x**2 + target_y**2)**0.5
         return 10 < distance <= self.max_reach
-    
     """
     Handles received data.
 
     Args:
         data (str): The received data string.
     """
+
     def data_received(self, data):
         if data is not None and isinstance(data, str):
             print("Received data: ", data)
@@ -297,24 +316,28 @@ class BluetoothController:
     Returns:
         int: The mapped servo position.
     """
+
     def map_angle_to_servo_position(self, angle, range_link):
         offset = (300 - (range_link * 2)) / 2
         position = int((1023 / 300) * (offset + angle + range_link))
         print(position)
         return position
-    
+
     """
     Starts the BluetoothController, attempts to connect to the Bluetooth client (multithreaded so it does not block).
     Returns:
         None(TODO change to say its returned or a thread or something so no rogue threads are left behind)
     """
+
     def start(self):
         def attempt_connection():
             while True:
                 if self.client is None:
                     print("Connecting...")
                     mac_address = "D4:8A:FC:A4:AF:06"
-                    self.client = BluetoothClient(mac_address, self.data_received)
+                    self.client = BluetoothClient(
+                            mac_address,
+                            self.data_received)
                     if self.client.connected:
                         print("Connected")
                         self.handle_input("init")
