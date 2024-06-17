@@ -13,7 +13,7 @@ class Led:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setup(self.pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pin, 10000)
+        self.pwm = GPIO.PWM(self.pin, 500)
         self.pwm.start(0)
         self.is_pwm_running = True
         self.red_brightness = 0
