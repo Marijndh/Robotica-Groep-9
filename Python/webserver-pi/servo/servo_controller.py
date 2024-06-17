@@ -1,3 +1,5 @@
+import threading
+
 import RPi.GPIO as GPIO
 import serial
 import time
@@ -18,6 +20,7 @@ class ServoController:
         print("GPIO setup complete.")
         self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.5)  # Setup serial communication
         print("Serial port setup complete.")
+        self.lock = threading.Lock()
 
     # Method to execute a get status command on a servo
     def execute_getstatus(self, servo_id, command, duration):
@@ -123,27 +126,28 @@ class ServoController:
 
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
-        # lock so no other thread can write/read at the same time
-        GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
-        self.serial_port.write(packet)  # Write packet to the serial port
-        while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
-            time.sleep(0.000000001)
-        time.sleep(
-            0.000001)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
-        GPIO.output(self.direction_pin, GPIO.LOW)  # Set direction to receive data
-        response = bytearray()
-        no_input = False
-        start = time.clock_gettime_ns(0)
-        while True:
-            byte = self.serial_port.read(1)  # Read one byte at a time
-            if not byte:
-                no_input = True
-            else:
-                response.extend(byte)
-            if len(response) >= 4 and no_input:
-                break
-            if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
-                break
+        with self.lock:
+            # lock so no other thread can write/read at the same time
+            GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
+            self.serial_port.write(packet)  # Write packet to the serial port
+            while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
+                time.sleep(0.000000001)
+            time.sleep(
+                0.000001)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
+            GPIO.output(self.direction_pin, GPIO.LOW)  # Set direction to receive data
+            response = bytearray()
+            no_input = False
+            start = time.clock_gettime_ns(0)
+            while True:
+                byte = self.serial_port.read(1)  # Read one byte at a time
+                if not byte:
+                    no_input = True
+                else:
+                    response.extend(byte)
+                if len(response) >= 4 and no_input:
+                    break
+                if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
+                    break
         # free the lock
         decoded_response = self.decode_response(response)  # Decode the response
         if isinstance(decoded_response, str):
