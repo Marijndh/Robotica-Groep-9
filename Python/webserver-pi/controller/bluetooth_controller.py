@@ -94,7 +94,7 @@ class BluetoothController:
         The input commands are used to control the movement of the robot.
 
         The commands include:
-            - "forward": Moves the robot forward by increasing the x position.
+        - "forward": Moves the robot forward by increasing the x position.
         - "backward": Moves the robot backward by decreasing the x position.
         - "left": Moves the robot to the left by increasing the y position.
         - "right": Moves the robot to the right by decreasing the y position.

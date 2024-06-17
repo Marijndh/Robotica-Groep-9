@@ -20,6 +20,7 @@ class ServoController:
         print("GPIO setup complete.")
         self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.5)  # Setup serial communication
         print("Serial port setup complete.")
+        self.lock = threading.Lock()
 
     # Method to execute a get status command on a servo
     def execute_getstatus(self, servo_id, command, duration):
