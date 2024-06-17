@@ -240,7 +240,15 @@ class BluetoothController:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
                 try:
-                    # TODO: Implement load detection and make it so it waits for a load
+                    # Get the current load on the servo
+                    load = self.servo_controller.execute_getstatus(5,40,2)
+                    print("load is:",load)
+                    # If the load is within a certain range,the gripper is open(means it is experiencing external load)
+                    if load > 1600 and load < 2048:
+                        gripper_open = True 
+                        self.gripper_open = gripper_open
+                        break
+                    # If it is not experiencing load but is open past the threshold it is open
                     if target_gripper >= 750:
                         gripper_open = True
                         self.gripper_open = gripper_open
@@ -252,13 +260,22 @@ class BluetoothController:
                 except Exception as e:
                     print("Error opening: ", e)
 
+
         # If the gripper is currently open close it
         elif gripper_open == True:
             # While the target position is within the valid range
             while 0 <= target_gripper <= 820:
                 try:
-                    # TODO: Implement load detection and make it so it waits for a load
+                    # Get the current load on the servo
+                    load = self.servo_controller.execute_getstatus(5, 40,2)
+                    print("load is:", load)
+                    # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
+                    if load > 400 and load < 1023:
+                        gripper_open = False
+                        self.gripper_open = gripper_open
+                        break
                     if target_gripper <= 50:
+                        # If its not experiencing load then it is not closed and we need to close it
                         gripper_open = False
                         self.gripper_open = gripper_open
                         break
@@ -267,7 +284,7 @@ class BluetoothController:
                         self.servo_controller.execute_command(5, 30, target_gripper, 300)
                 except Exception as e:
                     print("Error closing: ", e)
-
+    
     def move_z_axis(self, target_z):
         # Check if the target position is above or below the current position
         if target_z > self.pos_z:
