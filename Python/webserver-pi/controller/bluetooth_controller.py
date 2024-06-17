@@ -58,10 +58,10 @@ class BluetoothController:
 
         thread1 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servobase_id, 30, angle1, self.range1, 200))
+                args=(self.servobase_id, 30, angle1, self.range1, 100))
         thread2 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servomid_id, 30, angle2, self.range2, 200))
+                args=(self.servomid_id, 30, angle2, self.range2, 100))
 
         thread1.start()
         thread2.start()

@@ -21,8 +21,8 @@ class FlaskServer(object):
         self.configs(**configs)
         self.link1 = 300
         self.link2 = 300
-        self.range_l1 = 100
-        self.range_l2 = 120
+        self.range_l1 = 110
+        self.range_l2 = 150
         self.bluetooth_controller = BluetoothController(self.link1, self.link2, self.range_l1, self.range_l2)
         self.webcam = None
         self.encoder = Encoder()
@@ -107,8 +107,7 @@ class FlaskServer(object):
         base_thread.join()
         middle_thread.join()
 
-        return jsonify({"status": "success", "joint_base": joint_base, "joint_middle": joint_middle,
-                        "servo_base_position": servo_base_position, "servo_middle_position": servo_middle_position})
+        return jsonify({"status": "success", "servo_base_position": servo_base_position, "servo_middle_position": servo_middle_position})
     
     def servo_kinematics(self):
         data = request.json
@@ -122,13 +121,13 @@ class FlaskServer(object):
             x, y = map(float, command_string.split())
         except ValueError:
             return jsonify({"status": "error", "message": "Invalid command format"}), 400
-
+        
         joint_base, joint_middle = self.kinematics.inverse_kinematics(x, y)
-
+        speed = 130
         # Map angles to servo positions
         servo_base_position = map_angle_to_servo_position(joint_base, self.range_l1)
         servo_middle_position = map_angle_to_servo_position(joint_middle, self.range_l2)
-        response1 = self.move_servo_kinmatics(servo_base_position, servo_middle_position, 30)
+        response1 = self.move_servo_kinmatics(servo_base_position, servo_middle_position, speed)
         #response2 = move_servo_kinmatics(3, 30, servo_middle_position, 30)
         
         return response1
