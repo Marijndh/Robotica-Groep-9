@@ -182,3 +182,10 @@ class Instrument:
                     break
         if self.color == "":
             self.color = 'silver'
+
+    def calculate_pick_up_point(self):
+        if self.type == "straight":
+            return self.centroid
+        elif self.type == "crooked":
+            return self.centroid
+

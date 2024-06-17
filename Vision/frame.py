@@ -120,22 +120,6 @@ class Frame:
         for brick in self.bricks:
             print(brick.__str__())
 
-    # Find the gripper of the robot and return the location
-    def find_robot(self):
-        self.find_bricks()
-        for brick in self.bricks:
-            cv.drawContours(self.img, [brick.body], -1, (0, 255, 0), 4)
-        print(len(self.bricks))
-        if len(self.bricks) == 1:
-            return self.bricks[0].centroid
-        else:
-            amount_blue = []
-            for brick in self.bricks:
-                if brick.color == 'blue':
-                    amount_blue.append(brick)
-            if len(amount_blue) == 1:
-                return amount_blue[0].centroid
-        return self.width/2, self.height/2
 
     # Show the resulting image
     def show(self):
