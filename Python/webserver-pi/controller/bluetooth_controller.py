@@ -56,19 +56,6 @@ class BluetoothController:
     def command(self, angle1, angle2):
         print(f'Angle1: {(2*self.range1)-angle1}, Angle2: {angle2}')
 
-        # TODO make multithreaded
-        # @tjalling is dit wat je bedoelde?
-        # self.servo_controller.execute_command(
-        #         self.servobase_id,
-        #         30,
-        #         self.map_angle_to_servo_position(angle1, self.range1),
-        #         200)
-        #
-        # self.servo_controller.execute_command(
-        #         self.servomid_id,
-        #         30,
-        #         self.map_angle_to_servo_position(angle2, self.range2),
-        #         200)
         thread1 = threading.Thread(
                 target=self.execute_command_threaded,
                 args=(self.servobase_id, 30, angle1, self.range1, 200))
