@@ -92,7 +92,24 @@ class FlaskServer(object):
     # Endpoint to execute a complex servo command
     def servo_command(self):
         return self.servo_controller.servo_command()
+    
+    def move_servo_kinmatics(self, servo_base_position, servo_middle_position, speed):
 
+        # Create threads for moving servos concurrently
+        base_thread = threading.Thread(target=self.servo_controller.execute_command, args=(1, 30, servo_base_position, speed))
+        middle_thread = threading.Thread(target=self.servo_controller.execute_command, args=(3, 30, servo_middle_position, speed))
+
+        # Start the threads
+        base_thread.start()
+        middle_thread.start()
+
+        # Wait for both threads to finish
+        base_thread.join()
+        middle_thread.join()
+
+        return jsonify({"status": "success", "joint_base": joint_base, "joint_middle": joint_middle,
+                        "servo_base_position": servo_base_position, "servo_middle_position": servo_middle_position})
+    
     def servo_kinematics(self):
         data = request.json
         command_string = data.get('command')
@@ -111,7 +128,10 @@ class FlaskServer(object):
         # Map angles to servo positions
         servo_base_position = map_angle_to_servo_position(joint_base, self.range_l1)
         servo_middle_position = map_angle_to_servo_position(joint_middle, self.range_l2)
-
+        response1 = self.move_servo_kinmatics(servo_base_position, servo_middle_position, 30)
+        #response2 = move_servo_kinmatics(3, 30, servo_middle_position, 30)
+        
+        return response1
 
 
     def controls(self):
