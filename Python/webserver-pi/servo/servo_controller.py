@@ -126,8 +126,8 @@ class ServoController:
 
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
+        # lock so no other thread can write/read at the same time
         with self.lock:
-            # lock so no other thread can write/read at the same time
             GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
             self.serial_port.write(packet)  # Write packet to the serial port
             while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
@@ -148,7 +148,6 @@ class ServoController:
                     break
                 if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
                     break
-        # free the lock
         decoded_response = self.decode_response(response)  # Decode the response
         if isinstance(decoded_response, str):
             return {"status": "error", "message": decoded_response}
