@@ -86,15 +86,17 @@ def find_target(frame, location, hierarchy, color):
 def main():
     requester = ImageRequester()
     robot = Robot()
-    color = robot.get_color()
+    robot.fetch_values()
+    color = robot.color
+    previous_mode = robot.mode
     previous_locations = []
     previous_time = 0
-    previous_mode = 'targets'
     while True:
+        robot.fetch_values()
         current_time = time.time()
         time_difference = current_time - previous_time
         previous_time = current_time
-        mode = robot.get_mode()
+        mode = robot.mode
         if mode != previous_mode:
             previous_locations = []
             previous_time = 0

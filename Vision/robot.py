@@ -17,15 +17,25 @@ class Robot:
         self.hostname = 'ubuntu'
         self.IP = "192.168.218.40"
 
-    def get_mode(self):
-        # use http post request to get mode
-        self.mode = result
-        return self.mode
+    def fetch_values(self):
+        # De URL van de server
+        url = "http://" + self.IP + ":5000/bluetooth"
 
-    def get_color(self):
-        # use http post request to get mode
-        self.color = result
-        return self.color
+        # Verstuur het POST-verzoek
+        response = requests.get(url)
+
+        # Controleer de respons
+        if response.status_code == 200:
+            # Parse de JSON-respons
+            data = response.json()
+
+            # Haal de waarde van 'color' uit de respons
+            color = data.get('color', 'N/A')
+            self.color = color
+
+            # Haal de waarde van 'mode' uit de respons
+            mode = data.get('mode', 'N/A')
+            self.mode = mode
 
     def move_to_location(self):
         if self.target_point != (0, 0):
@@ -49,4 +59,3 @@ class Robot:
             # Controleer de respons
             if response.status_code == 200:
                 print("Bewogen naar: " + str(result))
-
