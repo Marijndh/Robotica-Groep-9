@@ -125,7 +125,7 @@ class Controller:
             self.move_z_axis(target_z)
             self.move_r_axis(target_r)
             self.open_close_gripper(target_gripper, gripper_open)
-        
+
         if x != target_x or y != target_y :
             if x < self.max_reach and y < self.max_reach:
                 self.threaded_move_x_y(x, y)
@@ -163,6 +163,7 @@ class Controller:
         target_x (float): Target x-coordinate.
         target_y (float): Target y-coordinate.
     """
+
     def move_x_y(self, target_x, target_y):
         if self.is_within_reach(target_x, target_y):
             self.pos_x, self.pos_y = target_x, target_y
