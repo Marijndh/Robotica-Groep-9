@@ -6,6 +6,7 @@ from bluedot.btcomm import BluetoothClient
 from time import sleep
 sys.path.append("..")
 
+
 class BluetoothController:
     """
         Initializes the BluetoothController with given links and ranges,
@@ -123,7 +124,7 @@ class BluetoothController:
             self.move_z_axis(target_z)
             self.move_r_axis(target_r)
             self.open_close_gripper(target_gripper, gripper_open)
-        
+
         if x != target_x or y != target_y :
             if x < self.max_reach and y < self.max_reach:
                 self.threaded_move_x_y(x, y)
@@ -131,7 +132,6 @@ class BluetoothController:
         if z != target_z:
             if z < 1000:
                 self.move_z_axis(z)
-                
         # Process each message separately they are split by a semicolon(;)
         messages = input.split(';')
         # Remove leading and trailing whitespace from the message
@@ -221,6 +221,7 @@ class BluetoothController:
         target_x (float): Target x-coordinate.
         target_y (float): Target y-coordinate.
     """
+
     def move_x_y(self, target_x, target_y):
         if self.is_within_reach(target_x, target_y):
             self.pos_x, self.pos_y = target_x, target_y
@@ -254,7 +255,7 @@ class BluetoothController:
             while 0 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5,40,2)
+                    load = self.servo_controller.execute_getstatus(5, 40, 2)
                     print("load is:",load)
                     # If the load is within a certain range,the gripper is open(means it is experiencing external load)
                     if load > 1600 and load < 2048:
@@ -269,10 +270,13 @@ class BluetoothController:
                     # If the gripper is not open and not experiencing load, open it
                     else:
                         target_gripper += 40
-                        self.servo_controller.execute_command(5, 30, target_gripper, 300)
+                        self.servo_controller.execute_command(
+                                5,
+                                30,
+                                target_gripper,
+                                300)
                 except Exception as e:
                     print("Error opening: ", e)
-
 
         # If the gripper is currently open close it
         elif gripper_open == True:
@@ -280,7 +284,7 @@ class BluetoothController:
             while 0 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5, 40,2)
+                    load = self.servo_controller.execute_getstatus(5, 40, 2)
                     print("load is:", load)
                     # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
                     if load > 400 and load < 1023:
@@ -294,10 +298,14 @@ class BluetoothController:
                         break
                     else:
                         target_gripper -= 40
-                        self.servo_controller.execute_command(5, 30, target_gripper, 300)
+                        self.servo_controller.execute_command(
+                                5,
+                                30,
+                                target_gripper,
+                                300)
                 except Exception as e:
                     print("Error closing: ", e)
-    
+
     def move_z_axis(self, target_z):
         # Check if the target position is above or below the current position
         if target_z > self.pos_z:
