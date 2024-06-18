@@ -97,25 +97,30 @@ class UltrasonicSensor:
         print("Reading distance...")
         # Send a 10us pulse to the trigger pin
         GPIO.output(self.trigger_pin, True)
-        time.sleep(0.00001)
+        start_reading_time = time.time()
+        while time.time() - start_reading_time < 0.000006:
+            pass
         GPIO.output(self.trigger_pin, False)
 
-        # Wait for the echo pin to go high
-        while GPIO.input(self.echo_pin) == 0:
-            start_time = time.time()
-        
-        print("pin was high")
+        while time.time() - start_reading_time < 0.01:
+            # Wait for the echo pin to go high
+            while GPIO.input(self.echo_pin) == 0:
+                start_time = time.time()
+            
+            #print("pin was high")
 
-        # Wait for the echo pin to go low
-        while GPIO.input(self.echo_pin) == 1:
-            end_time = time.time()
+            # Wait for the echo pin to go low
+            while GPIO.input(self.echo_pin) == 1:
+                end_time = time.time()
+            
+        if end_time:
+            # Calculate the duration of the echo pulse
+            pulse_duration = end_time - start_time
 
-        # Calculate the duration of the echo pulse
-        pulse_duration = end_time - start_time
-
-        # The speed of sound is 34300 cm/s, and the echo pulse travelled the
-        # distance to the object and back, so we divide by 2
-        distance = pulse_duration * 34300 / 2
-
-        return distance
+            # The speed of sound is 34300 cm/s, and the echo pulse travelled the
+            # distance to the object and back, so we divide by 2
+            distance = pulse_duration * 34300 / 2
+        else:
+            distance = -1
+            return distance
 
