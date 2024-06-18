@@ -1,10 +1,9 @@
-import cv2 as cv
-import numpy as np
-from geometry_utils import GeometryUtils
-from color_manager import ColorManager
-import requests
 import json
-import socket
+
+import requests
+
+from geometry_utils import GeometryUtils
+
 
 class Robot:
     def __init__(self):
