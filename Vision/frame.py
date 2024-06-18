@@ -72,7 +72,7 @@ class Frame:
         for instrument in self.instruments:
             center = instrument.centroid
             if self.check_target_color(center):
-                result.append(center)
+                result.append(instrument)
         return result
 
     # Find every target within the frame
