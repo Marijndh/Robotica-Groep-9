@@ -27,7 +27,7 @@ class Frame:
             cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
     # Find the instruments within the image
-    def find_instruments(self):
+    def find_instruments(self, color):
         contours = self.contours
         for index in range(len(contours)):
             contour = contours[index]
@@ -35,8 +35,9 @@ class Frame:
             # area is calibrated based on the camera position and size of the instruments
             if 3000.0 < area < 4000:
                 instrument = Instrument(contour, index, area)
-                self.instruments.append(instrument)
-                instrument.get_color(self.hsv_image)
+                instrument_color = instrument.get_color(self.hsv_image)
+                if color is None or instrument_color == color:
+                    self.instruments.append(instrument)
 
     # Find the children of each instrument within the frame
     def find_children(self):
@@ -59,22 +60,36 @@ class Frame:
         for instrument in self.instruments:
             print(instrument.__str__())
 
+    def is_close_to_a_target(self, center):
+        for target in self.targets:
+            centroid = np.array(target.centroid)
+            if np.linalg.norm(np.array(center) - centroid) <= 50:
+                return True
+        return False
+
+    def find_instrument_targets(self):
+        result = []
+        for instrument in self.instruments:
+            center = instrument.centroid
+            if self.check_target_color(center):
+                result.append(center)
+        return result
+
     # Find every target within the frame
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
-            if area > 10000 < self.width * self.height * 0.8:
+            if 10000 < area < self.width * self.height * 0.8:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
-                if is_ellipse_flag:
-                    self.check_bull_color(contour, center)
+                is_close = self.is_close_to_a_target(center)
+                if is_ellipse_flag and not is_close and self.check_target_color(center):
+                    self.targets.append(Target(center))
 
     # Draw the targets on the image
     def draw_targets(self):
         for target in self.targets:
-            center = target.hitpoint
-            ellipse = target.body
+            center = target.centroid
             cv.circle(self.img, center, 5, (0, 0, 0), -1)
-            cv.ellipse(self.img, ellipse, (0, 255, 0), 2)
 
     # Print details of targets
     def print_targets(self):
@@ -82,14 +97,15 @@ class Frame:
             print(target.__str__())
 
     # Check if the found contour is the right one by checking the color of the center
-    def check_bull_color(self, contour, center):
-        ellipse = cv.fitEllipse(contour)
+    def check_target_color(self, center):
         mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
         cv.circle(mask, center, 5, (255, 255, 255), -1)
         mean = cv.mean(self.hsv_image, mask=mask)
         expected_bulls_eye_color = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
         if expected_bulls_eye_color.is_color(mean[0], mean[1], mean[2]):
-            self.targets.append(Target(center, ellipse))
+            return True
+        else:
+            return False
 
     # Find every brick (rectangle or square) within the frame
     def find_bricks(self):
@@ -104,7 +120,6 @@ class Frame:
                     ratio = float(w) / h
                     # Controleer of de verhouding dicht bij 1:1 ligt voor vierkanten en rechthoeken
                     if 1.5 > ratio > 1.2:
-                        print(ratio)
                         brick = Brick(contour, index)
                         self.bricks.append(brick)
                         brick.get_color(self.hsv_image, self.gray_image)
@@ -119,23 +134,6 @@ class Frame:
     def print_bricks(self):
         for brick in self.bricks:
             print(brick.__str__())
-
-    # Find the gripper of the robot and return the location
-    def find_robot(self):
-        self.find_bricks()
-        for brick in self.bricks:
-            cv.drawContours(self.img, [brick.body], -1, (0, 255, 0), 4)
-        print(len(self.bricks))
-        if len(self.bricks) == 1:
-            return self.bricks[0].centroid
-        else:
-            amount_blue = []
-            for brick in self.bricks:
-                if brick.color == 'blue':
-                    amount_blue.append(brick)
-            if len(amount_blue) == 1:
-                return amount_blue[0].centroid
-        return self.width/2, self.height/2
 
     # Show the resulting image
     def show(self):

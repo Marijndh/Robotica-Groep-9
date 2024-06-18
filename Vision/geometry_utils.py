@@ -4,29 +4,6 @@ import math
 
 
 class GeometryUtils:
-
-    #Predict the 4 next positions of an instrument based on 4 given points
-    @staticmethod
-    def predict_future_positions(points, num_future_points=4, degree=2):
-        points = np.array(points)
-        x = points[:, 0]
-        y = points[:, 1]
-
-        # Fit a polynomial to the given points
-        coefficients = np.polyfit(x, y, degree)
-        polynomial = np.poly1d(coefficients)
-
-        # Predict future x-values based on the average step between x-values in the input
-        average_step = np.mean(np.diff(x))
-        future_x = np.arange(x[-1] + average_step, x[-1] + average_step *
-                             (num_future_points + 1), average_step)
-        future_y = polynomial(future_x)
-
-        future_x = np.round(future_x).astype(int)
-        future_y = np.round(future_y).astype(int)
-
-        return list(zip(future_x, future_y))
-
     # Determine if a contour is the shape of an ellipse
     # Returns a boolean and the center coordinate
     @staticmethod
@@ -53,7 +30,7 @@ class GeometryUtils:
             if distance < min_distance:
                 min_distance = distance
                 closest_obj = other_obj
-        return closest_obj, min_distance
+        return closest_obj
 
     # Returns the centroid of a given body
     @staticmethod
@@ -71,13 +48,72 @@ class GeometryUtils:
             return 'East'
         elif current_x < previous_x:
             return 'West'
+        else:
+            return 'Stationary'
 
     @staticmethod
-    def get_direction_and_speed(target, previous_objects, time):
-        result, length = GeometryUtils.find_closest_object(target.centroid, previous_objects)
-        if result is not None:
-            direction = GeometryUtils.determine_direction(result.centroid[0], target.centroid[0])
-            speed = length/time
-            return direction, speed
-        else:
-            return 'Stationary', 0
+    def get_direction_and_speed(target, previous_location, time):
+        direction = GeometryUtils.determine_direction(previous_location[0], target.centroid[0])
+        length = GeometryUtils.calculate_distance(target.centroid, previous_location)
+        speed = length / time
+        return direction, speed
+
+    @staticmethod
+    def calculate_trajectory(previous_locations, speed, direction):
+        # Extract the last known position and the time difference
+        last_position, time_diff = previous_locations[-1]
+        last_x, last_y = last_position
+
+        # Predict amount of time to move to location
+        move_time = 2
+
+        # Total time including the grasp time
+        total_time = time_diff + move_time
+
+        # Calculate the distance traveled
+        distance_traveled = speed * total_time
+
+        # Calculate the new position based on the direction
+        if direction.lower() == 'east':
+            new_x = last_x + distance_traveled
+            new_y = last_y
+        elif direction.lower() == 'west':
+            new_x = last_x - distance_traveled
+            new_y = last_y
+
+        # Return the new position
+        return new_x, new_y
+
+    @staticmethod
+    def calculate_affine_transform(src_points, dst_points):
+        A = []
+        B = []
+
+        for src, dst in zip(src_points, dst_points):
+            A.append([src[0], src[1], 1, 0, 0, 0])
+            A.append([0, 0, 0, src[0], src[1], 1])
+            B.append(dst[0])
+            B.append(dst[1])
+
+        A = np.array(A)
+        B = np.array(B)
+
+        affine_params = np.linalg.lstsq(A, B, rcond=None)[0]
+        return affine_params
+
+    @staticmethod
+    def apply_affine_transform(pixel, affine_params):
+        x, y = pixel
+        a, b, c, d, e, f = affine_params
+
+        coord_x = a * x + b * y + c
+        coord_y = d * x + e * y + f
+
+        return coord_x, coord_y
+
+    @staticmethod
+    def map_coordinate(pixel):
+        pixel_points = [(540, 720), (0, 300), (1280, 300)]
+        coord_points = [(600, 0), (0, 600), (0, -600)]
+        affine_params = GeometryUtils.calculate_affine_transform(pixel_points, coord_points)
+        return GeometryUtils.apply_affine_transform(pixel, affine_params)

@@ -182,3 +182,20 @@ class Instrument:
                     break
         if self.color == "":
             self.color = 'silver'
+        return self.color
+
+    def calculate_pick_up_point(self):
+        if self.type == "straight":
+            return self.centroid
+        elif self.type == "crooked":
+            # Vind het bounding rectangle van de contour
+            x, y, w, h = cv2.boundingRect(self.body)
+
+            # Hoekpunten van de bounding rectangle
+            rect_points = [(x, y), (x + w, y), (x, y + h), (x + w, y + h)]
+
+            # Bereken de afstand van elk hoekpunt tot het centroid en vind het dichtstbijzijnde hoekpunt
+            closest_point = min(rect_points, key=lambda point: np.linalg.norm(np.array(point) - np.array(centroid)))
+            return closest_point
+
+
