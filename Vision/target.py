@@ -1,7 +1,7 @@
 class Target:
-    def __init__(self, hitpoint, body):
-        self.hitpoint = hitpoint
+    def __init__(self, centroid, body):
+        self.centroid = centroid
         self.body = body
 
     def __str__(self):
-        return "Target: " + self.hitpoint.__str__()
+        return "Target: " + self.centroid.__str__()

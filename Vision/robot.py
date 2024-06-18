@@ -6,7 +6,7 @@ from color_manager import ColorManager
 
 class Robot:
     def __init__(self):
-        self.mode = 'instruments'
+        self.mode = 'targets'
         self.location = (0, 0)
         self.target = None
         self.target_point = (0,0)

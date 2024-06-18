@@ -6,6 +6,15 @@ from geometry_utils import GeometryUtils
 import time
 
 
+def determine_trajectory(robot, previous_locations, speed, direction):
+    if len(previous_locations) == 4 and direction != 'Stationary':
+        prediction = GeometryUtils.calculate_trajectory(previous_locations, speed, direction)
+        print(prediction)
+        previous_objects.pop(0)
+        robot.target_point = prediction
+        robot.move_to_location()
+
+
 def handle_instrument_mode(frame, robot, previous_locations, time_difference, speed, direction):
     gray_blurred = cv.GaussianBlur(frame.gray_image, (5, 5), 0)
     _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)
@@ -24,27 +33,31 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, sp
     if len(previous_locations) == 1:
         direction, speed = GeometryUtils.get_direction_and_speed(target, previous_locations[-1][0],
                                                                  time_difference)
-    if len(previous_locations) == 4 and direction != 'Stationary':
-        prediction = GeometryUtils.calculate_trajectory(previous_locations, speed, direction)
-        previous_objects.pop(0)
-        robot.target_point = prediction
+    determine_trajectory(robot, previous_locations, speed, direction)
 
 
-def handle_target_mode(frame):
+def handle_target_mode(frame, robot, previous_locations, time_difference, speed, direction):
     gray_blurred = cv.GaussianBlur(frame.gray_image, (9, 9), 2)
     _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY_INV)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     if len(frame.contours) > 0 and hierarchy is not None:
         frame.hierarchy = hierarchy[0]
         frame.find_targets()
-        frame.draw_targets()
-        frame.print_targets()
         if len(frame.targets) > 0:
-            target, length = GeometryUtils.find_closest_object(robot.location, frame.targets)
-            if previous_objects:
-                direction, speed = GeometryUtils.get_direction_and_speed(target, previous_objects, time)
-                # time_to_get_to_location = length/speed
-            previous_objects = frame.instruments
+            if robot.target is None:
+                target = GeometryUtils.find_closest_object(robot.location, frame.targets)
+                robot.target = target
+                robot.target_point = target.centroid
+                previous_locations = [[target.centroid, time_difference]]
+            else:
+                target = GeometryUtils.find_closest_object(robot.target.centroid, frame.targets)
+                if target is None:
+                    return False
+        if len(previous_locations) == 1:
+            direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-1][0],
+                                                                     time_difference)
+        determine_trajectory(robot, previous_locations, speed, direction)
+    frame.draw_targets()
 
 
 def trace_target(frame, target, hierarchy):
@@ -66,13 +79,8 @@ def find_target(frame, location, hierarchy):
             return closest
 
 
-
-# TODO make methods for each mode, clean-up main method
 # TODO replace videocapture with images from Raspberry Pi -> image_requester.py
-# TODO map pixel to coordinate usefull for servo's
 # TODO get mode from Raspberry using http request
-# TODO add mode to search for certain color
-# TODO implement finding trajectory for target -> Example code/find_trajectory.py
 def main():
     vid = cv.VideoCapture(0, cv.CAP_DSHOW)
     direction = 'Stationary'
@@ -80,20 +88,24 @@ def main():
     robot = Robot()
     previous_locations = []
     previous_time = 0
+    previous_mode = 'targets'
     while True:
         current_time = time.time()
         time_difference = current_time - previous_time
         previous_time = current_time
         mode = robot.get_mode()
+        if mode != previous_mode:
+            previous_locations = []
+            previous_time = 0
+            previous_mode = mode
         ret, img = vid.read()
         if ret:
             frame = Frame(img, 1280, 720)
             if mode == 'instruments':
                 handle_instrument_mode(frame, robot, previous_locations, time_difference, speed, direction)
             elif mode == 'targets':
-                handle_target_mode(frame)
+                handle_target_mode(frame, robot, previous_locations, time_difference, speed, direction)
             frame.show()
-        robot.move_to_location()
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
     # After the loop release the cap object

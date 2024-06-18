@@ -71,7 +71,7 @@ class Frame:
     # Draw the targets on the image
     def draw_targets(self):
         for target in self.targets:
-            center = target.hitpoint
+            center = target.centroid
             ellipse = target.body
             cv.circle(self.img, center, 5, (0, 0, 0), -1)
             cv.ellipse(self.img, ellipse, (0, 255, 0), 2)
