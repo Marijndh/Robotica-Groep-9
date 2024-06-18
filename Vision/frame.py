@@ -59,22 +59,37 @@ class Frame:
         for instrument in self.instruments:
             print(instrument.__str__())
 
+    def is_close_to_a_target(self, center):
+        for target in self.targets:
+            centroid = np.array(target.centroid)
+            if np.linalg.norm(np.array(center) - centroid) <= 50:
+                return True
+        return False
+
+    def find_instrument_targets(self):
+        result = []
+        for instrument in self.instruments:
+            center = instrument.centroid
+            if self.check_target_color(center):
+                result.append(center)
+        return result
+
     # Find every target within the frame
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
-            if area > 10000 < self.width * self.height * 0.8:
+            if 10000 < area < self.width * self.height * 0.8:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
-                if is_ellipse_flag:
-                    self.check_bull_color(contour, center)
+                is_close = self.is_close_to_a_target(center)
+                if is_ellipse_flag and not is_close and self.check_target_color(center):
+                    self.targets.append(Target(center))
+
 
     # Draw the targets on the image
     def draw_targets(self):
         for target in self.targets:
             center = target.centroid
-            ellipse = target.body
             cv.circle(self.img, center, 5, (0, 0, 0), -1)
-            cv.ellipse(self.img, ellipse, (0, 255, 0), 2)
 
     # Print details of targets
     def print_targets(self):
@@ -82,14 +97,15 @@ class Frame:
             print(target.__str__())
 
     # Check if the found contour is the right one by checking the color of the center
-    def check_bull_color(self, contour, center):
-        ellipse = cv.fitEllipse(contour)
+    def check_target_color(self, center):
         mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
         cv.circle(mask, center, 5, (255, 255, 255), -1)
         mean = cv.mean(self.hsv_image, mask=mask)
         expected_bulls_eye_color = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
         if expected_bulls_eye_color.is_color(mean[0], mean[1], mean[2]):
-            self.targets.append(Target(center, ellipse))
+            return True
+        else:
+            return False
 
     # Find every brick (rectangle or square) within the frame
     def find_bricks(self):
@@ -104,7 +120,6 @@ class Frame:
                     ratio = float(w) / h
                     # Controleer of de verhouding dicht bij 1:1 ligt voor vierkanten en rechthoeken
                     if 1.5 > ratio > 1.2:
-                        print(ratio)
                         brick = Brick(contour, index)
                         self.bricks.append(brick)
                         brick.get_color(self.hsv_image, self.gray_image)

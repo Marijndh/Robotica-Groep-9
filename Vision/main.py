@@ -3,19 +3,19 @@ import numpy as np
 from frame import Frame
 from robot import Robot
 from geometry_utils import GeometryUtils
+from image_requester import ImageRequester
 import time
 
 
 def determine_trajectory(robot, previous_locations, speed, direction):
     if len(previous_locations) == 4 and direction != 'Stationary':
         prediction = GeometryUtils.calculate_trajectory(previous_locations, speed, direction)
-        print(prediction)
-        previous_objects.pop(0)
+        previous_locations.pop(0)
         robot.target_point = prediction
         robot.move_to_location()
 
 
-def handle_instrument_mode(frame, robot, previous_locations, time_difference, speed, direction):
+def handle_instrument_mode(frame, robot, previous_locations, time_difference):
     gray_blurred = cv.GaussianBlur(frame.gray_image, (5, 5), 0)
     _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -29,14 +29,17 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, sp
         target = trace_target(frame, robot.target, hierarchy)
         if target is None:
             return False
-        previous_locations.append([target.centroid, time_difference])
-    if len(previous_locations) == 1:
-        direction, speed = GeometryUtils.get_direction_and_speed(target, previous_locations[-1][0],
-                                                                 time_difference)
-    determine_trajectory(robot, previous_locations, speed, direction)
+        robot.target = target
+        previous_locations.append([robot.target.centroid, time_difference])
+    if len(robot.instrument_targets) == 0:
+        robot.instrument_targets = frame.find_instrument_targets()
+    if len(previous_locations) > 1:
+        direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
+                                                                     time_difference)
+        determine_trajectory(robot, previous_locations, speed, direction)
 
 
-def handle_target_mode(frame, robot, previous_locations, time_difference, speed, direction):
+def handle_target_mode(frame, robot, previous_locations, time_difference):
     gray_blurred = cv.GaussianBlur(frame.gray_image, (9, 9), 2)
     _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY_INV)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -52,12 +55,13 @@ def handle_target_mode(frame, robot, previous_locations, time_difference, speed,
             else:
                 target = GeometryUtils.find_closest_object(robot.target.centroid, frame.targets)
                 if target is None:
-                    return False
-        if len(previous_locations) == 1:
-            direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-1][0],
-                                                                     time_difference)
-        determine_trajectory(robot, previous_locations, speed, direction)
-    frame.draw_targets()
+                    return
+                robot.target = target
+                previous_locations.append([robot.target.centroid, time_difference])
+            if len(previous_locations) > 1:
+                direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
+                                                                      time_difference)
+                determine_trajectory(robot, previous_locations, speed, direction)
 
 
 def trace_target(frame, target, hierarchy):
@@ -82,9 +86,7 @@ def find_target(frame, location, hierarchy):
 # TODO replace videocapture with images from Raspberry Pi -> image_requester.py
 # TODO get mode from Raspberry using http request
 def main():
-    vid = cv.VideoCapture(0, cv.CAP_DSHOW)
-    direction = 'Stationary'
-    speed = 0
+    requester = ImageRequester()
     robot = Robot()
     previous_locations = []
     previous_time = 0
@@ -98,20 +100,14 @@ def main():
             previous_locations = []
             previous_time = 0
             previous_mode = mode
-        ret, img = vid.read()
-        if ret:
+        img = requester.fetch_image(1)
+        if img:
             frame = Frame(img, 1280, 720)
             if mode == 'instruments':
-                handle_instrument_mode(frame, robot, previous_locations, time_difference, speed, direction)
+                handle_instrument_mode(frame, robot, previous_locations, time_difference)
             elif mode == 'targets':
-                handle_target_mode(frame, robot, previous_locations, time_difference, speed, direction)
+                handle_target_mode(frame, robot, previous_locations, time_difference)
             frame.show()
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    # After the loop release the cap object
-    vid.release()
-    # Destroy all the windows
-    cv.destroyAllWindows()
 
 
 if __name__ == '__main__':
