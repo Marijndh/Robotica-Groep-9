@@ -42,7 +42,10 @@ class ServoController:
     def move_for_duration(self, servo_id, command, duration, value):
         packet = self.build_packet(servo_id, command, None, value)
         self.send_packet(packet)
-        sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
+        start = time.clock_gettime_ns(0)
+        while time.clock_gettime_ns(0) - start < (duration * 1000000):  # Wait for the specified duration
+            pass
+        #sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
         self.stop(servo_id)  # Stop the servo after the duration
 
     # Method to build a packet for communication with the servo(should be switchcase or something as its not dry now)
@@ -146,7 +149,7 @@ class ServoController:
                 response.extend(byte)
             if len(response) >= 4 and no_input:
                 break
-            if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
+            if time.clock_gettime_ns(0) - start > 800000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
                 break
         self.lock.release()
         # free the lock

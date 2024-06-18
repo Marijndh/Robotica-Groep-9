@@ -5,6 +5,7 @@ from webcam.webcam import Webcam
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics
 from controller.bluetooth_controller import BluetoothController
+#from controller.controller import Controller
 from controls.controls import Leds
 from controls.controls import UltrasonicSensor
 
@@ -25,15 +26,17 @@ class FlaskServer(object):
         self.range_l1 = 110
         self.range_l2 = 150
         self.bluetooth_controller = BluetoothController(self.link1, self.link2, self.range_l1, self.range_l2)
+        #self.controller = BluetoothController.controller
+        #self.controller = Controller(self.link1, self.link2, self.range_l1, self.range_l2)
         self.webcam = None
         self.sensor = UltrasonicSensor()
         self.leds = Leds()
         self.servo_controller = ServoController()
         self.kinematics = Kinematics(link1=self.link1, link2=self.link2, range_l1=self.range_l1, range_l2=self.range_l2)
-        self.servo_controller.execute_command(1, 30, 512,
-                                              50)  # initialise the servo's to its straight ahead starting position
-        self.servo_controller.execute_command(2, 30, 512, 50)
         self.bluetooth_controller.start()
+        self.servo_controller.execute_command(1, 30, 512, 50)  # initialise the servo's to its straight ahead starting position
+        self.servo_controller.execute_command(2, 30, 512, 50)
+        
 
     # Set configuration
     def configs(self, **configs):
@@ -158,8 +161,26 @@ class FlaskServer(object):
 
         else:
             return jsonify({"status": "error", "message": "Invalid action"}), 400
+    
+    def bluetooth(self):
+        return jsonify({"color": self.bluetooth_controller.color, "mode": self.bluetooth_controller.mode})
+    
+    def controller(self):
+        data = request.json
+        x = data.get('x')
+        y = data.get('y')
+        z = data.get('z')
+        r = data.get('r')
+        gripper = data.get('gripper')
 
+        if x is None or y is None or z is None or r is None or gripper is None:
+            return jsonify({"status": "error", "message": "Invalid parameters"}), 400
+        else:
+            # Call the controller.py function with the received values
+            self.bluetooth_controller.controller.move_arm(x, y, z, r, gripper)
 
+            return jsonify({"status": "send", "message": "Controller values sent"}) , 200
+    
 def main():
     # Initialise server
     flask = Flask(__name__)
@@ -170,11 +191,14 @@ def main():
     app.add_endpoint('/', 'index', app.index, methods=['GET'])
     app.add_endpoint('/webcam', 'webcam', app.live_feed, methods=['GET'])
     app.add_endpoint('/image', 'image', app.capture, methods=['GET'])
-
+    app.add_endpoint('/bluetooth', 'bluetooth', app.bluetooth, methods=['GET'])
+    
     app.add_endpoint('/controls/height', 'height', app.read_height, methods=['POST'])
     app.add_endpoint('/servo/command', 'servo_command', app.servo_command, methods=['POST'])
     app.add_endpoint('/servo/kinematics', 'kinematics', app.servo_kinematics, methods=['POST'])
     app.add_endpoint('/controls/controls', 'controls', app.controls, methods=['POST'])
+    app.add_endpoint('/controller', 'controller', app.controller, methods=['POST'])
+
 
     # Run the app
     app.run(host='0.0.0.0', port=5000)

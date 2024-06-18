@@ -4,6 +4,7 @@ import threading
 import sys
 from bluedot.btcomm import BluetoothClient
 from time import sleep
+from controller.controller import Controller
 sys.path.append("..")
 
 
@@ -22,28 +23,30 @@ class BluetoothController:
     def __init__(self, link1, link2, range1, range2):
         self.link1, self.link2 = link1, link2
         self.range1, self.range2 = range1, range2
-        self.max_reach = link1 + link2
-        self.km = Kinematics(link1, link2, range1, range2)
-        self.pos_x, self.pos_y = 600, 0
-        self.pos_z = 500
-        self.pos_r = 512
-        self.pos_gripper = 300
-        self.ax12_range = 600
-        self.offset_range1 = ((self.ax12_range - (self.range1*2)) / 2)
-        self.offset_range2 = ((self.ax12_range - (self.range2*2)) / 2)
+        self.mode = ""
+        self.color = ""
+        #self.max_reach = link1 + link2
+        #self.km = Kinematics(link1, link2, range1, range2)
+        #self.pos_x, self.pos_y = 600, 0
+        #self.pos_z = 500
+        #self.pos_r = 512
+        #self.pos_gripper = 300
+        #self.ax12_range = 600
+        #self.offset_range1 = ((self.ax12_range - (self.range1*2)) / 2)
+        #self.offset_range2 = ((self.ax12_range - (self.range2*2)) / 2)
         self.client = None
-        self.servobase_id = 1
-        self.servomid_id = 3
-        self.servorotation_id = 2
-        self.gripper_servo_id = 5
-        self.gripper_open = True
-        self.max_pos_multiplier = 1.5
-        self.servo_controller = ServoController()
-        self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
-        self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
+        #self.servobase_id = 1
+        #self.servomid_id = 3
+        #self.servorotation_id = 2
+        #self.gripper_servo_id = 5
+        #self.gripper_open = True
+        #self.max_pos_multiplier = 1.5
+        self.controller = Controller(self.link1, self.link2, self.range1, self.range2)
+        #self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
+        #self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
         # TODO change to be command 32 for move with the wheelmode
         # Wat bedoel je hiermee? @tjalling
-        self.servo_controller.execute_command(2, 30, self.pos_r, 50)
+        #self.servo_controller.execute_command(2, 30, self.pos_r, 50)
 
     """
     Executes a command to control the servo motors.
@@ -111,13 +114,13 @@ class BluetoothController:
         """
 
     def handle_input(self, input):
-        target_x = self.pos_x
-        target_y = self.pos_y
-        target_z = self.pos_z
+        target_x = self.controller.pos_x
+        target_y = self.controller.pos_y
+        target_z = self.controller.pos_z
         # target_r is never used waarom ??
-        target_r = self.pos_r
-        target_gripper = self.pos_gripper
-        gripper_open = self.gripper_open
+        target_r = self.controller.pos_r
+        target_gripper = self.controller.pos_gripper
+        #gripper_open = self.gripper_open
 
         # Process each message separately they are split by a semicolon(;)
         messages = input.split(';')
@@ -130,62 +133,82 @@ class BluetoothController:
         match message:
             case "forward":
                 # If the target x position is within the valid range
-                if target_x < (self.ax12_range*self.max_pos_multiplier):
+                if target_x < (self.controller.ax12_range*self.controller.max_pos_multiplier):
                     target_x += 40
-                    self.move_x_y(target_x, target_y)
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "backward":
                 # If the target x position is within the valid range
-                if target_x > -(self.ax12_range*self.max_pos_multiplier):
+                if target_x > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
                     target_x -= 40
-                    self.move_x_y(target_x, target_y)
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "left":
                 # If the target y position is within the valid range
-                if target_y < (self.ax12_range*self.max_pos_multiplier):
+                if target_y < (self.controller.ax12_range*self.controller.max_pos_multiplier):
                     target_y += 40
-                    self.move_x_y(target_x, target_y)
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "right":
                 # If the target y position is within the valid range
-                if target_y > -(self.ax12_range*self.max_pos_multiplier):
+                if target_y > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
                     target_y -= 40
-                    self.move_x_y(target_x, target_y)
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "up":
                 # If the target z position is within the valid range
-                if target_z < 1000:
-                    target_z += 20
-
-                self.move_z_axis(target_z)
+                if target_z < 27:
+                    target_z += 1
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "down":
                 # If the target z position is within the valid range
-                if target_z > 80:
-                    target_z -= 20
-                self.move_z_axis(target_z)
+                if target_z > 10:
+                    target_z -= 1
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+
 
             case "Grijpen":
-                self.open_close_gripper(target_gripper, gripper_open)
-
+                if self.mode == "handmatig":
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                else:
+                    target_z = 13
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    target_z = 20
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+            
             case "cw":
-                self.pos_r += 20
-                self.move_r_axis(self.pos_r)
+                target_r += 20
+                self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "ccw":
-                self.pos_r -= 20
-                self.move_r_axis(self.pos_r)
+                target_r -= 20
+                self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             # move to start position xy and z
             case "init":
-                self.move_x_y(target_x, target_y)
-                self.move_z_axis(target_z)
-
+                self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+            case "pink":
+                self.color = "pink"
+            case "red":
+                self.color = "red"
+            case "green":
+                self.color = "green"
+            case "blue":
+                self.color = "blue"
+            case "silver":
+                self.color = "silver"
+            case "autonoom":
+                self.mode = "instruments"
+            case "handmatig":
+                self.mode = "handmatig"
+            case "mollenmeppen":
+                self.mode = "targets"
             case _:
                 print("Invalid input: ", input)
         # set the position to the new target position(possible not needed?)
-        self.pos_x = target_x
-        self.pos_y = target_y
+        #self.pos_x = target_x
+        #self.pos_y = target_y
 
     """
     Starts a new thread to move to the target x and y coordinates.

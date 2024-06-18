@@ -1,12 +1,13 @@
 from servo.servo_controller import ServoController
 from servo.kinematics import Kinematics  # Correct import for Kinematics as its in a different sibling folder
+from controls.controls import UltrasonicSensor
 import threading
 import sys
-from bluedot.btcomm import BluetoothClient
 from time import sleep
+import numpy as np
 sys.path.append("..")
 
-class BluetoothController:
+class Controller:
     """
         Initializes the BluetoothController with given links and ranges,
         sets up initial positions and servo controller.
@@ -24,7 +25,7 @@ class BluetoothController:
         self.max_reach = link1 + link2
         self.km = Kinematics(link1, link2, range1, range2)
         self.pos_x, self.pos_y = 600, 0
-        self.pos_z = 500
+        self.pos_z = 20
         self.pos_r = 512
         self.pos_gripper = 300
         self.ax12_range = 600
@@ -38,6 +39,7 @@ class BluetoothController:
         self.gripper_open = True
         self.max_pos_multiplier = 1.5
         self.servo_controller = ServoController()
+        self.ultrasonic_sensor = UltrasonicSensor()
         self.servo_controller.execute_command(self.servobase_id, 30, 512, 50)
         self.servo_controller.execute_command(self.servomid_id, 30, 512, 50)
         # TODO change to be command 32 for move with the wheelmode
@@ -129,76 +131,16 @@ class BluetoothController:
                 self.threaded_move_x_y(x, y)
 
         if z != target_z:
-            if z < 1000:
+            if z < 28 and z > 13:
                 self.move_z_axis(z)
-                
-        # Process each message separately they are split by a semicolon(;)
-        messages = input.split(';')
-        # Remove leading and trailing whitespace from the message
-        message = messages[0]
-        message = message.strip()
-        print("Message: ", message)
+        
+        if r != target_r:
+            if r < 1023 and r > 0:
+                self.move_r_axis(r)
 
-        # Process the message based on its content
-        match message:
-            case "forward":
-                # If the target x position is within the valid range
-                if target_x < (self.ax12_range*self.max_pos_multiplier):
-                    target_x += 40
-                    self.move_x_y(target_x, target_y)
+        if gripper != target_gripper:
+            self.open_close_gripper(gripper, gripper_open)
 
-            case "backward":
-                # If the target x position is within the valid range
-                if target_x > -(self.ax12_range*self.max_pos_multiplier):
-                    target_x -= 40
-                    self.move_x_y(target_x, target_y)
-
-            case "left":
-                # If the target y position is within the valid range
-                if target_y < (self.ax12_range*self.max_pos_multiplier):
-                    target_y += 40
-                    self.move_x_y(target_x, target_y)
-
-            case "right":
-                # If the target y position is within the valid range
-                if target_y > -(self.ax12_range*self.max_pos_multiplier):
-                    target_y -= 40
-                    self.move_x_y(target_x, target_y)
-
-            case "up":
-                # If the target z position is within the valid range
-                if target_z < 1000:
-                    target_z += 20
-
-                self.move_z_axis(target_z)
-
-            case "down":
-                # If the target z position is within the valid range
-                if target_z > 80:
-                    target_z -= 20
-                self.move_z_axis(target_z)
-
-            case "Grijpen":
-                self.open_close_gripper(target_gripper, gripper_open)
-
-            case "cw":
-                self.pos_r += 20
-                self.move_r_axis(self.pos_r)
-
-            case "ccw":
-                self.pos_r -= 20
-                self.move_r_axis(self.pos_r)
-
-            # move to start position xy and z
-            case "init":
-                self.move_x_y(target_x, target_y)
-                self.move_z_axis(target_z)
-
-            case _:
-                print("Invalid input: ", input)
-        # set the position to the new target position(possible not needed?)
-        self.pos_x = target_x
-        self.pos_y = target_y
 
     """
     Starts a new thread to move to the target x and y coordinates.
@@ -299,19 +241,40 @@ class BluetoothController:
                     print("Error closing: ", e)
     
     def move_z_axis(self, target_z):
-        # Check if the target position is above or below the current position
-        if target_z > self.pos_z:
-            # Move up
-            self.servo_controller.move_for_duration(41, 32, target_z, 1500)
-        elif target_z < self.pos_z:
-            # Move down
-            self.servo_controller.move_for_duration(41, 32, target_z, 400)
-        else:
-            # Target position is the same as the current position, do nothing maybe unnecessary
-            pass
-        # Update the current position
-        self.pos_z = target_z
+        while True:
+            # Get the current distance from the sensor and round it to 1 decimal place
+            current_z = round(self.ultrasonic_sensor.read_distance(), 1)
+            dif_z = round(target_z - current_z , 1)
+            movement_z = np.clip(dif_z, -20, 20)
+            movement_z = round(movement_z)
 
+            #print("dif_z", dif_z)
+            if current_z == -1:
+                break
+            if dif_z < 0.5 and dif_z > -0.5:
+                break
+            
+
+            if target_z > current_z:
+                # Move up
+                self.servo_controller.move_for_duration(41, 32, 10, (2040))
+            elif target_z < current_z:
+                # Move down
+                movement_z = abs(movement_z * 50)
+                movement_z = np.clip(movement_z, 0, 1000)
+                self.servo_controller.move_for_duration(41, 32, 10, movement_z)
+            elif target_z == current_z:
+                break
+            
+
+        
+            # Update the current position
+        print("Target position reached", target_z)
+        #print("Current position", self.ultrasonic_sensor.read_distance())
+        #print("current_z", current_z)
+        #print("dif_z", dif_z)
+        self.pos_z = current_z
+        
     """
     Moves the rotation-axis to the target position.
 
