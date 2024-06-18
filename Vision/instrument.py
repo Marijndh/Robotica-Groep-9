@@ -182,6 +182,7 @@ class Instrument:
                     break
         if self.color == "":
             self.color = 'silver'
+        return self.color
 
     def calculate_pick_up_point(self):
         if self.type == "straight":

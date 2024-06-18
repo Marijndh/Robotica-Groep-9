@@ -14,7 +14,10 @@ class ImageRequester:
     # In order to work you have to be on the samen network as the Raspberry
     def fetch_image(self, amount):
         images = []
-        response = requests.get('http://' + self.IP + ':5000/webcam?num_frames=' + str(amount), stream=True)
+        try:
+            response = requests.get('http://' + self.IP + ':5000/webcam?num_frames=' + str(amount), stream=True)
+        except Exception as e:
+            print("Kan geen images ophalen: \n"+str(e))
 
         if response.status_code != 200:
             print(f"Failed to connect to http://{self.IP}:5000/webcam?num_frames={amount}")

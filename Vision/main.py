@@ -15,12 +15,12 @@ def determine_trajectory(robot, previous_locations, speed, direction):
         robot.move_to_location()
 
 
-def handle_instrument_mode(frame, robot, previous_locations, time_difference):
+def handle_instrument_mode(frame, robot, previous_locations, time_difference, color):
     gray_blurred = cv.GaussianBlur(frame.gray_image, (5, 5), 0)
     _, thresh = cv.threshold(gray_blurred, 127, 255, cv.THRESH_BINARY)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     if robot.target is None:
-        target = find_target(frame, robot.location, hierarchy)
+        target = find_target(frame, robot.location, hierarchy, color)
         if target is None:
             return False
         robot.target_point = target.calculate_pick_up_point()
@@ -73,21 +73,20 @@ def trace_target(frame, target, hierarchy):
             return GeometryUtils.find_closest_object(target.centroid, frame.instruments)
 
 
-def find_target(frame, location, hierarchy):
+def find_target(frame, location, hierarchy, color):
     if len(frame.contours) > 0 and hierarchy is not None:
         frame.hierarchy = hierarchy[0]
-        frame.find_instruments()
+        frame.find_instruments(color)
         frame.find_children()
         if len(frame.instruments) > 0:
             closest = GeometryUtils.find_closest_object(location, frame.instruments)
             return closest
 
 
-# TODO replace videocapture with images from Raspberry Pi -> image_requester.py
-# TODO get mode from Raspberry using http request
 def main():
     requester = ImageRequester()
     robot = Robot()
+    color = robot.get_color()
     previous_locations = []
     previous_time = 0
     previous_mode = 'targets'
@@ -100,14 +99,18 @@ def main():
             previous_locations = []
             previous_time = 0
             previous_mode = mode
-        img = requester.fetch_image(1)
-        if img:
+        images = requester.fetch_image(1)
+        for img in images:
             frame = Frame(img, 1280, 720)
             if mode == 'instruments':
-                handle_instrument_mode(frame, robot, previous_locations, time_difference)
+                handle_instrument_mode(frame, robot, previous_locations, time_difference, color)
             elif mode == 'targets':
                 handle_target_mode(frame, robot, previous_locations, time_difference)
             frame.show()
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    # Destroy all the windows
+    cv.destroyAllWindows()
 
 
 if __name__ == '__main__':

@@ -8,23 +8,24 @@ import socket
 
 class Robot:
     def __init__(self):
+        self.color = None
         self.mode = 'targets'
         self.location = (0, 0)
         self.target = None
         self.target_point = (0, 0)
-        self.moving = False
         self.instrument_targets = []
         self.hostname = 'ubuntu'
-        self.IP = socket.gethostbyname(self.hostname)
-
-
-    def get_moving(self):
-        # use http request to get status
-        return False
+        self.IP = "192.168.218.40"
 
     def get_mode(self):
         # use http post request to get mode
+        self.mode = result
         return self.mode
+
+    def get_color(self):
+        # use http post request to get mode
+        self.color = result
+        return self.color
 
     def move_to_location(self):
         if self.target_point != (0, 0):

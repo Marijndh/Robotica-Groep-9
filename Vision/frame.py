@@ -27,7 +27,7 @@ class Frame:
             cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
     # Find the instruments within the image
-    def find_instruments(self):
+    def find_instruments(self, color):
         contours = self.contours
         for index in range(len(contours)):
             contour = contours[index]
@@ -35,8 +35,9 @@ class Frame:
             # area is calibrated based on the camera position and size of the instruments
             if 3000.0 < area < 4000:
                 instrument = Instrument(contour, index, area)
-                self.instruments.append(instrument)
-                instrument.get_color(self.hsv_image)
+                instrument_color = instrument.get_color(self.hsv_image)
+                if color is None or instrument_color == color:
+                    self.instruments.append(instrument)
 
     # Find the children of each instrument within the frame
     def find_children(self):
@@ -83,7 +84,6 @@ class Frame:
                 is_close = self.is_close_to_a_target(center)
                 if is_ellipse_flag and not is_close and self.check_target_color(center):
                     self.targets.append(Target(center))
-
 
     # Draw the targets on the image
     def draw_targets(self):
@@ -134,7 +134,6 @@ class Frame:
     def print_bricks(self):
         for brick in self.bricks:
             print(brick.__str__())
-
 
     # Show the resulting image
     def show(self):
