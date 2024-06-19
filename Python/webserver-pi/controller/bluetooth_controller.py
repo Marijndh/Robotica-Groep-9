@@ -170,6 +170,10 @@ class BluetoothController:
 
             case "Grijpen":
                 if self.mode == "handmatig":
+                    if target_gripper == 400:
+                        target_gripper = 512 
+                    else:
+                        target_gripper = 400 
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
                 else:
                     target_z = 13
@@ -187,9 +191,9 @@ class BluetoothController:
 
             # move to start position xy and z
             case "init":
-                target_gripper = 300
+                target_gripper = 200
                 target_r = 512
-                target_z = 15
+                target_z = 18
                 target_x = 600
                 target_y = 0
                 self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
@@ -230,153 +234,11 @@ class BluetoothController:
                 args=(target_x, target_y))
         thread.start()
 
-    """
-    Moves to the target x and y coordinates if they are within reach.
-
-    Args:
-        target_x (float): Target x-coordinate.
-        target_y (float): Target y-coordinate.
-    """
-    def move_x_y(self, target_x, target_y):
-        if self.is_within_reach(target_x, target_y):
-            self.pos_x, self.pos_y = target_x, target_y
-            angle1, angle2 = self.km.inverse_kinematics(target_x, target_y)
-            # self.servo_controller.execute_command(self.servobase_id, 30,target_x, 30)
-            # self.servo_controller.execute_command(self.servomid_id, 30,target_y, 30)
-
-            self.command(angle1, angle2)
-            print("Target position reached", target_x, target_y)
-        else:
-            #self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
-            #self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
-            # we cant reach the coordinate but will try to get as close as possible
-            angle1, angle2 = self.km.inverse_kinematics(target_x, target_y)
-            self.command(angle1, angle2)
-            print("Target position is out of reach", target_x, target_y)
-
-    """
-    Opens or closes the gripper based on the current state.
-
-    Args:
-        target_gripper (float): Target position for the gripper.
-        gripper_open (bool): Whether the gripper should be open or closed.
-    """
-
-    def open_close_gripper(self, target_gripper, gripper_open):
-
-        # If the gripper is currently closed open it
-        if gripper_open == False:
-            # While the target position is within the valid range
-            while 0 <= target_gripper <= 820:
-                try:
-                    # Get the current load on the servo
-                    response = self.servo_controller.execute_getstatus(5,40,2)
-                    load = response[5] + (response[6] << 8)
-                    print("load is:",load)
-                    # If the load is within a certain range,the gripper is open(means it is experiencing external load)
-                    if load > 1600 and load < 2048:
-                        gripper_open = True 
-                        self.gripper_open = gripper_open
-                        break
-                    # If it is not experiencing load but is open past the threshold it is open
-                    if target_gripper >= 750:
-                        gripper_open = True
-                        self.gripper_open = gripper_open
-                        break
-                    # If the gripper is not open and not experiencing load, open it
-                    else:
-                        target_gripper += 40
-                        self.servo_controller.execute_command(5, 30, target_gripper, 300)
-                except Exception as e:
-                    print("Error opening: ", e)
-
-
-        # If the gripper is currently open close it
-        elif gripper_open == True:
-            # While the target position is within the valid range
-            while 0 <= target_gripper <= 820:
-                try:
-                    # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5, 40,2)
-                    print("load is:", load)
-                    # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
-                    if load > 400 and load < 1023:
-                        gripper_open = False
-                        self.gripper_open = gripper_open
-                        break
-                    if target_gripper <= 50:
-                        # If its not experiencing load then it is not closed and we need to close it
-                        gripper_open = False
-                        self.gripper_open = gripper_open
-                        break
-                    else:
-                        target_gripper -= 40
-                        self.servo_controller.execute_command(5, 30, target_gripper, 300)
-                except Exception as e:
-                    print("Error closing: ", e)
-    
-    def move_z_axis(self, target_z):
-        # Check if the target position is above or below the current position
-        if target_z > self.pos_z:
-            # Move up
-            self.servo_controller.move_for_duration(41, 32, target_z, 1500)
-        elif target_z < self.pos_z:
-            # Move down
-            self.servo_controller.move_for_duration(41, 32, target_z, 400)
-        else:
-            # Target position is the same as the current position, do nothing maybe unnecessary
-            pass
-        # Update the current position
-        self.pos_z = target_z
-
-    """
-    Moves the rotation-axis to the target position.
-
-    Args:
-        target_r (float): Target position for the rotation-axis of the gripper.
-    """
-
-    def move_r_axis(self, target_r):
-        self.servo_controller.execute_command(self.servorotation_id, 30, target_r, 600)
-
-    """
-    check if the target position is within reach
-    Args:
-        target_x (float): Target x-coordinate.
-        target_y (float): Target y-coordinate.
-    """
-
-    def is_within_reach(self, target_x, target_y):
-        distance = (target_x**2 + target_y**2)**0.5
-        return 10 < distance <= self.max_reach
-    """
-    Handles received data.
-
-    Args:
-        data (str): The received data string.
-    """
 
     def data_received(self, data):
         if data is not None and isinstance(data, str):
             print("Received data: ", data)
             self.handle_input(data)
-
-    """
-    Maps the given angle to a servo position.
-
-    Args:
-        angle (float): The angle to map.
-        range_link (float): The range of motion for the servo.
-
-    Returns:
-        int: The mapped servo position.
-    """
-
-    def map_angle_to_servo_position(self, angle, range_link):
-        offset = (300 - (range_link * 2)) / 2
-        position = int((1023 / 300) * (offset + angle + range_link))
-        print(position)
-        return position
 
     """
     Starts the BluetoothController, attempts to connect to the Bluetooth client (multithreaded so it does not block).

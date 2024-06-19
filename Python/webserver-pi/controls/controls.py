@@ -118,7 +118,9 @@ class UltrasonicSensor:
 
             # The speed of sound is 34300 cm/s, and the echo pulse travelled the
             # distance to the object and back, so we divide by 2
-            distance = (pulse_duration*1000000) / 58    
+            distance = (pulse_duration*1000000) / 58
+            if distance > 40:
+                distance = -1
         else:
             distance = -1
         #print("Distance: ", distance)

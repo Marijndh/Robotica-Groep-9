@@ -27,7 +27,7 @@ class Controller:
         self.pos_x, self.pos_y = 600, 0
         self.pos_z = 20
         self.pos_r = 512
-        self.pos_gripper = 300
+        self.pos_gripper = 400
         self.ax12_range = 600
         self.offset_range1 = ((self.ax12_range - (self.range1*2)) / 2)
         self.offset_range2 = ((self.ax12_range - (self.range2*2)) / 2)
@@ -127,7 +127,7 @@ class Controller:
             self.open_close_gripper(target_gripper, gripper_open)
 
         if x != target_x or y != target_y :
-            if x < self.max_reach and y < self.max_reach:
+            if x <= self.max_reach and y <= self.max_reach:
                 self.threaded_move_x_y(x, y)
 
         if z != target_z:
@@ -135,7 +135,7 @@ class Controller:
                 self.move_z_axis(z)
         
         if r != target_r:
-            if r < 1023 and r > 0:
+            if r <= 1023 and r >= 0:
                 self.move_r_axis(r)
 
         if gripper != target_gripper:
@@ -192,53 +192,60 @@ class Controller:
     def open_close_gripper(self, target_gripper, gripper_open):
 
         # If the gripper is currently closed open it
-        if gripper_open == False:
+        if gripper_open == False and target_gripper < 400:
             # While the target position is within the valid range
-            while 0 <= target_gripper <= 820:
+            while 150 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
                     response = self.servo_controller.execute_getstatus(5,40,2)
-                    load = response[5] + (response[6])
+                    load = int(response['response']['parameters'])
                     print("load is:",load)
                     # If the load is within a certain range,the gripper is open(means it is experiencing external load)
-                    if load > 1600 and load < 2048:
+                    if load > 400 and load < 1023:
+                        print("gripper is open load")
                         gripper_open = True 
                         self.gripper_open = gripper_open
                         break
                     # If it is not experiencing load but is open past the threshold it is open
-                    if target_gripper >= 750:
+                    if target_gripper <= 200:
+                        print("gripper is open")
                         gripper_open = True
                         self.gripper_open = gripper_open
                         break
                     # If the gripper is not open and not experiencing load, open it
                     else:
-                        target_gripper += 40
+                        #print("opening")
+                        target_gripper -= 20
                         self.servo_controller.execute_command(5, 30, target_gripper, 300)
                 except Exception as e:
                     print("Error opening: ", e)
 
 
         # If the gripper is currently open close it
-        elif gripper_open == True:
+        elif gripper_open == True and target_gripper > 400:
             # While the target position is within the valid range
-            while 0 <= target_gripper <= 820:
+            while 150 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
                     response = self.servo_controller.execute_getstatus(5,40,2)
-                    load = response[5] + (response[6])
+                    print("response",response)
+                    load = int(response['response']['parameters'])
                     print("load is:", load)
                     # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
-                    if load > 400 and load < 1023:
+                    if load > 1500 and load < 2048:
+                        print("gripper is closed load")
                         gripper_open = False
                         self.gripper_open = gripper_open
                         break
-                    if target_gripper <= 50:
+                    if target_gripper >= 750:
                         # If its not experiencing load then it is not closed and we need to close it
+                        print("gripper is closed")
                         gripper_open = False
                         self.gripper_open = gripper_open
                         break
                     else:
-                        target_gripper -= 40
+                        #print("gripper is closing")
+                        target_gripper += 20
                         self.servo_controller.execute_command(5, 30, target_gripper, 300)
                 except Exception as e:
                     print("Error closing: ", e)
@@ -252,23 +259,33 @@ class Controller:
             movement_z = round(movement_z)
 
             #print("dif_z", dif_z)
-            if current_z == -1:
+            if current_z < 12:
+                self.servo_controller.stop(41)
                 break
-            if dif_z < 0.5 and dif_z > -0.5:
-                break
-            
-
-            if target_z > current_z:
-                # Move up
-                self.servo_controller.move_for_duration(41, 32, 10, (2040))
-            elif target_z < current_z:
-                # Move down
-                movement_z = abs(movement_z * 50)
-                movement_z = np.clip(movement_z, 0, 1000)
-                self.servo_controller.move_for_duration(41, 32, 10, movement_z)
-            elif target_z == current_z:
-                break
-            
+                
+            elif current_z > 29:
+                self.servo_controller.stop(41)
+                pass
+            else:
+                if dif_z < 0.5 and dif_z > -0.5:
+                    break    
+                if target_z > current_z:
+                    # Move up
+                    print("move up")
+                    print("target_z", target_z)
+                    print("current_z", current_z)              
+                    self.servo_controller.move_for_duration(41, 32, 10, (2040))
+                elif target_z < current_z:
+                    # Move down
+                    movement_z = abs(movement_z * 150)
+                    movement_z = np.clip(movement_z, 200, 1000)
+                    print("movement_z", movement_z)
+                    print("target_z", target_z)
+                    print("current_z", current_z)
+                    self.servo_controller.move_for_duration(41, 32, 10, movement_z)
+                elif target_z == current_z:
+                    break
+                
 
         
             # Update the current position

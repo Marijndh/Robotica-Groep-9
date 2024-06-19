@@ -3,8 +3,13 @@ import RPi.GPIO as GPIO
 import serial
 import time
 import re
+import binascii
+import sys
 from time import sleep
 from flask import request, jsonify
+sys.path.append("..")
+from utils.common import waiting
+
 
 
 class ServoController:
@@ -47,7 +52,9 @@ class ServoController:
             pass
         #sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
         self.stop(servo_id)  # Stop the servo after the duration
-
+        waiting(0.1)  # Wait for the servo to stop moving
+        self.stop(servo_id)
+        
     # Method to build a packet for communication with the servo(should be switchcase or something as its not dry now)
     def build_packet(self, dxl_id, address, readsize, value=None, value2=None):
         if value2 is not None:
@@ -96,7 +103,8 @@ class ServoController:
     def decode_response(self, response):
         header = response[:2]
         if header != b'\xff\xff':
-            return "Invalid header"
+            back = ("invalid header" + binascii.hexlify(response).decode('utf-8'))
+            return back
 
         servo_id = response[2]
         length = response[3]
@@ -134,9 +142,8 @@ class ServoController:
         GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
         self.serial_port.write(packet)  # Write packet to the serial port
         while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
-            time.sleep(0.000000001)
-        time.sleep(
-            0.000001)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
+            waiting(0.001)
+        waiting(1)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
         GPIO.output(self.direction_pin, GPIO.LOW)  # Set direction to receive data
         response = bytearray()
         no_input = False
@@ -147,9 +154,9 @@ class ServoController:
                 no_input = True
             else:
                 response.extend(byte)
-            if len(response) >= 4 and no_input:
+            if len(response) >= 6 and no_input:
                 break
-            if time.clock_gettime_ns(0) - start > 800000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
+            if time.clock_gettime_ns(0) - start > 4000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
                 break
         self.lock.release()
         # free the lock
