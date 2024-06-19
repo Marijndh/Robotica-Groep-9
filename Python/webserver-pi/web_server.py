@@ -1,3 +1,8 @@
+import cProfile
+import pstats
+import io
+#above are for profiling
+
 import threading
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
@@ -203,6 +208,20 @@ def main():
     # Run the app
     app.run(host='0.0.0.0', port=5000)
 
+def profile_main():
+    # This is the main function for profiling
+    profiler = cProfile.Profile()
+    profiler.enable()
+    main()  # This is your main function
+    profiler.disable()
+    
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(profiler, stream=s).sort_stats(sortby)
+    ps.print_stats(50)  # Show only the top 10 functions
+    print(s.getvalue())
+
 
 if __name__ == "__main__":
-    main()
+    #main()
+    profile_main()

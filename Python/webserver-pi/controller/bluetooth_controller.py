@@ -187,7 +187,13 @@ class BluetoothController:
 
             # move to start position xy and z
             case "init":
+                target_gripper = 300
+                target_r = 512
+                target_z = 15
+                target_x = 600
+                target_y = 0
                 self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+            
             case "pink":
                 self.color = "pink"
             case "red":
@@ -241,8 +247,8 @@ class BluetoothController:
             self.command(angle1, angle2)
             print("Target position reached", target_x, target_y)
         else:
-            self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
-            self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
+            #self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
+            #self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
             # we cant reach the coordinate but will try to get as close as possible
             angle1, angle2 = self.km.inverse_kinematics(target_x, target_y)
             self.command(angle1, angle2)
@@ -264,7 +270,8 @@ class BluetoothController:
             while 0 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5,40,2)
+                    response = self.servo_controller.execute_getstatus(5,40,2)
+                    load = response[5] + (response[6] << 8)
                     print("load is:",load)
                     # If the load is within a certain range,the gripper is open(means it is experiencing external load)
                     if load > 1600 and load < 2048:

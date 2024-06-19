@@ -26,9 +26,9 @@ class ServoController:
     def execute_getstatus(self, servo_id, command, duration):
         packet = self.build_packet(servo_id, command, duration)  # Build the packet
         response = self.send_packet(packet)
-        decoded = self.decode_response(response)
-        parameters = self.parse_parameters(decoded)
-        return type(int(parameters))  # Send the packet and return the response
+        #decoded = self.decode_response(response)
+        #parameters = self.parse_parameters(decoded)
+        return response  # Send the packet and return the response
 
     # Method to execute a command on a servo
     def execute_command(self, servo_id, command, value, value2=None):

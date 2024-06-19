@@ -59,10 +59,10 @@ class Controller:
 
         thread1 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servobase_id, 30, angle1, self.range1, 100))
+                args=(self.servobase_id, 30, angle1, self.range1, 80))
         thread2 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servomid_id, 30, angle2, self.range2, 100))
+                args=(self.servomid_id, 30, angle2, self.range2, 80))
 
         thread1.start()
         thread2.start()
@@ -131,7 +131,7 @@ class Controller:
                 self.threaded_move_x_y(x, y)
 
         if z != target_z:
-            if z < 28 and z > 13:
+            if z < 29 and z > 12:
                 self.move_z_axis(z)
         
         if r != target_r:
@@ -174,8 +174,8 @@ class Controller:
             self.command(angle1, angle2)
             print("Target position reached", target_x, target_y)
         else:
-            self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
-            self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
+            #self.servo_controller.execute_command(self.servobase_id, 30, target_x, 30)
+            #self.servo_controller.execute_command(self.servomid_id, 30, target_y, 30)
             # we cant reach the coordinate but will try to get as close as possible
             angle1, angle2 = self.km.inverse_kinematics(target_x, target_y)
             self.command(angle1, angle2)
@@ -197,7 +197,8 @@ class Controller:
             while 0 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5,40,2)
+                    response = self.servo_controller.execute_getstatus(5,40,2)
+                    load = response[5] + (response[6])
                     print("load is:",load)
                     # If the load is within a certain range,the gripper is open(means it is experiencing external load)
                     if load > 1600 and load < 2048:
@@ -223,7 +224,8 @@ class Controller:
             while 0 <= target_gripper <= 820:
                 try:
                     # Get the current load on the servo
-                    load = self.servo_controller.execute_getstatus(5, 40,2)
+                    response = self.servo_controller.execute_getstatus(5,40,2)
+                    load = response[5] + (response[6])
                     print("load is:", load)
                     # If the load is within a certain range,the gripper is closed(means it is experiencing external load)
                     if load > 400 and load < 1023:
