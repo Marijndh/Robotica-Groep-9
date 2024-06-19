@@ -59,7 +59,7 @@ class Controller:
 
         thread1 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servobase_id, 30, angle1, self.range1, 80))
+                args=(self.servobase_id, 30, angle1, self.range1, 60))
         thread2 = threading.Thread(
                 target=self.execute_command_threaded,
                 args=(self.servomid_id, 30, angle2, self.range2, 80))
@@ -261,30 +261,35 @@ class Controller:
             #print("dif_z", dif_z)
             if current_z < 12:
                 self.servo_controller.stop(41)
-                break
+                self.target_z = 14
+                print("an error occured, the z-axis is too low")
+                #break
                 
-            elif current_z > 29:
+            elif current_z > 27:
                 self.servo_controller.stop(41)
-                pass
-            else:
-                if dif_z < 0.5 and dif_z > -0.5:
-                    break    
-                if target_z > current_z:
-                    # Move up
-                    print("move up")
-                    print("target_z", target_z)
-                    print("current_z", current_z)              
-                    self.servo_controller.move_for_duration(41, 32, 10, (2040))
-                elif target_z < current_z:
-                    # Move down
-                    movement_z = abs(movement_z * 150)
-                    movement_z = np.clip(movement_z, 200, 1000)
-                    print("movement_z", movement_z)
-                    print("target_z", target_z)
-                    print("current_z", current_z)
-                    self.servo_controller.move_for_duration(41, 32, 10, movement_z)
-                elif target_z == current_z:
-                    break
+                print("an error occured, the z-axis is too high")
+                self.target_z = 25
+                #pass
+            
+            if dif_z < 0.5 and dif_z > -0.5:
+                print("Target position reached difference to low", dif_z)
+                break    
+            if target_z > current_z:
+                # Move up
+                #print("move up")
+                #print("target_z", target_z)
+                #print("current_z", current_z)              
+                self.servo_controller.move_for_duration(41, 32, 100, (2040))
+            elif target_z < current_z:
+                # Move down
+                movement_z = abs(movement_z * 300)
+                movement_z = np.clip(movement_z, 200, 1000)
+                #print("movement_z", movement_z)
+                #print("target_z", target_z)
+                #print("current_z", current_z)
+                self.servo_controller.move_for_duration(41, 32, 100, movement_z)
+            elif target_z == current_z:
+                break
                 
 
         
@@ -304,6 +309,7 @@ class Controller:
 
     def move_r_axis(self, target_r):
         self.servo_controller.execute_command(self.servorotation_id, 30, target_r, 600)
+        self.pos_r = target_r
 
     """
     check if the target position is within reach

@@ -22,7 +22,7 @@ class Kinematics:
         theta2 = np.arccos(distance)
 
         # Adjust the angle based on the y coordinate
-        if y > 250:
+        if y > 100:
             theta2 = theta2
         else:
             theta2 = -theta2

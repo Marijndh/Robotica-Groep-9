@@ -134,37 +134,37 @@ class BluetoothController:
             case "forward":
                 # If the target x position is within the valid range
                 if target_x < (self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_x += 40
+                    target_x += 10
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "backward":
                 # If the target x position is within the valid range
                 if target_x > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_x -= 40
+                    target_x -= 10
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "left":
                 # If the target y position is within the valid range
                 if target_y < (self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_y += 40
+                    target_y += 10
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "right":
                 # If the target y position is within the valid range
                 if target_y > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_y -= 40
+                    target_y -= 10
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "up":
                 # If the target z position is within the valid range
                 if target_z < 27:
-                    target_z += 1
+                    target_z += 0.5
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "down":
                 # If the target z position is within the valid range
-                if target_z > 10:
-                    target_z -= 1
+                if target_z > 12:
+                    target_z -= 0.5
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
 
@@ -182,11 +182,11 @@ class BluetoothController:
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
             
             case "cw":
-                target_r += 20
+                target_r += 10
                 self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "ccw":
-                target_r -= 20
+                target_r -= 10
                 self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             # move to start position xy and z

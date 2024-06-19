@@ -14,7 +14,7 @@ class Led:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setup(self.pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pin, 500)
+        self.pwm = GPIO.PWM(self.pin, 5000)
         self.pwm.start(0)
         self.is_pwm_running = True
         self.red_brightness = 0
@@ -103,13 +103,13 @@ class UltrasonicSensor:
         GPIO.output(self.trigger_pin, False)
 
         # Wait for the echo pin to go high
-        while GPIO.input(self.echo_pin) == 0 and time.time() - start_reading_time < 4:
+        while GPIO.input(self.echo_pin) == 0 and time.time() - start_reading_time < 2:
             start_time = time.time()
         
         #print("pin was high")
 
         # Wait for the echo pin to go low
-        while GPIO.input(self.echo_pin) == 1 and time.time() - start_reading_time < 6:
+        while GPIO.input(self.echo_pin) == 1 and time.time() - start_reading_time < 3:
             end_time = time.time()
         #print("done reading pulses now calculating distance...")
         if 'end_time' in locals():

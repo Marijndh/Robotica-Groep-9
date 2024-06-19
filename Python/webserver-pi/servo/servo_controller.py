@@ -5,7 +5,6 @@ import time
 import re
 import binascii
 import sys
-from time import sleep
 from flask import request, jsonify
 sys.path.append("..")
 from utils.common import waiting
@@ -23,7 +22,7 @@ class ServoController:
         GPIO.setup(self.direction_pin, GPIO.OUT)
         GPIO.setwarnings(False)
         print("GPIO setup complete.")
-        self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.5)  # Setup serial communication
+        self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.001)  # Setup serial communication
         print("Serial port setup complete.")
         self.lock = threading.Lock()
 
