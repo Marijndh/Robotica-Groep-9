@@ -24,7 +24,10 @@ class Frame:
     # Draw the found contours on the image
     def draw_contours(self):
         for contour in self.contours:
-            cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
+            area = cv.contourArea(contour)
+            # area is calibrated based on the camera position and size of the instruments
+            if 1000.0 < area < 4000:
+                cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
     # Find the instruments within the image
     def find_instruments(self, color):
@@ -33,7 +36,7 @@ class Frame:
             contour = contours[index]
             area = cv.contourArea(contour)
             # area is calibrated based on the camera position and size of the instruments
-            if 3000.0 < area < 4000:
+            if 1000.0 < area < 200000:
                 instrument = Instrument(contour, index, area)
                 instrument_color = instrument.get_color(self.hsv_image)
                 if color is None or instrument_color == color:
@@ -74,7 +77,6 @@ class Frame:
             center = instrument.centroid
             if self.check_target_color(center):
                 result.append(instrument)
-                print('Target locatie gevonden: ' + center)
         return result
 
     # Find every target within the frame

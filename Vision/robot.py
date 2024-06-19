@@ -70,7 +70,7 @@ class Robot:
         if self.target_point != (0, 0) and self.target_point != self.location:
             self.location = self.target_point
             x, y = GeometryUtils.map_coordinate(self.target_point)
-            r = 1024 * self.target.rotation / 360
+            r = round(1024 * self.target.rotation / 360)
             # lower z-axes to 13, move to instrument, open gripper
             self.send_command(x, y, 13, r, 240)
             # grab object
@@ -85,7 +85,7 @@ class Robot:
                 elif location.type == "crooked":
                     target = location.calculate_pick_up_point()
             if target is not None:
-                target_rotation = 1024 * self.target.rotation / 360
+                target_rotation = round(1024 * self.target.rotation / 360)
                 self.send_command(target[0], target[1], 20, target_rotation, 400)
                 # lower z-axes to 13
                 self.send_command(target[0], target[1], 13, target_rotation, 400)
