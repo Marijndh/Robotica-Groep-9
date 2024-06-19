@@ -109,11 +109,11 @@ class GeometryUtils:
         coord_x = a * x + b * y + c
         coord_y = d * x + e * y + f
 
-        return coord_x, coord_y
+        return round(coord_x), round(coord_y)
 
     @staticmethod
     def map_coordinate(pixel):
-        pixel_points = [(540, 720), (0, 300), (1280, 300)]
+        pixel_points = [(650, 0), (200, 440), (1090, 490)]
         coord_points = [(600, 0), (0, 600), (0, -600)]
         affine_params = GeometryUtils.calculate_affine_transform(pixel_points, coord_points)
         return GeometryUtils.apply_affine_transform(pixel, affine_params)

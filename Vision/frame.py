@@ -38,6 +38,7 @@ class Frame:
                 instrument_color = instrument.get_color(self.hsv_image)
                 if color is None or instrument_color == color:
                     self.instruments.append(instrument)
+                    print("Instrument gevonden: " + instrument_color , instrument.centroid)
 
     # Find the children of each instrument within the frame
     def find_children(self):
@@ -73,16 +74,16 @@ class Frame:
             center = instrument.centroid
             if self.check_target_color(center):
                 result.append(instrument)
+                print('Target locatie gevonden: ' + center)
         return result
 
     # Find every target within the frame
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
-            if 10000 < area < self.width * self.height * 0.8:
+            if 15000 < area < 20000:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
-                is_close = self.is_close_to_a_target(center)
-                if is_ellipse_flag and not is_close and self.check_target_color(center):
+                if is_ellipse_flag and self.check_target_color(center):
                     self.targets.append(Target(center))
 
     # Draw the targets on the image
