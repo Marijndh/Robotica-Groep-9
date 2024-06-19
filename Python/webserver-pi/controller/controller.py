@@ -265,10 +265,10 @@ class Controller:
                 print("an error occured, the z-axis is too low")
                 #break
                 
-            elif current_z > 27:
+            elif current_z > 26:
                 self.servo_controller.stop(41)
                 print("an error occured, the z-axis is too high")
-                self.target_z = 25
+                self.target_z = 24
                 #pass
             
             if dif_z < 0.5 and dif_z > -0.5:

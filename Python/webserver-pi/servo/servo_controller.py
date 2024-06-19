@@ -6,6 +6,7 @@ import re
 import binascii
 import sys
 from flask import request, jsonify
+from time import sleep
 sys.path.append("..")
 from utils.common import waiting
 
@@ -46,12 +47,9 @@ class ServoController:
     def move_for_duration(self, servo_id, command, duration, value):
         packet = self.build_packet(servo_id, command, None, value)
         self.send_packet(packet)
-        start = time.clock_gettime_ns(0)
-        while time.clock_gettime_ns(0) - start < (duration * 1000000):  # Wait for the specified duration
-            pass
-        #sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
+        sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
         self.stop(servo_id)  # Stop the servo after the duration
-        waiting(0.1)  # Wait for the servo to stop moving
+        waiting(2)  # Wait for the servo to stop moving
         self.stop(servo_id)
         
     # Method to build a packet for communication with the servo(should be switchcase or something as its not dry now)
