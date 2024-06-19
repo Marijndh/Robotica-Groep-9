@@ -28,6 +28,8 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
     # Apply Canny edge detection
     edges = cv.Canny(morph, 50, 150)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    if len(robot.instrument_targets) == 0:
+        robot.instrument_targets = frame.find_instrument_targets()
     if robot.target is None:
         target = find_target(frame, robot.location, hierarchy, color)
         if target is None:
@@ -41,13 +43,11 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
             return
         robot.target = target
         previous_locations.append([robot.target.centroid, time_difference])
-    if len(robot.instrument_targets) == 0:
-        robot.instrument_targets = frame.find_instrument_targets()
     if len(previous_locations) > 1:
         direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
                                                                  time_difference)
         determine_trajectory(robot, previous_locations, speed, direction)
-        robot.move_to_instrument()
+        #robot.move_to_instrument()
 
 
 def handle_target_mode(frame, robot, previous_locations, time_difference):
@@ -110,7 +110,6 @@ def main():
     previous_locations = []
     previous_time = 0
     while True:
-
         robot.fetch_values()
         current_time = time.time()
         time_difference = current_time - previous_time
@@ -130,12 +129,13 @@ def main():
             frame = Frame(img, 1280, 720)
             if mode == 'instruments':
                 handle_instrument_mode(frame, robot, previous_locations, time_difference, color)
+                frame.draw_instruments()
                 #frame.draw_contours()
             elif mode == 'targets':
                 handle_target_mode(frame, robot, previous_locations, time_difference)
-            #frame.show()
-        #if cv.waitKey(1) & 0xFF == ord('q'):
-            #break
+            frame.show()
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
 
 if __name__ == '__main__':
     main()
