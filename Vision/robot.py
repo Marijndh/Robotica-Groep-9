@@ -79,16 +79,22 @@ class Robot:
             # increase z-axes to 20
             self.send_command(x, y, 20, r, 400)
             # move to instrument location, involve instrument.type
-            target_x, target_y = None, None
-            for location in self.instrument_targets:
-                target_x, target_y = GeometryUtils.map_coordinate(location.calculate_pick_up_point())
-            if target is not None:
-                target_rotation = round(1024 * self.target.rotation / 360)
-                self.send_command(target_x, target_y, 20, target_rotation, 400)
-                # lower z-axes to 13
-                self.send_command(target_x, target_y,  13, target_rotation, 400)
-                # release gripper
-                self.send_command(target_x, target_y,  20, target_rotation, 240)
+            target_x, target_y, target_rotation = 600, 0, 512
+            if len(self.instrument_targets) > 0:
+                for location in self.instrument_targets:
+                    target_x, target_y = GeometryUtils.map_coordinate(location.calculate_pick_up_point())
+                    if target is not None:
+                        target_rotation = round(1024 * self.target.rotation / 360)
+            else:
+                if target.type == "straight":
+                    target_x, target_y = GeometryUtils.map_coordinate((830, 600))
+                elif target.type == "crooked":
+                    target_x, target_y = GeometryUtils.map_coordinate((420, 600))
+            self.send_command(target_x, target_y, 20, target_rotation, 400)
+            # lower z-axes to 13
+            self.send_command(target_x, target_y,  13, target_rotation, 400)
+            # release gripper
+            self.send_command(target_x, target_y,  20, target_rotation, 240)
             self.target_point = (0, 0)
             self.target = None
 
