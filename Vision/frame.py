@@ -31,6 +31,8 @@ class Frame:
 
     # Find the instruments within the image
     def find_instruments(self, color):
+        found_instruments = []
+        right_color = []
         contours = self.contours
         for index in range(len(contours)):
             contour = contours[index]
@@ -39,11 +41,14 @@ class Frame:
             if 1500.0 < area < 3500:
                 instrument = Instrument(contour, index, area)
                 if instrument.centroid[1] < 440:
+                    found_instruments.append(instrument)
                     instrument_color = instrument.get_color(self.hsv_image)
-                    print("Instrument gevonden: " + instrument.color + ", " + str(instrument.hsv), instrument.centroid)
                     if instrument_color == color:
-                        self.instruments.append(instrument)
-                        print("----------------------\nInstrument gevonden met juiste kleur: " + instrument_color, str(instrument.centroid)+ "\n----------------------")
+                        right_color.append(instrument)
+        if len(right_color) > 0:
+            self.instruments = right_color
+        else:
+            self.instruments = found_instruments
 
     # Find the children of each instrument within the frame
     def find_children(self):

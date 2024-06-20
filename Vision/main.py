@@ -42,6 +42,7 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
         if target is None:
             return
         robot.target = target
+        robot.target_point = target.calculate_pick_up_point()
         previous_locations.append([robot.target.centroid, time_difference])
     if len(previous_locations) > 1:
         direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
