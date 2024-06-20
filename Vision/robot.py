@@ -80,7 +80,7 @@ class Robot:
             self.send_command(x, y, 20, r, 400)
             # move to instrument location, involve instrument.type
             target_x, target_y, target_rotation = 600, 0, 512
-            if len(self.instrument_targets) > 0:
+            if len(self.instrument_targets) > 1:
                 for location in self.instrument_targets:
                     target_x, target_y = GeometryUtils.map_coordinate(location.calculate_pick_up_point())
                     if target is not None:
