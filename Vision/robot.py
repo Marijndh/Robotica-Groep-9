@@ -70,6 +70,8 @@ class Robot:
         if self.target_point != (0, 0) and self.target_point != self.location:
             self.location = self.target_point
             x, y = GeometryUtils.map_coordinate(self.target_point)
+            if x > 600 or y > 600:
+                return
             r = round(1024 * self.target.rotation / 360)
             # lower z-axes to 13, move to instrument, open gripper
             self.send_command(x, y, 13, r, 240)
@@ -78,19 +80,16 @@ class Robot:
             # increase z-axes to 20
             self.send_command(x, y, 20, r, 400)
             # move to instrument location, involve instrument.type
-            target = None
+            target_x, target_y = None, None
             for location in self.instrument_targets:
-                if location.type == "straight":
-                    target = location.centroid
-                elif location.type == "crooked":
-                    target = location.calculate_pick_up_point()
+                target_x, target_y = GeometryUtils.map_coordinate(location.calculate_pick_up_point())
             if target is not None:
                 target_rotation = round(1024 * self.target.rotation / 360)
-                self.send_command(target[0], target[1], 20, target_rotation, 400)
+                self.send_command(target_x, target_y, 20, target_rotation, 400)
                 # lower z-axes to 13
-                self.send_command(target[0], target[1], 13, target_rotation, 400)
+                self.send_command(target_x, target_y,  13, target_rotation, 400)
                 # release gripper
-                self.send_command(target[0], target[1], 20, target_rotation, 240)
+                self.send_command(target_x, target_y,  20, target_rotation, 240)
             self.target_point = (0, 0)
             self.target = None
 
@@ -103,14 +102,14 @@ class Robot:
         if self.target_point != (0, 0) and self.target_point != self.location:
             self.location = self.target_point
             x, y = GeometryUtils.map_coordinate(self.target_point)
-            print(self.target_point)
-            print(x, y)
+            if x > 600 or y > 600:
+                return
             # move to target
-            self.send_command(x, y, 20, 512, 400)
+            self.send_command(x, y, 19, 512, 400)
             # lower z-axes to tap target
             self.send_command(x, y, 17, 512, 400)
             # increase z-axes to around 17
-            self.send_command(x, y, 20, 512, 400)
+            self.send_command(x, y, 19, 512, 400)
             self.target_point = (0, 0)
             self.target = None
 

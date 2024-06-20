@@ -47,7 +47,7 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
         direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
                                                                  time_difference)
         determine_trajectory(robot, previous_locations, speed, direction)
-        #robot.move_to_instrument()
+        robot.move_to_instrument()
 
 
 def handle_target_mode(frame, robot, previous_locations, time_difference):
@@ -130,12 +130,12 @@ def main():
             if mode == 'instruments':
                 handle_instrument_mode(frame, robot, previous_locations, time_difference, color)
                 frame.draw_instruments()
-                #frame.draw_contours()
             elif mode == 'targets':
                 handle_target_mode(frame, robot, previous_locations, time_difference)
             frame.show()
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+
 
 if __name__ == '__main__':
     main()
