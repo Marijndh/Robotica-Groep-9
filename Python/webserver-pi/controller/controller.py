@@ -59,10 +59,10 @@ class Controller:
 
         thread1 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servobase_id, 30, angle1, self.range1, 60))
+                args=(self.servobase_id, 30, angle1, self.range1, 80))
         thread2 = threading.Thread(
                 target=self.execute_command_threaded,
-                args=(self.servomid_id, 30, angle2, self.range2, 80))
+                args=(self.servomid_id, 30, angle2, self.range2, 100))
 
         thread1.start()
         thread2.start()
@@ -139,6 +139,7 @@ class Controller:
                 self.move_r_axis(r)
 
         if gripper != target_gripper:
+            print("gripper moving to target position", gripper)
             self.open_close_gripper(gripper, gripper_open)
 
 
@@ -190,8 +191,9 @@ class Controller:
     """
 
     def open_close_gripper(self, target_gripper, gripper_open):
-
+        print("target_gripper", target_gripper)
         # If the gripper is currently closed open it
+        print("gripper_open", gripper_open)
         if gripper_open == False and target_gripper < 400:
             # While the target position is within the valid range
             while 150 <= target_gripper <= 820:
@@ -205,12 +207,14 @@ class Controller:
                         print("gripper is open load")
                         gripper_open = True 
                         self.gripper_open = gripper_open
+                        self.pos_gripper = target_gripper
                         break
                     # If it is not experiencing load but is open past the threshold it is open
                     if target_gripper <= 200:
                         print("gripper is open")
                         gripper_open = True
                         self.gripper_open = gripper_open
+                        self.pos_gripper = target_gripper
                         break
                     # If the gripper is not open and not experiencing load, open it
                     else:
@@ -236,12 +240,14 @@ class Controller:
                         print("gripper is closed load")
                         gripper_open = False
                         self.gripper_open = gripper_open
+                        self.pos_gripper = target_gripper
                         break
                     if target_gripper >= 750:
                         # If its not experiencing load then it is not closed and we need to close it
                         print("gripper is closed")
                         gripper_open = False
                         self.gripper_open = gripper_open
+                        self.pos_gripper = target_gripper
                         break
                     else:
                         #print("gripper is closing")

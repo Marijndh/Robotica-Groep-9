@@ -134,25 +134,25 @@ class BluetoothController:
             case "forward":
                 # If the target x position is within the valid range
                 if target_x < (self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_x += 10
+                    target_x += 15
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "backward":
                 # If the target x position is within the valid range
                 if target_x > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_x -= 10
+                    target_x -= 15
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "left":
                 # If the target y position is within the valid range
                 if target_y < (self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_y += 10
+                    target_y += 15
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "right":
                 # If the target y position is within the valid range
                 if target_y > -(self.controller.ax12_range*self.controller.max_pos_multiplier):
-                    target_y -= 10
+                    target_y -= 15
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
             case "up":
@@ -164,20 +164,35 @@ class BluetoothController:
             case "down":
                 # If the target z position is within the valid range
                 if target_z > 12:
-                    target_z -= 0.5
+                    target_z -= 1
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
 
 
             case "Grijpen":
                 if self.mode == "handmatig":
+                    print("Gripper: ", target_gripper)
                     if target_gripper == 400:
-                        target_gripper = 512 
+                        target_gripper = 200
+                        print("Gripper: ", target_gripper)
+                        self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    elif target_gripper < 400:
+                        target_gripper = 512
+                        self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
                     else:
-                        target_gripper = 400 
-                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                        target_gripper = 350 
+                        self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    
                 else:
-                    target_z = 13
+                    target_gripper = 240
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    target_z = 12.5
+                    target_gripper = 240
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    target_gripper = 500
+                    target_z = 12.8
+                    self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
+                    sleep(0.5)
+                    
                     target_z = 20
                     self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
             
@@ -191,11 +206,11 @@ class BluetoothController:
 
             # move to start position xy and z
             case "init":
-                target_gripper = 200
+                target_gripper = 500
                 target_r = 512
                 target_z = 18
-                target_x = 600
-                target_y = 0
+                target_x = 590
+                target_y = 5
                 self.controller.move_arm(target_x, target_y, target_z, target_r, target_gripper)
             
             case "pink":
