@@ -157,31 +157,48 @@ class Instrument:
         cv.circle(img, point, 5, (150, 65, 132), -1)
 
     # Determine the color of the instrument
-    def get_color(self, hsv_image):
+    def get_color(self, image):
         color_manager = ColorManager()
-
-        # Determine the average color of the contour by drawing it on to a mask and getting the average color
-        mask = np.zeros(hsv_image.shape[:2], np.uint8)
-        contours = [self.body] + self.children
-        cv.drawContours(mask, contours, -1, 255, -1)
-        mean = cv.mean(hsv_image, mask=mask)
-
-        self.hsv = mean
-        primary_colors = color_manager.primary_colors
         colors = color_manager.colors
-        h = mean[0]
-        s = mean[1]
-        v = mean[2]
-        # See in which hsv-range the contour fits
-        # If it doesn't fit anything it is silver
-        for color_name in primary_colors:
-            if color_name in colors:
-                color = colors[color_name]
-                if color.is_color(h, s, v):
+
+        # Create a mask for the contour
+        mask = np.zeros(image.shape[:2], dtype=np.uint8)
+        cv.drawContours(mask, [self.body], -1, 255, thickness=cv.FILLED)
+
+        # Extract the pixels within the contour
+        pixels = cv.bitwise_and(image, image, mask=mask)
+        pixels = pixels[mask == 255]
+
+        # If no pixels are found within the contour, return None
+        if len(pixels) == 0:
+            return None
+
+        # Convert to floating point for k-means clustering
+        pixels = np.float32(pixels)
+
+        # Define criteria and apply kmeans()
+        criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 100, 0.2)
+        k = 1
+        _, labels, centers = cv.kmeans(pixels, k, None, criteria, 10, cv.KMEANS_RANDOM_CENTERS)
+
+        # The dominant color is the center of the cluster
+        dominant_color_bgr = centers[0].astype(int)
+
+        # Convert BGR to HSV
+        dominant_color_bgr = np.uint8([[dominant_color_bgr]])
+        dominant_color_hsv = cv.cvtColor(dominant_color_bgr, cv.COLOR_BGR2HSV)
+        hsv_tuple = tuple(dominant_color_hsv[0][0])
+        self.hsv = [hsv_tuple[0], hsv_tuple[1], hsv_tuple[2]]
+
+        self.color = "silver"
+
+        for color_name in color_manager.primary_colors:
+            color_list = colors[color_name]
+            for color in color_list:
+                if color.is_color(hsv_tuple[0], hsv_tuple[1], hsv_tuple[2]):
                     self.color = color_name
                     break
-        if self.color == "":
-            self.color = 'silver'
+
         return self.color
 
     def calculate_pick_up_point(self):
@@ -189,13 +206,13 @@ class Instrument:
             return self.centroid
         elif self.type == "crooked":
             # Vind het bounding rectangle van de contour
-            x, y, w, h = cv2.boundingRect(self.body)
+            x, y, w, h = cv.boundingRect(self.body)
 
             # Hoekpunten van de bounding rectangle
             rect_points = [(x, y), (x + w, y), (x, y + h), (x + w, y + h)]
 
             # Bereken de afstand van elk hoekpunt tot het centroid en vind het dichtstbijzijnde hoekpunt
-            closest_point = min(rect_points, key=lambda point: np.linalg.norm(np.array(point) - np.array(centroid)))
+            closest_point = min(rect_points, key=lambda point: np.linalg.norm(np.array(point) - np.array(self.centroid)))
             return closest_point
 
 

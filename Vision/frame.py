@@ -24,20 +24,31 @@ class Frame:
     # Draw the found contours on the image
     def draw_contours(self):
         for contour in self.contours:
-            cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
+            area = cv.contourArea(contour)
+            # area is calibrated based on the camera position and size of the instruments
+            if 1500.0 < area < 3500:
+                cv.drawContours(self.img, [contour], -1, (0, 255, 0), 2)
 
     # Find the instruments within the image
     def find_instruments(self, color):
+        found_instruments = []
+        right_color = []
         contours = self.contours
         for index in range(len(contours)):
             contour = contours[index]
             area = cv.contourArea(contour)
             # area is calibrated based on the camera position and size of the instruments
-            if 3000.0 < area < 4000:
+            if 1500.0 < area < 3500:
                 instrument = Instrument(contour, index, area)
-                instrument_color = instrument.get_color(self.hsv_image)
-                if color is None or instrument_color == color:
-                    self.instruments.append(instrument)
+                if instrument.centroid[1] < 440:
+                    found_instruments.append(instrument)
+                    instrument_color = instrument.get_color(self.hsv_image)
+                    if instrument_color == color:
+                        right_color.append(instrument)
+        if len(right_color) > 0:
+            self.instruments = right_color
+        else:
+            self.instruments = found_instruments
 
     # Find the children of each instrument within the frame
     def find_children(self):
@@ -69,20 +80,29 @@ class Frame:
 
     def find_instrument_targets(self):
         result = []
-        for instrument in self.instruments:
-            center = instrument.centroid
-            if self.check_target_color(center):
-                result.append(center)
+        contours = self.contours
+        for index in range(len(contours)):
+            contour = contours[index]
+            area = cv.contourArea(contour)
+            # area is calibrated based on the camera position and size of the instruments
+            if 10000.0 < area < 15000:
+                instrument = Instrument(contour, index, area)
+                instrument.get_color(self.hsv_image)
+                if self.check_target_color(instrument.hsv):
+                    result.append(instrument)
+                    print("Target gevonden: " + str(instrument.centroid), instrument.type)
         return result
 
     # Find every target within the frame
     def find_targets(self):
         for contour in self.contours:
             area = cv.contourArea(contour)
-            if 10000 < area < self.width * self.height * 0.8:
+            if 15000 < area < 20000:
                 is_ellipse_flag, center = GeometryUtils.is_ellipse(contour)
-                is_close = self.is_close_to_a_target(center)
-                if is_ellipse_flag and not is_close and self.check_target_color(center):
+                mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
+                cv.circle(mask, center, 5, (255, 255, 255), -1)
+                mean = cv.mean(self.hsv_image, mask=mask)
+                if is_ellipse_flag and self.check_target_color(mean):
                     self.targets.append(Target(center))
 
     # Draw the targets on the image
@@ -97,12 +117,9 @@ class Frame:
             print(target.__str__())
 
     # Check if the found contour is the right one by checking the color of the center
-    def check_target_color(self, center):
-        mask = np.zeros(self.gray_image.shape, dtype=np.uint8)
-        cv.circle(mask, center, 5, (255, 255, 255), -1)
-        mean = cv.mean(self.hsv_image, mask=mask)
+    def check_target_color(self, color):
         expected_bulls_eye_color = Color('bulls_eye', np.array([20, 0, 0]), np.array([25, 255, 255]))
-        if expected_bulls_eye_color.is_color(mean[0], mean[1], mean[2]):
+        if expected_bulls_eye_color.is_color(color[0], color[1], color[2]):
             return True
         else:
             return False
