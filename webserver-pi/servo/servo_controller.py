@@ -1,9 +1,15 @@
+import threading
 import RPi.GPIO as GPIO
 import serial
 import time
 import re
-from time import sleep
+import binascii
+import sys
 from flask import request, jsonify
+from time import sleep
+sys.path.append("..")
+from utils.common import waiting
+
 
 
 class ServoController:
@@ -11,21 +17,23 @@ class ServoController:
 
     def __init__(self):
         print("Initializing ServoController...")
+        self.lock = threading.Lock()
         self.direction_pin = 18  # GPIO pin used for direction control
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.direction_pin, GPIO.OUT)
         GPIO.setwarnings(False)
         print("GPIO setup complete.")
-        self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.5)  # Setup serial communication
+        self.serial_port = serial.Serial('/dev/ttyS0', baudrate=1000000, timeout=0.001)  # Setup serial communication
         print("Serial port setup complete.")
+        self.lock = threading.Lock()
 
     # Method to execute a get status command on a servo
     def execute_getstatus(self, servo_id, command, duration):
         packet = self.build_packet(servo_id, command, duration)  # Build the packet
         response = self.send_packet(packet)
-        decoded = self.decode_response(response)
-        parameters = self.parse_parameters(decoded)
-        return type(int(parameters))  # Send the packet and return the response
+        #decoded = self.decode_response(response)
+        #parameters = self.parse_parameters(decoded)
+        return response  # Send the packet and return the response
 
     # Method to execute a command on a servo
     def execute_command(self, servo_id, command, value, value2=None):
@@ -41,7 +49,9 @@ class ServoController:
         self.send_packet(packet)
         sleep(duration / 1000)  # Sleep for the specified duration (in milliseconds)
         self.stop(servo_id)  # Stop the servo after the duration
-
+        waiting(2)  # Wait for the servo to stop moving
+        self.stop(servo_id)
+        
     # Method to build a packet for communication with the servo(should be switchcase or something as its not dry now)
     def build_packet(self, dxl_id, address, readsize, value=None, value2=None):
         if value2 is not None:
@@ -90,7 +100,8 @@ class ServoController:
     def decode_response(self, response):
         header = response[:2]
         if header != b'\xff\xff':
-            return "Invalid header"
+            back = ("invalid header" + binascii.hexlify(response).decode('utf-8'))
+            return back
 
         servo_id = response[2]
         length = response[3]
@@ -123,12 +134,13 @@ class ServoController:
 
     # Method to send a packet to the servo and receive a response
     def send_packet(self, packet):
+        # lock so no other thread can write/read at the same time
+        self.lock.acquire()
         GPIO.output(self.direction_pin, GPIO.HIGH)  # Set direction to send data
         self.serial_port.write(packet)  # Write packet to the serial port
         while self.serial_port.out_waiting > 0:  # Wait until the packet is completely sent
-            time.sleep(0.000000001)
-        time.sleep(
-            0.000001)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
+            waiting(0.001)
+        waiting(1)  # Small delay so it waits a little after its empty so we are sure it is done must be below the delay time of servo(500us default)
         GPIO.output(self.direction_pin, GPIO.LOW)  # Set direction to receive data
         response = bytearray()
         no_input = False
@@ -139,10 +151,12 @@ class ServoController:
                 no_input = True
             else:
                 response.extend(byte)
-            if len(response) >= 4 and no_input:
+            if len(response) >= 6 and no_input:
                 break
-            if time.clock_gettime_ns(0) - start > 100000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
+            if time.clock_gettime_ns(0) - start > 4000000:  # Timeout after 5 seconds(need to be changed to 5ms or so)
                 break
+        self.lock.release()
+        # free the lock
         decoded_response = self.decode_response(response)  # Decode the response
         if isinstance(decoded_response, str):
             return {"status": "error", "message": decoded_response}

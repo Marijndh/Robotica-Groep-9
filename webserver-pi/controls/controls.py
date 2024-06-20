@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import smbus
+import time
 
 
 class Led:
@@ -13,7 +14,7 @@ class Led:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setup(self.pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pin, 10000)
+        self.pwm = GPIO.PWM(self.pin, 5000)
         self.pwm.start(0)
         self.is_pwm_running = True
         self.red_brightness = 0
@@ -74,35 +75,54 @@ class Leds:
         self.blue_led.set_brightness(self.blue_brightness)
         
 
-# this is not yet working no i2c device found yet so need fixing(maybe unnececary as we probably can use load from servo)
-class Encoder:
-    """
-    Initialize the Encoder object.
-    """
+"""
+Initialize the UltrasonicSensor object.
+"""
+class UltrasonicSensor:
+    
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
-        self.bus = smbus.SMBus(1)  # Use I2C bus 1
-        self.address = 0x36  # Address of the AS5600 encoder
-        self.direction_pin = 22  # BCM pin for the direction pin
-        GPIO.setup(self.direction_pin, GPIO.IN)
+        self.trigger_pin = 23  # BCM pin for the trigger
+        self.echo_pin = 24  # BCM pin for the echo
+        GPIO.setup(self.trigger_pin, GPIO.OUT)
+        GPIO.setup(self.echo_pin, GPIO.IN)
 
     """
-    Read the angle from the AS5600 encoder.
-
-    Returns:
-        int: The angle value.
-    """
-    def read_angle(self):  
-        angle = self.bus.read_word_data(self.address, 0x0E)
-        return angle
-
-    """
-    Read the direction from the direction pin.
+    Read the distance from the HC-SR04 sensor.
 
     Returns:
-        int: The direction value.
+        float: The distance value in cm.
     """
-    def read_direction(self):
+    def read_distance(self):
+        print("Reading distance...")
+        # Send a 10us pulse to the trigger pin
+        GPIO.output(self.trigger_pin, True)
+        start_reading_time = time.time()
+        while time.time() - start_reading_time < 0.000004:
+            pass
+        GPIO.output(self.trigger_pin, False)
+
+        # Wait for the echo pin to go high
+        while GPIO.input(self.echo_pin) == 0 and time.time() - start_reading_time < 2:
+            start_time = time.time()
         
-        direction = GPIO.input(self.direction_pin)
-        return direction
+        #print("pin was high")
+
+        # Wait for the echo pin to go low
+        while GPIO.input(self.echo_pin) == 1 and time.time() - start_reading_time < 3:
+            end_time = time.time()
+        #print("done reading pulses now calculating distance...")
+        if 'end_time' in locals():
+            # Calculate the duration of the echo pulse
+            pulse_duration = end_time - start_time
+
+            # The speed of sound is 34300 cm/s, and the echo pulse travelled the
+            # distance to the object and back, so we divide by 2
+            distance = (pulse_duration*1000000) / 58
+            if distance > 40:
+                distance = -1
+        else:
+            distance = -1
+        #print("Distance: ", distance)
+        return distance
+
