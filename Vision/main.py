@@ -14,7 +14,7 @@ def determine_trajectory(robot, previous_locations, speed, direction):
         robot.target_point = prediction
 
 
-def handle_instrument_mode(frame, robot, previous_locations, time_difference, color):
+def handle_instrument_mode(frame, robot, previous_locations, time_difference, color, mode):
     gray_blur = cv.GaussianBlur(frame.gray_image, (5, 5), 0)
     thresh = cv.adaptiveThreshold(gray_blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
 
@@ -34,6 +34,7 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
         target = find_target(frame, robot.location, hierarchy, color)
         if target is None:
             return
+        print("Target found: " + str(target.centroid))
         robot.target = target
         robot.target_point = target.calculate_pick_up_point()
         previous_locations = [[target.centroid, time_difference]]
@@ -48,10 +49,11 @@ def handle_instrument_mode(frame, robot, previous_locations, time_difference, co
         direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
                                                                  time_difference)
         determine_trajectory(robot, previous_locations, speed, direction)
-        robot.move_to_instrument()
+        if mode == "instruments":
+            robot.move_to_instrument()
 
 
-def handle_target_mode(frame, robot, previous_locations, time_difference):
+def handle_target_mode(frame, robot, previous_locations, time_difference, mode):
     gray_blur = cv.GaussianBlur(frame.gray_image, (9, 9), 2)
     thresh = cv.adaptiveThreshold(gray_blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
     frame.contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -64,6 +66,7 @@ def handle_target_mode(frame, robot, previous_locations, time_difference):
                 target = GeometryUtils.find_closest_object(robot.location, frame.targets)
                 if target is None:
                     return
+                print("Target found: " + str(target.centroid))
                 robot.target = target
                 robot.target_point = target.centroid
                 previous_locations = [[target.centroid, time_difference]]
@@ -77,7 +80,8 @@ def handle_target_mode(frame, robot, previous_locations, time_difference):
                 direction, speed = GeometryUtils.get_direction_and_speed(robot.target, previous_locations[-2][0],
                                                                          time_difference)
                 determine_trajectory(robot, previous_locations, speed, direction)
-                robot.move_to_target()
+                if mode == "targets":
+                    robot.move_to_target()
 
 
 def trace_target(frame, target, hierarchy, color):
@@ -103,7 +107,8 @@ def main():
     requester = ImageRequester()
     robot = Robot()
     robot.fetch_values()
-    robot.reset()
+    if robot.mode == "instruments" or robot.mode == "targets":
+        robot.reset()
     print("Modus: " + str(robot.mode))
     print("Kleur: " + str(robot.color))
     previous_mode = robot.mode
@@ -117,8 +122,6 @@ def main():
         previous_time = current_time
         color = robot.color
         mode = robot.mode
-        if mode == "handmatig":
-            break
         if mode != previous_mode or color != previous_color:
             print("Nieuwe modus of kleur: " + mode + ", " + color)
             previous_locations = []
@@ -128,11 +131,12 @@ def main():
         images = requester.fetch_image(1)
         for img in images:
             frame = Frame(img, 1280, 720)
-            if mode == 'instruments':
-                handle_instrument_mode(frame, robot, previous_locations, time_difference, color)
+            if mode == 'instruments' or mode == "handmatig":
+                handle_instrument_mode(frame, robot, previous_locations, time_difference, color, mode)
                 frame.draw_instruments()
-            elif mode == 'targets':
-                handle_target_mode(frame, robot, previous_locations, time_difference)
+            elif mode == 'targets': #or mode == "handmatig":
+                handle_target_mode(frame, robot, previous_locations, time_difference, mode)
+                frame.draw_targets()
             frame.show()
         if cv.waitKey(1) & 0xFF == ord('q'):
             break

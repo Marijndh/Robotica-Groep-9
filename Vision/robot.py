@@ -71,13 +71,14 @@ class Robot:
             x, y = GeometryUtils.map_coordinate(self.target_point)
             if x > 600 or y > 600:
                 return
+            print("Moving to: "+ x + ", " + y)
             r = round(1024 * self.target.rotation / 360)
             # lower z-axes to 13, move to instrument, open gripper
             self.send_command(x, y, 13, r, 240)
             # grab object
             self.send_command(x, y, 13, r, 600)
             # increase z-axes to 20
-            self.send_command(x, y, 20, r, 400)
+            self.send_command(x, y, 24, r, 400)
             # move to instrument location, involve instrument.type
             target_x, target_y, target_rotation = 600, 0, 512
             if len(self.instrument_targets) > 1:
@@ -86,17 +87,18 @@ class Robot:
                     if target is not None:
                         target_rotation = round(1024 * self.target.rotation / 360)
             else:
-                if target.type == "straight":
+                if self.target.type == "straight":
                     target_x, target_y = GeometryUtils.map_coordinate((830, 600))
-                elif target.type == "crooked":
+                elif self.target.type == "crooked":
                     target_x, target_y = GeometryUtils.map_coordinate((420, 600))
-            self.send_command(target_x, target_y, 20, target_rotation, 400)
+            self.send_command(target_x, target_y, 24, target_rotation, 400)
             # lower z-axes to 13
             self.send_command(target_x, target_y,  13, target_rotation, 400)
             # release gripper
-            self.send_command(target_x, target_y,  20, target_rotation, 240)
+            self.send_command(target_x, target_y,  24, target_rotation, 240)
             self.target_point = (0, 0)
             self.target = None
+            self.reset()
 
     def reset(self):
         if self.location != (650, 0):
@@ -109,6 +111,7 @@ class Robot:
             x, y = GeometryUtils.map_coordinate(self.target_point)
             if x > 600 or y > 600:
                 return
+            print("Moving to: "+ x + ", " + y)
             # move to target
             self.send_command(x, y, 19, 512, 400)
             # lower z-axes to tap target
